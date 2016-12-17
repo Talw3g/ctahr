@@ -58,14 +58,12 @@ class CtahrApplication:
             self.not_running.wait(1)
 
             if (time.time() - self.led_run_time) > 1:
-                self.led_run.activate(1)
-                time.sleep(0.01)
-                self.led_run.activate(0)
+                self.led_run.blink()
                 self.led_run_time = time.time()
 
             hygrotemp_int = self.thermohygro_interior.get()
             hygrotemp_ext = self.thermohygro_exterior.get()
             if hygrotemp_int != None and hygrotemp_ext != None:
-                self.display.get_values(hygrotemp_int,hygrotemp_ext)
+                self.display.update_values(hygrotemp_int,hygrotemp_ext)
 
         print "[+] Ctahr as stopped"
