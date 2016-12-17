@@ -8,4 +8,7 @@ class CtahrRelay:
         GPIO.setup(self.pin, GPIO.OUT, initial = GPIO.LOW)
 
     def activate(self, b):
-        GPIO.output(self.pin, GPIO.HIGH if b else GPIO.LOW)
+        if b == 1:
+            GPIO.output(self.pin, GPIO.HIGH)
+        else:
+            GPIO.output(self.pin, GPIO.LOW)

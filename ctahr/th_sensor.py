@@ -22,6 +22,9 @@ class CtahrThermoHygroSensor(threading.Thread):
 
     def run(self):
         while True:
-            vs = DHT.read_retry(DHT.DHT22, self.pin)
-            with self.lock:
-                self.values = vs
+            hygro,temp = DHT.read_retry(DHT.DHT22, self.pin)
+            if hygro != None and temp != None:
+                vs = (round(hygro,1),round(temp,1))
+                print vs
+                with self.lock:
+                    self.values = vs
