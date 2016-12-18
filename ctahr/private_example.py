@@ -1,4 +1,6 @@
 
+## Rename this file 'private.py' and modify the following info to fit your case ##
+
 # Mail server infos
 sender_address = 'utility.mail@address.com'
 smtp_server_address = 'smtp.server.com'

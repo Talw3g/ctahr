@@ -9,6 +9,7 @@ from display import CtahrDisplay
 from th_sensor import CtahrThermoHygroSensor
 from relay import CtahrRelay
 from logic import CtahrLogic
+from security import CtahrSecurity
 
 class CtahrApplication:
 
@@ -43,6 +44,9 @@ class CtahrApplication:
         self.logic = CtahrLogic(self)
         self.logic.start()
 
+        # Creating security object
+        self.security = CtahrSecurity()
+
         self.led_run_status = False
 
 
@@ -63,6 +67,9 @@ class CtahrApplication:
 
             hygrotemp_int = self.thermohygro_interior.get()
             hygrotemp_ext = self.thermohygro_exterior.get()
+            self.security.check_freshness(hygrotemp_int, hygrotemp_ext)
+
+
             if hygrotemp_int != None and hygrotemp_ext != None:
                 self.display.update_values(hygrotemp_int,hygrotemp_ext)
 
