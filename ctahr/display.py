@@ -6,6 +6,7 @@ import configuration
 from serial import Serial
 
 class CtahrDisplay(threading.Thread):
+    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
@@ -26,6 +27,7 @@ class CtahrDisplay(threading.Thread):
         # Initializing variables
         self.app = app
         self.state = 'CURRENT'
+        self.states_indice = 0
 
         self.int_hygro = None
         self.int_temp = None
@@ -52,6 +54,13 @@ class CtahrDisplay(threading.Thread):
         else:
             self.serial.write('\xfe\x42\0')
 
+    def cycle_states(self):
+        states = ['CURRENT','TEMP','HYGRO','POWER']
+        self.states_indice += 1
+        if self.states_indice > (len(states) - 1):
+            self.states_indice = 0
+        self.state = states[self.states_indice]
+
     def update_state(self):
         if self.state == 'CURRENT':
             self.update_values()
@@ -62,7 +71,11 @@ class CtahrDisplay(threading.Thread):
             self.serial.write('\xfe\x48')
             self.serial.write(msg)
 
-        elif self.state == 'MIN/MAX':
+        elif self.state == 'TEMP':
+            self.write('MAX TEMP SCREEN')
+            self.clear()
+
+        elif self.state == 'HYGRO':
             pass
 
         elif self.state == 'POWER':

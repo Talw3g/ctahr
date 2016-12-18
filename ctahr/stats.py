@@ -4,6 +4,7 @@ import json
 import configuration
 
 class CtahrStats(threading.Thread):
+    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)

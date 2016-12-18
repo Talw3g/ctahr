@@ -11,6 +11,7 @@ from relay import CtahrRelay
 from logic import CtahrLogic
 from security import CtahrSecurity
 from stats import CtahrStats
+from buttons import CtahrButtons
 
 class CtahrApplication:
 
@@ -36,6 +37,10 @@ class CtahrApplication:
         self.heater = CtahrRelay(configuration.heater_relay_pin)
         self.dehum = CtahrRelay(configuration.dehum_relay_pin)
         self.led_run = CtahrRelay(configuration.led_run_pin)
+
+        # Starting buttons manager
+        self.buttons = CtahrButtons(self)
+        self.buttons.start()
 
         # Starting display manager
         self.display = CtahrDisplay(self)

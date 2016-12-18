@@ -4,6 +4,7 @@ from datetime import datetime
 from mailing import CtahrMailing
 
 class CtahrSecurity(threading.Thread):
+    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
