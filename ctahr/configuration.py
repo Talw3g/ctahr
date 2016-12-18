@@ -1,7 +1,7 @@
 ## PIN CONFIGURATION ##
 # Display
 display_serial_device = "/dev/ttyAMA0"
-display_serial_speed = 19200
+display_serial_speed = 115200
 
 # Sensors
 thermohygro_sensor_exterior_pin = 17

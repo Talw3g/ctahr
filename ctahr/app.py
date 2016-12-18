@@ -22,7 +22,7 @@ class CtahrApplication:
         signal.signal(signal.SIGTERM, self.shutdown)
 
         # Starting display manager
-        self.display = CtahrDisplay()
+        self.display = CtahrDisplay(self)
         self.display.start()
 
         # Starting exterior sensor daemon

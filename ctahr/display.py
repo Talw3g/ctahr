@@ -1,3 +1,4 @@
+
 import os,sys,time
 import threading
 from Queue import Queue
@@ -8,28 +9,35 @@ from serial import Serial
 class CtahrDisplay(threading.Thread):
     daemon = True
 
-    def __init__(self):
+    def __init__(self, app):
         threading.Thread.__init__(self)
 
         print "[+] Starting display manager"
 
+        # Configuring display
         self.serial = Serial(
             configuration.display_serial_device,
             configuration.display_serial_speed)
-
         self.serial.write('\xfe\x52')
         self.clear()
 
+        # Configuring light sensor
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.light_sensor_pin, GPIO.IN)
+
+        # Initializing variables
+        self.app = app
+        self.state = 'CURRENT'
 
         self.int_hygro = None
         self.int_temp = None
         self.ext_temp = None
         self.ext_hygro = None
 
-    def update_values(self, int_values, ext_values):
+    def update_values(self):
         """ Get latest values of Temp and Hygro """
+        int_values = self.app.thermohygro_interior.get()
+        ext_values = self.app.thermohygro_exterior.get()
         if int_values != None:
             self.int_hygro, self.int_temp, self.int_time = int_values
         if ext_values != None:
@@ -46,14 +54,25 @@ class CtahrDisplay(threading.Thread):
         else:
             self.serial.write('\xfe\x42\0')
 
-    def run(self):
-        while True:
-#            self.clear()
-            self.light_state()
+    def update_state(self):
+        if self.state == 'CURRENT':
+            update_values()
             msg = ('Interior Temp:' + str(self.int_temp) + '\xb2C\n'
                 + 'Exterior Temp:' + str(self.ext_temp) + '\xb2C\n'
                 + 'Interior Hygro:' + str(self.int_hygro) + '\x25\n'
                 + 'Exterior Hygro:' + str(self.ext_hygro)+ '\x25')
             self.serial.write('\xfe\x48')
             self.serial.write(msg)
+
+        elif self.state == 'MIN/MAX':
+            pass
+
+        elif self.state == 'POWER':
+            pass
+
+    def run(self):
+        while True:
+#            self.clear()
+            self.light_state()
+            self.update_state()
             time.sleep(1)
