@@ -56,7 +56,7 @@ class CtahrDisplay(threading.Thread):
 
     def update_state(self):
         if self.state == 'CURRENT':
-            update_values()
+            self.update_values()
             msg = ('Interior Temp:' + str(self.int_temp) + '\xb2C\n'
                 + 'Exterior Temp:' + str(self.ext_temp) + '\xb2C\n'
                 + 'Interior Hygro:' + str(self.int_hygro) + '\x25\n'

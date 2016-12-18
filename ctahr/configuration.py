@@ -31,6 +31,7 @@ watchdog_pin = 20
 powerstate_pin = 23
 led_run_pin = 16
 
+stats_log_file = 'ctahr/stats.json'
 
 ## REGULATION FIXED VALUES ##
 # Temperature thresholds
