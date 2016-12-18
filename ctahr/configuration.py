@@ -1,3 +1,5 @@
+ctahr_absolute_path = '/opt/ctahr/'
+
 ## PIN CONFIGURATION ##
 # Display
 display_serial_device = "/dev/ttyAMA0"
@@ -31,7 +33,7 @@ watchdog_pin = 20
 powerstate_pin = 23
 led_run_pin = 16
 
-stats_log_file = 'ctahr/stats.json'
+stats_log_file = ctahr_absolute_path + 'ctahr/stats.json'
 
 ## REGULATION FIXED VALUES ##
 # Temperature thresholds

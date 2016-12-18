@@ -4,14 +4,16 @@ import json
 import configuration
 
 class CtahrStats(threading.Thread):
-    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
         self.lock = threading.Lock()
-        self.data = {'int':{'temp':{'min':0,'max':0},'hygro':{'min':0,'max':0}},
-            'ext':{'temp':{'min':0,'max':0},'hygro':{'min':0,'max':0}}}
+        self.data = ({'int':{'temp':{'min':None, 'max':None},
+            'hygro':{'min':None, 'max':None}},
+            'ext':{'temp':{'min':None, 'max':None},
+            'hygro':{'min':None, 'max':None}}})
+        self.reset_hygro_temp()
         self.log_time = time.time()
         self.get_from_file()
 
@@ -48,12 +50,28 @@ class CtahrStats(threading.Thread):
     def update_values(self):
         int_values = self.app.thermohygro_interior.get()
         ext_values = self.app.thermohygro_exterior.get()
-        if int_values != None:
+        if int_values != None and ext_values != None:
             with self.lock:
                 self.int_hygro, self.int_temp, int_time = int_values
-        if ext_values != None:
-            with self.lock:
                 self.ext_hygro, self.ext_temp, ext_time = ext_values
+            return True
+        else:
+            return False
+
+
+    def reset_hygro_temp(self):
+        while not self.update_values():
+            time.sleep(0.5)
+        with self.lock:
+            self.int_hygro_max = self.int_hygro
+            self.int_hygro_min = self.int_hygro
+            self.int_temp_max = self.int_temp
+            self.int_temp_min = self.int_temp
+            self.ext_hygro_max = self.ext_hygro
+            self.ext_hygro_min = self.ext_hygro
+            self.ext_temp_max = self.ext_temp
+            self.ext_temp_min = self.ext_temp
+
 
 
     def do_math(self):
@@ -84,8 +102,8 @@ class CtahrStats(threading.Thread):
 
     def run(self):
         while True:
-            self.update_values()
-            self.do_math()
+            if self.update_values():
+                self.do_math()
             if (time.time() - self.log_time) > 10:
                 self.save_to_file()
             time.sleep(1)

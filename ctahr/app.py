@@ -22,6 +22,16 @@ class CtahrApplication:
         # gracefull shutdown signal handler
         signal.signal(signal.SIGTERM, self.shutdown)
 
+        # Starting interior sensor daemon
+        self.thermohygro_interior = CtahrThermoHygroSensor(
+            configuration.thermohygro_sensor_interior_pin)
+        self.thermohygro_interior.start()
+
+        # Starting exterior sensor daemon
+        self.thermohygro_exterior = CtahrThermoHygroSensor(
+            configuration.thermohygro_sensor_exterior_pin)
+        self.thermohygro_exterior.start()
+
         # Creating controlled output objects
         self.heater = CtahrRelay(configuration.heater_relay_pin)
         self.dehum = CtahrRelay(configuration.dehum_relay_pin)
@@ -45,16 +55,6 @@ class CtahrApplication:
 
         self.led_run_status = False
 
-        # Starting interior sensor daemon
-        self.thermohygro_interior = CtahrThermoHygroSensor(
-            configuration.thermohygro_sensor_interior_pin)
-        self.thermohygro_interior.start()
-
-        # Starting exterior sensor daemon
-        self.thermohygro_exterior = CtahrThermoHygroSensor(
-            configuration.thermohygro_sensor_exterior_pin)
-        self.thermohygro_exterior.start()
-
 
     def shutdown(self, signum, frame):
         # perform a gracefull shutdown here ;)
@@ -76,7 +76,6 @@ class CtahrApplication:
 
             #if hygrotemp_int != None and hygrotemp_ext != None:
             #    self.display.update_values(hygrotemp_int,hygrotemp_ext)
-            self.display.update_values()
 
         print "[+] Ctahr as stopped"
         self.led_run.activate(False)

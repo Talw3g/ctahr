@@ -1,13 +1,11 @@
 
 import os,sys,time
 import threading
-from Queue import Queue
 import RPi.GPIO as GPIO
 import configuration
 from serial import Serial
 
 class CtahrDisplay(threading.Thread):
-    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
