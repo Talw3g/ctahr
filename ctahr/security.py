@@ -1,16 +1,18 @@
 
-import time,os
+import threading,time,os
 from datetime import datetime
-from smtplib import SMTP
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
-import private
+from mailing import CtahrMailing
 
-class CtahrSecurity:
+class CtahrSecurity(threading.Thread):
 
-    def __init__(self):
+    def __init__(self, app):
+        threading.Thread.__init__(self)
+        self.app = app
+
         self.int_time = time.time()
         self.ext_time = time.time()
+
+        self.mail = CtahrMailing()
 
     def check_freshness(self, int_values, ext_values):
         if int_values != None:
@@ -28,26 +30,19 @@ class CtahrSecurity:
         if reason == 'int_outdated':
             subject = 'Interior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            self.mail(subject, message)
+            self.mail.send_mail(subject, message)
         if reason == 'ext_outdated':
             subject = 'Exterior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            self.mail(subject, message)
+            self.mail.send_mail(subject, message)
 
         os.system("shutdown -r now")
 
 
-    def mail(self, subject, message):
-        msg = MIMEMultipart()
-        msg['From'] = private.sender_address
-        msg['To'] = private.dest_address_1
-        msg['Subject'] = subject
-        msg.attach(MIMEText(message, 'plain'))
+    def run(self):
+        while True:
+            int_values = self.app.thermohygro_interior.get()
+            ext_values = self.app.thermohygro_exterior.get()
+            self.check_freshness(int_values, ext_values)
 
-        server = SMTP(private.smtp_server_address, private.smtp_server_port)
-        server.starttls()
-        server.login(private.sender_address, private.smtp_server_password)
-        server.sendmail(private.sender_address, private.dest_address_1, msg.as_string())
-        server.quit()
-
-
+            time.sleep(1)

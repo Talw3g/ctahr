@@ -44,8 +44,9 @@ class CtahrApplication:
         self.logic = CtahrLogic(self)
         self.logic.start()
 
-        # Creating security object
-        self.security = CtahrSecurity()
+        # Starting security daemon
+        self.security = CtahrSecurity(self)
+        self.security.start()
 
         self.led_run_status = False
 
@@ -67,10 +68,9 @@ class CtahrApplication:
 
             hygrotemp_int = self.thermohygro_interior.get()
             hygrotemp_ext = self.thermohygro_exterior.get()
-            self.security.check_freshness(hygrotemp_int, hygrotemp_ext)
-
 
             if hygrotemp_int != None and hygrotemp_ext != None:
                 self.display.update_values(hygrotemp_int,hygrotemp_ext)
 
         print "[+] Ctahr as stopped"
+        self.led_run.activate(False)
