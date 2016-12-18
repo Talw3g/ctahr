@@ -43,7 +43,8 @@ class CtahrApplication:
         self.logic = CtahrLogic(self)
         self.logic.start()
 
-        self.led_run_time = time.time()
+        self.led_run_status = False
+
 
     def shutdown(self, signum, frame):
         # perform a gracefull shutdown here ;)
@@ -57,9 +58,8 @@ class CtahrApplication:
 
             self.not_running.wait(1)
 
-            if (time.time() - self.led_run_time) > 1:
-                self.led_run.blink()
-                self.led_run_time = time.time()
+            self.led_run.activate(self.led_run_status)
+            self.led_run_status = not self.led_run_status
 
             hygrotemp_int = self.thermohygro_interior.get()
             hygrotemp_ext = self.thermohygro_exterior.get()

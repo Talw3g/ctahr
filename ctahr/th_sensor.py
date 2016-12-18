@@ -1,4 +1,4 @@
-import threading
+import threading,time
 
 import Adafruit_DHT as DHT
 
@@ -24,7 +24,7 @@ class CtahrThermoHygroSensor(threading.Thread):
         while True:
             hygro,temp = DHT.read_retry(DHT.DHT22, self.pin)
             if hygro != None and temp != None:
-                vs = (round(hygro,1),round(temp,1))
+                vs = (round(hygro,1),round(temp,1),time.time())
                 print vs
                 with self.lock:
                     self.values = vs

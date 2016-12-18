@@ -31,9 +31,9 @@ class CtahrDisplay(threading.Thread):
     def update_values(self, int_values, ext_values):
         """ Get latest values of Temp and Hygro """
         if int_values != None:
-            self.int_hygro, self.int_temp = int_values
+            self.int_hygro, self.int_temp, self.int_time = int_values
         if ext_values != None:
-            self.ext_hygro, self.ext_temp = ext_values
+            self.ext_hygro, self.ext_temp, self.ext_time = ext_values
 
     def clear(self):
         """ Clear display """
