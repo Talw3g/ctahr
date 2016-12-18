@@ -1,3 +1,4 @@
+## PIN CONFIGURATION ##
 # Display
 display_serial_device = "/dev/ttyAMA0"
 display_serial_speed = 19200
@@ -31,3 +32,15 @@ powerstate_pin = 23
 led_run_pin = 16
 
 
+## REGULATION FIXED VALUES ##
+# Temperature thresholds
+temp_low = 11
+temp_high = 13
+temp_freeze = 9
+summer_temp = 13
+
+# Hygrometry thresholds
+winter_hygro_low = 75
+winter_hygro_high = 80
+summer_hygro_low = 85
+summer_hygro_high = 90
