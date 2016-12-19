@@ -27,8 +27,8 @@ reset_lever_pin = 7
 # Servo
 servo_power_pin = 27
 servo_pwm_pin = 18
-servo_dutycycle_close = 5
-servo_dutycycle_open = 10
+servo_dutycycle_close = 6
+servo_dutycycle_open = 9
 
 
 # System / Misc

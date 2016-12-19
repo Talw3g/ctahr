@@ -4,6 +4,7 @@ import configuration
 import RPi.GPIO as GPIO
 
 class CtahrButtons(threading.Thread):
+    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
@@ -48,6 +49,5 @@ class CtahrButtons(threading.Thread):
     def run(self):
         while self.running:
             self.update_reset()
-            time.sleep(0.01)
-            print time.time()
+            time.sleep(0.001)
         print "[-] Stopping buttons manager"

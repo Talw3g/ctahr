@@ -12,6 +12,7 @@ from logic import CtahrLogic
 from security import CtahrSecurity
 from stats import CtahrStats
 from buttons import CtahrButtons
+from fan import CtahrFan
 
 class CtahrApplication:
 
@@ -51,6 +52,10 @@ class CtahrApplication:
         #self.logic = CtahrLogic(self)
         #self.logic.start()
 
+        # Starting fan manager
+        self.fan = CtahrFan()
+        self.fan.start()
+
         # Starting security daemon
         self.security = CtahrSecurity(self)
         self.security.start()
@@ -86,6 +91,8 @@ class CtahrApplication:
         self.stats.join()
         self.security.stop()
         self.security.join()
+        self.fan.stop()
+        self.fan.join()
         self.display.stop()
         self.display.join()
         self.buttons.stop()

@@ -76,10 +76,12 @@ class CtahrDisplay(threading.Thread):
             self.serial.write('MAX TEMP SCREEN')
 
         elif self.state == 'HYGRO':
-            pass
+            self.clear()
+            self.serial.write('MAX HYGRO SCREEN')
 
         elif self.state == 'POWER':
-            pass
+            self.clear()
+            self.serial.write('POWER SCREEN')
 
     def stop(self):
         self.running = False

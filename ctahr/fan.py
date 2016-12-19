@@ -3,7 +3,7 @@ import threading,time
 import RPi.GPIO as GPIO
 import configuration
 
-def CtahrFan(threading.Thread):
+class CtahrFan(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
 
@@ -33,17 +33,21 @@ def CtahrFan(threading.Thread):
         with self.lock:
             self.state = 'STOPPING'
 
-    def servo_set(self, state):
+    def servo_set(self, cmd):
         GPIO.output(configuration.servo_power_pin, GPIO.HIGH)
+        print "servo ON"
         time.sleep(0.5)
-        if state == 'OPEN':
+        if cmd == 'OPEN':
+            print "opening"
             self.pwm.ChangeDutyCycle(
                 configuration.servo_dutycycle_open)
-        elif state == 'CLOSE':
+        elif cmd == 'CLOSE':
+            print "closing"
             self.pwm.ChangeDutyCycle(
                 configuration.servo_dutycycle_close)
         time.sleep(0.7)
         GPIO.output(configuration.servo_power_pin, GPIO.LOW)
+        print "servo OFF"
 
 
     def update_state_machine(self):
@@ -55,26 +59,26 @@ def CtahrFan(threading.Thread):
             self.servo_set('OPEN')
             GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
             self.starting_time_s = time.time()
-            self.state = 'STARTING_WAIT'
-
-        elif self.state == 'STARTING_WAIT':
-            if time.time() - self.starting_time_s > 1.0:
-                self.state = 'RUNNING'
+            self.state = 'RUNNING'
 
         elif self.state == 'RUNNING':
             pass
 
         elif self.state == 'STOPPING':
-            pass
+            self.servo_set('CLOSE')
+            GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
+            self.state = 'IDLE'
 
     def stop(self):
         self.running = False
+        self.state = 'STOPPING'
 
     def run(self):
         while self.running:
             with self.lock:
                 self.update_state_machine()
                 time.sleep(0.1)
+        self.update_state_machine()
         print "[-] Stopping fan manager"
 
 
