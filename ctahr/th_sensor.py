@@ -5,11 +5,12 @@ import Adafruit_DHT as DHT
 class CtahrThermoHygroSensor(threading.Thread):
     daemon = True
 
-    def __init__(self, pin):
+    def __init__(self, pin, name):
         threading.Thread.__init__(self)
         self.pin = pin
+        self.name = name
         self.running = True
-        print "[+] Starting " + str(self) + " module"
+        print "[+] Starting " + self.name + " sensors module"
 
         self.lock = threading.Lock()
 
@@ -32,4 +33,4 @@ class CtahrThermoHygroSensor(threading.Thread):
                 vs = (round(hygro,1),round(temp,1),time.time())
                 with self.lock:
                     self.values = vs
-        print "[-] Stoping sensors module"
+        print "[-] Stoping " + self.name + " sensors module"

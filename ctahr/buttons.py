@@ -17,14 +17,14 @@ class CtahrButtons(threading.Thread):
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(configuration.reset_lever_pin, GPIO.IN)
+        GPIO.setup(configuration.reset_lever_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.setup(configuration.fan_lever_pin, GPIO.IN)
         GPIO.setup(configuration.dehum_lever_pin, GPIO.IN)
         GPIO.setup(configuration.heater_lever_pin, GPIO.IN)
 
     def update_reset(self):
         if self.reset_state == 'WAIT':
-            if GPIO.input(configuration.fan_lever_pin) == 1:
+            if GPIO.input(configuration.reset_lever_pin) == 0:
                 self.reset_state = 'UP'
                 self.reset_up_time = time.time()
 
@@ -34,7 +34,7 @@ class CtahrButtons(threading.Thread):
             elif (time.time() - self.reset_up_time) > 1:
                 pass
 
-            if GPIO.input(configuration.fan_lever_pin) == 0:
+            if GPIO.input(configuration.reset_lever_pin) == 1:
                 self.reset_state = 'DOWN'
 
         elif self.reset_state == 'DOWN':

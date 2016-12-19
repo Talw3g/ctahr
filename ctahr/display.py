@@ -28,6 +28,7 @@ class CtahrDisplay(threading.Thread):
         self.app = app
         self.state = 'CURRENT'
         self.states_indice = 0
+        self.t_state = 0
 
         self.int_hygro = None
         self.int_temp = None
@@ -60,6 +61,7 @@ class CtahrDisplay(threading.Thread):
         if self.states_indice > (len(states) - 1):
             self.states_indice = 0
         self.state = states[self.states_indice]
+        self.t_state = 0
 
     def update_state(self):
         if self.state == 'CURRENT':
@@ -72,8 +74,8 @@ class CtahrDisplay(threading.Thread):
             self.serial.write(msg)
 
         elif self.state == 'TEMP':
-            self.write('MAX TEMP SCREEN')
             self.clear()
+            self.serial.write('MAX TEMP SCREEN')
 
         elif self.state == 'HYGRO':
             pass
@@ -88,8 +90,10 @@ class CtahrDisplay(threading.Thread):
         while self.running:
 #            self.clear()
             self.light_state()
-            self.update_state()
-            time.sleep(1)
+            if (time.time() - self.t_state) > 1:
+                self.update_state()
+                self.t_state = time.time()
+            time.sleep(0.1)
 
         self.clear()
         print "[-] Stoping display manager"

@@ -1,5 +1,7 @@
 
 import threading,time
+import RPi.GPIO as GPIO
+import configuration
 
 def CtahrFan(threading.Thread):
     def __init__(self):
@@ -7,6 +9,18 @@ def CtahrFan(threading.Thread):
 
         self.lock = threading.Lock()
         self.state = 'IDLE'
+
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(configuration.fan_relay_pin, GPIO.OUT,
+            initial = GPIO.LOW)
+        GPIO.setup(configuration.servo_power_pin, GPIO.OUT,
+            initial = GPIO.LOW)
+        GPIO.setup(configuration.servo_pwm_pin, GPIO.OUT,
+            initial = GPIO.LOW)
+
+        self.pwm = GPIO.PWM(configuration.servo_pwm_pin, 50)
+        self.pwm.start(configuration.servo_dutycycle_close)
+
 
         self.starting_time_s = None
 
@@ -18,11 +32,18 @@ def CtahrFan(threading.Thread):
         with self.lock:
             self.state = 'STOPPING'
 
-    def run(self):
-        while True:
-            with self.lock:
-                self.update_state_machine()
-                time.sleep(0.1)
+    def servo_set(self, state):
+        GPIO.output(configuration.servo_power_pin, GPIO.HIGH)
+        time.sleep(0.5)
+        if state == 'OPEN':
+            self.pwm.ChangeDutyCycle(
+                configuration.servo_dutycycle_open)
+        elif state == 'CLOSE':
+            self.pwm.ChangeDutyCycle(
+                configuration.servo_dutycycle_close)
+        time.sleep(0.7)
+        GPIO.output(configuration.servo_power_pin, GPIO.LOW)
+
 
     def update_state_machine(self):
         if self.state == 'IDLE':
@@ -30,9 +51,8 @@ def CtahrFan(threading.Thread):
             pass
 
         elif self.state == 'STARTING':
-            #servo.set(100)
-            #relay.set(1)
-
+            self.servo_set('OPEN')
+            GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
             self.starting_time_s = time.time()
             self.state = 'STARTING_WAIT'
 
@@ -45,4 +65,11 @@ def CtahrFan(threading.Thread):
 
         elif self.state == 'STOPPING':
             pass
+
+    def run(self):
+        while True:
+            with self.lock:
+                self.update_state_machine()
+                time.sleep(0.1)
+
 

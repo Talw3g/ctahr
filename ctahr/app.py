@@ -25,12 +25,12 @@ class CtahrApplication:
 
         # Starting interior sensor daemon
         self.thermohygro_interior = CtahrThermoHygroSensor(
-            configuration.thermohygro_sensor_interior_pin)
+            configuration.thermohygro_sensor_interior_pin, 'interior')
         self.thermohygro_interior.start()
 
         # Starting exterior sensor daemon
         self.thermohygro_exterior = CtahrThermoHygroSensor(
-            configuration.thermohygro_sensor_exterior_pin)
+            configuration.thermohygro_sensor_exterior_pin, 'exterior')
         self.thermohygro_exterior.start()
 
         # Creating controlled output objects

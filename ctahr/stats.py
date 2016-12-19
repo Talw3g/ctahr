@@ -8,7 +8,7 @@ class CtahrStats(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
-        print "[+] Starting Stats module"
+        print "[+] Starting stats module"
         self.app = app
         self.lock = threading.Lock()
         self.running = True
@@ -27,6 +27,8 @@ class CtahrStats(threading.Thread):
             with open(configuration.stats_log_file, 'r') as f:
                 try:
                     self.data = json.load(f)
+                except:
+                    pass
             with self.lock:
                 self.int_hygro_max = self.data['int']['hygro']['max']
                 self.int_hygro_min = self.data['int']['hygro']['min']
@@ -115,4 +117,4 @@ class CtahrStats(threading.Thread):
             if (time.time() - self.log_time) > 10:
                 self.save_to_file()
             time.sleep(1)
-        print "[-] Stoping Stats module"
+        print "[-] Stoping stats module"
