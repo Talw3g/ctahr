@@ -8,6 +8,7 @@ class CtahrLogic(threading.Thread):
         self.app = app
         self.state = 'INIT'
         self.summer = False
+        self.running = True
 
     def update(self):
         if self.state == 'INIT':
@@ -21,8 +22,11 @@ class CtahrLogic(threading.Thread):
             elif self.int_hygro > self.hygro_high:
                 self.state = 'DRY'
 
+    def stop(self):
+        self.running = False
+
     def run(self):
-        while True:
+        while self.running:
             self.int_hygro,self.int_temp,self.int_ts = self.app.thermohygro_interior.get()
             self.ext_hygro,self.ext_temp,self.ext_ts = self.app.thermohygro_exterior.get()
             if self.ext_temp > configuration.summer_temp:
@@ -35,3 +39,4 @@ class CtahrLogic(threading.Thread):
             self.update()
 
             time.sleep(1)
+        print "[-] Stopping logic module"

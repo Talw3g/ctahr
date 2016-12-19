@@ -22,6 +22,7 @@ class CtahrApplication:
 
         # gracefull shutdown signal handler
         signal.signal(signal.SIGTERM, self.shutdown)
+        signal.signal(signal.SIGINT, self.shutdown)
 
         # Starting interior sensor daemon
         self.thermohygro_interior = CtahrThermoHygroSensor(

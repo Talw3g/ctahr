@@ -57,9 +57,7 @@ class CtahrDisplay(threading.Thread):
 
     def cycle_states(self):
         states = ['CURRENT','TEMP','HYGRO','POWER']
-        self.states_indice += 1
-        if self.states_indice > (len(states) - 1):
-            self.states_indice = 0
+        self.states_indice = ((self.states_indice + 1) % len(states))
         self.state = states[self.states_indice]
         self.t_state = 0
 
@@ -96,4 +94,4 @@ class CtahrDisplay(threading.Thread):
             time.sleep(0.1)
 
         self.clear()
-        print "[-] Stoping display manager"
+        print "[-] Stopping display manager"

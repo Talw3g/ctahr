@@ -9,6 +9,7 @@ def CtahrFan(threading.Thread):
 
         self.lock = threading.Lock()
         self.state = 'IDLE'
+        self.running = True
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.fan_relay_pin, GPIO.OUT,
@@ -66,10 +67,14 @@ def CtahrFan(threading.Thread):
         elif self.state == 'STOPPING':
             pass
 
+    def stop(self):
+        self.running = False
+
     def run(self):
-        while True:
+        while self.running:
             with self.lock:
                 self.update_state_machine()
                 time.sleep(0.1)
+        print "[-] Stopping fan manager"
 
 

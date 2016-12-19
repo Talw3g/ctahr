@@ -40,7 +40,6 @@ class CtahrButtons(threading.Thread):
         elif self.reset_state == 'DOWN':
             if (time.time() - self.reset_up_time) < 0.5:
                 self.app.display.cycle_states()
-                print "Cycling states"
             self.reset_state = 'WAIT'
 
     def stop(self):
@@ -50,4 +49,5 @@ class CtahrButtons(threading.Thread):
         while self.running:
             self.update_reset()
             time.sleep(0.01)
-        print "[-] Stoping buttons manager"
+            print time.time()
+        print "[-] Stopping buttons manager"
