@@ -10,7 +10,7 @@ class CtahrDisplay(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
-
+        self.running = True
         print "[+] Starting display manager"
 
         # Configuring display
@@ -81,9 +81,15 @@ class CtahrDisplay(threading.Thread):
         elif self.state == 'POWER':
             pass
 
+    def stop(self):
+        self.running = False
+
     def run(self):
-        while True:
+        while self.running:
 #            self.clear()
             self.light_state()
             self.update_state()
             time.sleep(1)
+
+        self.clear()
+        print "[-] Stoping display manager"

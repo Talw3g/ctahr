@@ -64,7 +64,7 @@ class CtahrApplication:
     def shutdown(self, signum, frame):
         # perform a gracefull shutdown here ;)
 
-        print "[+] SIGNAL",signum,"received, shutting down gracefully"
+        print "[-] SIGNAL",signum,"received, shutting down gracefully"
         #
         self.not_running.set()
 
@@ -81,6 +81,18 @@ class CtahrApplication:
 
             #if hygrotemp_int != None and hygrotemp_ext != None:
             #    self.display.update_values(hygrotemp_int,hygrotemp_ext)
+        self.stats.stop()
+        self.stats.join()
+        self.security.stop()
+        self.security.join()
+        self.display.stop()
+        self.display.join()
+        self.buttons.stop()
+        self.buttons.join()
+        self.thermohygro_exterior.stop()
+        self.thermohygro_exterior.join()
+        self.thermohygro_interior.stop()
+        self.thermohygro_interior.join()
 
-        print "[+] Ctahr as stopped"
         self.led_run.activate(False)
+        print "[-] Ctahr as stopped"

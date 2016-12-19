@@ -8,6 +8,8 @@ class CtahrThermoHygroSensor(threading.Thread):
     def __init__(self, pin):
         threading.Thread.__init__(self)
         self.pin = pin
+        self.running = True
+        print "[+] Starting " + str(self) + " module"
 
         self.lock = threading.Lock()
 
@@ -20,10 +22,14 @@ class CtahrThermoHygroSensor(threading.Thread):
             vs = self.values
         return vs
 
+    def stop(self):
+        self.running = False
+
     def run(self):
-        while True:
+        while self.running:
             hygro,temp = DHT.read_retry(DHT.DHT22, self.pin)
             if hygro != None and temp != None:
                 vs = (round(hygro,1),round(temp,1),time.time())
                 with self.lock:
                     self.values = vs
+        print "[-] Stoping sensors module"

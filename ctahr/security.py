@@ -9,6 +9,8 @@ class CtahrSecurity(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
+        self.running = True
+        print "[+] Starting security module"
 
         self.int_time = time.time()
         self.ext_time = time.time()
@@ -39,11 +41,13 @@ class CtahrSecurity(threading.Thread):
 
         os.system("shutdown -r now")
 
+    def stop(self):
+        self.running = False
 
     def run(self):
-        while True:
+        while self.running:
             int_values = self.app.thermohygro_interior.get()
             ext_values = self.app.thermohygro_exterior.get()
             self.check_freshness(int_values, ext_values)
-
             time.sleep(1)
+        print "[-] Stoping security module"

@@ -13,6 +13,7 @@ class CtahrButtons(threading.Thread):
         print "[+] Starting buttons manager"
 
         self.reset_state = 'WAIT'
+        self.running = True
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
@@ -42,9 +43,11 @@ class CtahrButtons(threading.Thread):
                 print "Cycling states"
             self.reset_state = 'WAIT'
 
+    def stop(self):
+        self.running = False
 
     def run(self):
-        while True:
+        while self.running:
             self.update_reset()
             time.sleep(0.01)
-
+        print "[-] Stoping buttons manager"
