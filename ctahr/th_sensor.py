@@ -1,37 +1,47 @@
-import threading,time
+import time
+from multiprocessing import Process,Array
 
 import Adafruit_DHT as DHT
 
-class CtahrThermoHygroSensor(threading.Thread):
+class CtahrThermoHygroSensor:
     daemon = True
 
     def __init__(self, pin, name):
-        threading.Thread.__init__(self)
         self.pin = pin
         self.name = name
-        self.running = True
         print "[+] Starting " + self.name + " sensors module"
 
-        self.lock = threading.Lock()
-
-        self.values = None
+        self.process = None
+        self.values_wrapper = Array('d', 3)
 
     def get(self):
         """ Return a (hygro, temperature) tuple in floats (% hum, deg C),
             None if not ready"""
-        with self.lock:
-            vs = self.values
-        return vs
+        return self.values_wrapper[:]
+
+    def start(self):
+        self.process = Process(target=self.run, args=(self.values_wrapper,self.pin))
+        self.process.start()
 
     def stop(self):
-        self.running = False
+        if self.process is not None:
+            self.process.terminate()
 
-    def run(self):
-        while self.running:
-            hygro,temp = DHT.read_retry(DHT.DHT22, self.pin)
+    @staticmethod
+    def run(values_wrapper, pin):
+        while True:
+            hygro,temp = DHT.read_retry(DHT.DHT22, pin)
             if hygro != None and temp != None:
-                vs = (round(hygro,1),round(temp,1),time.time())
-                with self.lock:
-                    self.values = vs
-            time.sleep(10)
-        print "[-] Stopping " + self.name + " sensors module"
+                values_wrapper[:] = round(hygro,1),round(temp,1),time.time()
+            time.sleep(1)
+
+if __name__ == '__main__':
+    cth = CtahrThermoHygroSensor(0,"x")
+    cth.start()
+    time.sleep(1)
+    print cth.get()
+    time.sleep(1)
+    print cth.get()
+    time.sleep(1)
+    print cth.get()
+    cth.stop()
