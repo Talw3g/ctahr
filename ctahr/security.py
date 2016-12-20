@@ -18,9 +18,9 @@ class CtahrSecurity(threading.Thread):
         self.mail = CtahrMailing()
 
     def check_freshness(self, int_values, ext_values):
-        if int_values != None:
+        if int_values[3] != 0:
             self.int_time = int_values[2]
-        if ext_values != None:
+        if ext_values[3] != 0:
             self.ext_time = ext_values[2]
 
         if (time.time() - self.int_time) > 300:

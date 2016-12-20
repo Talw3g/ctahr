@@ -49,32 +49,32 @@ class CtahrButtons(threading.Thread):
     def update_fan(self):
         if self.fan_state == 'WAIT':
             if GPIO.input(configuration.fan_lever_pin) == 1:
-                self.app.fan.force(True)
                 self.fan_state = 'UP'
+                self.app.fan.force(True)
         if self.fan_state == 'UP':
             if GPIO.input(configuration.fan_lever_pin) == 0:
-                self.app.fan.force(False)
                 self.fan_state = 'WAIT'
+                self.app.fan.force(False)
 
     def update_heater(self):
         if self.heater_state == 'WAIT':
             if GPIO.input(configuration.heater_lever_pin) == 1:
-                self.app.logic.heater_force = True
                 self.heater_state = 'UP'
+                self.app.logic.heater_force = True
         elif self.heater_state == 'UP':
             if GPIO.input(configuration.heater_lever_pin) == 0:
-                self.app.logic.heater_force = False
                 self.heater_state = 'WAIT'
+                self.app.logic.heater_force = False
 
     def update_dehum(self):
         if self.dehum_state == 'WAIT':
             if GPIO.input(configuration.dehum_lever_pin) == 1:
-                self.app.logic.dehum_force = True
                 self.dehum_state = 'UP'
+                self.app.logic.dehum_force = True
         elif self.dehum_state == 'UP':
             if GPIO.input(configuration.dehum_lever_pin) == 0:
-                self.app.logic.dehum_force = False
                 self.dehum_state = 'WAIT'
+                self.app.logic.dehum_force = False
 
     def stop(self):
         self.running = False
@@ -85,6 +85,5 @@ class CtahrButtons(threading.Thread):
             self.update_fan()
             self.update_heater()
             self.update_dehum()
-            print time.time()
-            time.sleep(0.001)
+            time.sleep(0.01)
         print "[-] Stopping buttons manager"

@@ -57,10 +57,10 @@ class CtahrStats(threading.Thread):
     def update_values(self):
         int_values = self.app.thermohygro_interior.get()
         ext_values = self.app.thermohygro_exterior.get()
-        if int_values != None and ext_values != None:
+        if int_values[3] != 0 and ext_values[3] != 0:
             with self.lock:
-                self.int_hygro, self.int_temp, int_time = int_values
-                self.ext_hygro, self.ext_temp, ext_time = ext_values
+                self.int_hygro, self.int_temp = int_values[:2]
+                self.ext_hygro, self.ext_temp = ext_values[:2]
             return True
         else:
             return False

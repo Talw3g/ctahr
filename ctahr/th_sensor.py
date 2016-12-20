@@ -12,7 +12,7 @@ class CtahrThermoHygroSensor:
         print "[+] Starting " + self.name + " sensors module"
 
         self.process = None
-        self.values_wrapper = Array('d', [0, 0, time.time()])
+        self.values_wrapper = Array('d', [0, 0, time.time(), 0])
 
     def get(self):
         """ Return a (hygro, temperature) tuple in floats (% hum, deg C),
@@ -32,8 +32,10 @@ class CtahrThermoHygroSensor:
         while True:
             hygro,temp = DHT.read_retry(DHT.DHT22, pin)
             if hygro != None and temp != None:
-                values_wrapper[:] = round(hygro,1),round(temp,1),time.time()
-            time.sleep(1)
+                values_wrapper[:] = round(hygro,1), round(temp,1), time.time(), 1
+            else:
+                values_wrapper[3] = 0
+            time.sleep(3)
 
 if __name__ == '__main__':
     cth = CtahrThermoHygroSensor(17,"x")

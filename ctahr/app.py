@@ -77,8 +77,9 @@ class CtahrApplication:
     def run(self):
         while not self.not_running.is_set():
             self.not_running.wait(1)
-            self.led_run.activate(self.led_run_status)
-            self.led_run_status = not self.led_run_status
+            self.led_run.activate(True)
+            time.sleep(0.01)
+            self.led_run.activate(False)
 
         self.stats.stop()
         self.stats.join()

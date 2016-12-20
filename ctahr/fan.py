@@ -27,13 +27,13 @@ class CtahrFan(threading.Thread):
         self.starting_time_s = None
 
     def force(self, b):
-        with self.lock:
-            if b:
-                self.state = 'STARTING'
-                self.app.logic.fan_force = True
-            else:
-                self.state = 'STOPPING'
-                self.app.logic.fan_force = False
+ #       with self.lock:
+        if b:
+            self.state = 'STARTING'
+            self.app.logic.fan_force = True
+        else:
+            self.state = 'STOPPING'
+            self.app.logic.fan_force = False
 
     def servo_set(self, cmd):
         GPIO.output(configuration.servo_power_pin, GPIO.HIGH)
@@ -75,9 +75,9 @@ class CtahrFan(threading.Thread):
 
     def run(self):
         while self.running:
-            with self.lock:
-                self.update_state_machine()
-                time.sleep(0.1)
+#            with self.lock:
+            self.update_state_machine()
+            time.sleep(0.1)
         self.update_state_machine()
         print "[-] Stopping fan manager"
 
