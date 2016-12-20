@@ -93,9 +93,7 @@ class CtahrApplication:
         self.logic.stop()
         self.logic.join()
         self.thermohygro_exterior.stop()
-        self.thermohygro_exterior.join()
         self.thermohygro_interior.stop()
-        self.thermohygro_interior.join()
 
         self.led_run.activate(False)
         GPIO.cleanup()

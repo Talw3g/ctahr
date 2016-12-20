@@ -85,5 +85,6 @@ class CtahrButtons(threading.Thread):
             self.update_fan()
             self.update_heater()
             self.update_dehum()
+            print time.time()
             time.sleep(0.001)
         print "[-] Stopping buttons manager"
