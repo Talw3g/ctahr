@@ -35,9 +35,11 @@ class CtahrButtons(threading.Thread):
                 self.reset_up_time = time.time()
         elif self.reset_state == 'UP':
             if (time.time() - self.reset_up_time) > 3:
-                pass
+                self.app.stats.reset_hygro_temp()
+                self.app.display.state = (
+                    self.app.display.states_list[self.app.display.states_indice])
             elif (time.time() - self.reset_up_time) > 1:
-                pass
+                self.app.display.state = 'RESET'
 
             if GPIO.input(configuration.reset_lever_pin) == 1:
                 self.reset_state = 'DOWN'

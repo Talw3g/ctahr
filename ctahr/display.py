@@ -27,8 +27,10 @@ class CtahrDisplay(threading.Thread):
         # Initializing variables
         self.app = app
         self.state = 'CURRENT'
+        self.states_list = ['CURRENT','TEMP','HYGRO','POWER']
         self.states_indice = 0
         self.t_state = 0
+        self.reset_toggle = False
 
         self.int_hygro = None
         self.int_temp = None
@@ -56,9 +58,9 @@ class CtahrDisplay(threading.Thread):
             self.serial.write('\xfe\x42\0')
 
     def cycle_states(self):
-        states = ['CURRENT','TEMP','HYGRO','POWER']
-        self.states_indice = ((self.states_indice + 1) % len(states))
-        self.state = states[self.states_indice]
+        self.states_indice = ((self.states_indice + 1) % len(self.states_list))
+        self.state = self.states_list[self.states_indice]
+        self.clear()
         self.t_state = 0
 
     def update_state(self):
@@ -72,16 +74,41 @@ class CtahrDisplay(threading.Thread):
             self.serial.write(msg)
 
         elif self.state == 'TEMP':
-            self.clear()
-            self.serial.write('MAX TEMP SCREEN')
+            msg = ('Interior MAX: ' + str(self.app.stats.int_temp_max)
+                + '\xb2C\n'
+                + 'Interior MIN: ' + str(self.app.stats.int_temp_min)
+                + '\xb2C\n'
+                + 'Exterior MAX: ' + str(self.app.stats.ext_temp_max)
+                + '\xb2C\n'
+                + 'Exterior MIN: ' + str(self.app.stats.ext_temp_min)
+                + '\xb2C')
+            self.serial.write('\xfe\x48')
+            self.serial.write(msg)
 
         elif self.state == 'HYGRO':
-            self.clear()
-            self.serial.write('MAX HYGRO SCREEN')
+            msg = ('Interior MAX: ' + str(self.app.stats.int_hygro_max)
+                + '\x25\n'
+                + 'Interior MIN: ' + str(self.app.stats.int_hygro_min)
+                + '\x25\n'
+                + 'Exterior MAX: ' + str(self.app.stats.ext_hygro_max)
+                + '\x25\n'
+                + 'Exterior MIN: ' + str(self.app.stats.ext_hygro_min)
+                + '\x25')
+            self.serial.write('\xfe\x48')
+            self.serial.write(msg)
 
         elif self.state == 'POWER':
-            self.clear()
+            self.serial.write('\xfe\x48')
             self.serial.write('POWER SCREEN')
+
+        elif self.state == 'RESET':
+            self.clear()
+            if not self.reset_toggle:
+                msg = '\n        RESET'
+                self.serial.write('\xfe\x48')
+                self.serial.write(msg)
+            self.reset_toggle = not self.reset_toggle
+
 
     def stop(self):
         self.running = False
@@ -90,7 +117,7 @@ class CtahrDisplay(threading.Thread):
         while self.running:
 #            self.clear()
             self.light_state()
-            if (time.time() - self.t_state) > 1:
+            if (time.time() - self.t_state) > 0.5:
                 self.update_state()
                 self.t_state = time.time()
             time.sleep(0.1)

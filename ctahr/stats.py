@@ -117,4 +117,4 @@ class CtahrStats(threading.Thread):
             if (time.time() - self.log_time) > 10:
                 self.save_to_file()
             time.sleep(1)
-        print "[-] Stoping stats module"
+        print "[-] Stopping stats module"
