@@ -12,7 +12,7 @@ class CtahrThermoHygroSensor:
         print "[+] Starting " + self.name + " sensors module"
 
         self.process = None
-        self.values_wrapper = Array('d', 3)
+        self.values_wrapper = Array('d', [0, 0, time.time()])
 
     def get(self):
         """ Return a (hygro, temperature) tuple in floats (% hum, deg C),
@@ -36,7 +36,7 @@ class CtahrThermoHygroSensor:
             time.sleep(1)
 
 if __name__ == '__main__':
-    cth = CtahrThermoHygroSensor(0,"x")
+    cth = CtahrThermoHygroSensor(17,"x")
     cth.start()
     time.sleep(1)
     print cth.get()
