@@ -3,12 +3,16 @@ import threading,time
 import configuration
 
 class CtahrLogic(threading.Thread):
+    daemon = True
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
         self.state = 'INIT'
         self.summer = False
         self.running = True
+        self.heater_force = False
+        self.dehum_force = False
+        self.fan_force = False
 
     def update(self):
         if self.state == 'INIT':
@@ -27,16 +31,16 @@ class CtahrLogic(threading.Thread):
 
     def run(self):
         while self.running:
-            self.int_hygro,self.int_temp,self.int_ts = self.app.thermohygro_interior.get()
-            self.ext_hygro,self.ext_temp,self.ext_ts = self.app.thermohygro_exterior.get()
-            if self.ext_temp > configuration.summer_temp:
-                self.hygro_low = configuration.summer_hygro_low
-                self.hygro_high = configuration.summer_hygro_high
-            else:
-                self.hygro_low = configuration.winter_hygro_low
-                self.hygro_high = configuration.winter_hygro_high
+            #self.int_hygro,self.int_temp,self.int_ts = self.app.thermohygro_interior.get()
+            #self.ext_hygro,self.ext_temp,self.ext_ts = self.app.thermohygro_exterior.get()
+            #if self.ext_temp > configuration.summer_temp:
+            #    self.hygro_low = configuration.summer_hygro_low
+            #    self.hygro_high = configuration.summer_hygro_high
+            #else:
+            #    self.hygro_low = configuration.winter_hygro_low
+            #    self.hygro_high = configuration.winter_hygro_high
 
-            self.update()
+            #self.update()
 
             time.sleep(1)
         print "[-] Stopping logic module"

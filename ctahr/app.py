@@ -40,6 +40,14 @@ class CtahrApplication:
         self.dehum = CtahrRelay(configuration.dehum_relay_pin)
         self.led_run = CtahrRelay(configuration.led_run_pin)
 
+        # Starting regulation daemon
+        self.logic = CtahrLogic(self)
+        self.logic.start()
+
+        # Starting fan manager
+        self.fan = CtahrFan(self)
+        self.fan.start()
+
         # Starting buttons manager
         self.buttons = CtahrButtons(self)
         self.buttons.start()
@@ -47,14 +55,6 @@ class CtahrApplication:
         # Starting display manager
         self.display = CtahrDisplay(self)
         self.display.start()
-
-        # Starting regulation daemon
-        #self.logic = CtahrLogic(self)
-        #self.logic.start()
-
-        # Starting fan manager
-        self.fan = CtahrFan()
-        self.fan.start()
 
         # Starting security daemon
         self.security = CtahrSecurity(self)
@@ -76,17 +76,10 @@ class CtahrApplication:
 
     def run(self):
         while not self.not_running.is_set():
-
             self.not_running.wait(1)
-
             self.led_run.activate(self.led_run_status)
             self.led_run_status = not self.led_run_status
 
-            #hygrotemp_int = self.thermohygro_interior.get()
-            #hygrotemp_ext = self.thermohygro_exterior.get()
-
-            #if hygrotemp_int != None and hygrotemp_ext != None:
-            #    self.display.update_values(hygrotemp_int,hygrotemp_ext)
         self.stats.stop()
         self.stats.join()
         self.security.stop()
@@ -97,10 +90,13 @@ class CtahrApplication:
         self.display.join()
         self.buttons.stop()
         self.buttons.join()
+        self.logic.stop()
+        self.logic.join()
         self.thermohygro_exterior.stop()
         self.thermohygro_exterior.join()
         self.thermohygro_interior.stop()
         self.thermohygro_interior.join()
 
         self.led_run.activate(False)
+        GPIO.cleanup()
         print "[-] Ctahr as stopped"

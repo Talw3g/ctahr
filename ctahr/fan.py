@@ -4,10 +4,11 @@ import RPi.GPIO as GPIO
 import configuration
 
 class CtahrFan(threading.Thread):
-    def __init__(self):
+    def __init__(self, app):
         threading.Thread.__init__(self)
 
         self.lock = threading.Lock()
+        self.app = app
         self.state = 'IDLE'
         self.running = True
 
@@ -25,29 +26,28 @@ class CtahrFan(threading.Thread):
 
         self.starting_time_s = None
 
-    def turn_on(self):
+    def force(self, b):
         with self.lock:
-            self.state = 'STARTING'
-
-    def turn_off(self):
-        with self.lock:
-            self.state = 'STOPPING'
+            if b:
+                self.state = 'STARTING'
+                self.app.logic.fan_force = True
+            else:
+                self.state = 'STOPPING'
+                self.app.logic.fan_force = False
 
     def servo_set(self, cmd):
         GPIO.output(configuration.servo_power_pin, GPIO.HIGH)
-        print "servo ON"
         time.sleep(0.5)
+
         if cmd == 'OPEN':
-            print "opening"
             self.pwm.ChangeDutyCycle(
                 configuration.servo_dutycycle_open)
         elif cmd == 'CLOSE':
-            print "closing"
             self.pwm.ChangeDutyCycle(
                 configuration.servo_dutycycle_close)
+
         time.sleep(0.7)
         GPIO.output(configuration.servo_power_pin, GPIO.LOW)
-        print "servo OFF"
 
 
     def update_state_machine(self):
