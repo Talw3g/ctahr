@@ -62,7 +62,8 @@ class CtahrFan(threading.Thread):
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
             self.servo_set('CLOSE')
             self.up_time = time.time() - self.starting_time_s
-            self.daily_up_time = self.daily_up_time + self.up_time
+            self.app.logic.daily_up_time = (self.daily_up_time +
+                self.up_time)
             self.state = 'IDLE'
             self.app.stats.fan_up_time = self.up_time
 

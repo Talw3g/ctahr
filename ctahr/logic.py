@@ -19,6 +19,8 @@ class CtahrLogic(threading.Thread):
         self.hygro_err = 0
         self.running = True
         self.block_dehum = False
+        self.daily_up_time = 0
+        self.aired_time = time.time()
 
 
     def update_temp(self):
@@ -78,7 +80,8 @@ class CtahrLogic(threading.Thread):
     def update_values(self):
         int_values = self.app.thermohygro_interior.get()
         ext_values = self.app.thermohygro_exterior.get()
-        if int_values[3] != 0 and ext_values[3] != 0:
+        int_valid, ext_valid = int_values[3], ext_values[3]
+        if int_valid != 0 and ext_valid != 0:
             with self.lock:
                 self.int_hygro, self.int_temp = int_values[:2]
                 self.ext_hygro, self.ext_temp = ext_values[:2]
@@ -89,11 +92,26 @@ class CtahrLogic(threading.Thread):
     def calc_err_targ(self):
         self.temp_targ_err = configuration.temp_target - self.int_temp
         self.temp_ext_err = self.ext_temp - self.int_temp
+        self.airing_err = abs(configuration.temp_target - self.ext_temp)
         if self.temp_targ_err < -configuration.delta_targ_H:
             self.hygro_target = configuration.hygro_target_summer
         else:
             self.hygro_target = configuration.hygro_target_winter
         self.hygro_err = self.hygro_target - self.int_hygro
+
+
+    def daily_airing(self):
+        temp_optimal = self.airing_err < configuration.delta_targ_H
+        unaired = (time.time() - self.aired_time) > configuration.daily_period
+        damp = self.ext_hygro > self.hygro_target
+
+        if self.daily_up_time > configuration.daily_airing_time:
+            self.app.fan.daily_up_time = 0
+            self.aired_time = time.time()
+        elif temp_optimal and unaired and not damp:
+            self.fan_vote[1] = True
+        else:
+            self.fan_vote[1] = False
 
 
     def decide_ventilate(self):
@@ -111,6 +129,7 @@ class CtahrLogic(threading.Thread):
         while self.running:
             if self.update_values():
                 self.calc_err_targ()
+                self.daily_airing()
             self.update_temp()
             self.update_hygro()
             self.decide_ventilate()
