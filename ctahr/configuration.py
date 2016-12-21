@@ -40,13 +40,19 @@ stats_log_file = ctahr_absolute_path + 'ctahr/stats.json'
 
 ## REGULATION FIXED VALUES ##
 # Temperature thresholds
-temp_low = 11
-temp_high = 13
-temp_freeze = 9
-summer_temp = 13
+temp_target = 12
+delta_targ_H = 1
+delta_targ_L = 0.2
+delta_ext_H = 2
+delta_ext_L = 1
+delta_freeze_H = 3
+delta_freeze_L = 1
+
 
 # Hygrometry thresholds
-winter_hygro_low = 75
-winter_hygro_high = 80
-summer_hygro_low = 85
-summer_hygro_high = 90
+hygro_target_winter = 75
+hygro_target_summer= 85
+delta_hygro = 5
+
+## POWER VALUES ##
+fan_power = 100

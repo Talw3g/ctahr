@@ -12,11 +12,12 @@ class CtahrStats(threading.Thread):
         self.app = app
         self.lock = threading.Lock()
         self.running = True
+        self.fan_up_time = 0
         self.data = ({'int':{'temp':{'min':None, 'max':None},
             'hygro':{'min':None, 'max':None}},
             'ext':{'temp':{'min':None, 'max':None},
-            'hygro':{'min':None, 'max':None}}})
-
+            'hygro':{'min':None, 'max':None}},
+            'fan':{'energy':None, 'time':None}})
         self.reset_hygro_temp()
         self.log_time = time.time()
         self.get_from_file()
@@ -38,6 +39,8 @@ class CtahrStats(threading.Thread):
                 self.ext_hygro_min = self.data['ext']['hygro']['min']
                 self.ext_temp_max = self.data['ext']['temp']['max']
                 self.ext_temp_min = self.data['ext']['temp']['min']
+                self.fan_global_time = self.data['fan']['time']
+                self.fan_energy = self.data['fan']['energy']
 
 
     def save_to_file(self):
@@ -50,6 +53,8 @@ class CtahrStats(threading.Thread):
             self.data['ext']['hygro']['min'] = self.ext_hygro_min
             self.data['ext']['temp']['max'] = self.ext_temp_max
             self.data['ext']['temp']['min'] = self.ext_temp_min
+            self.data['fan']['time'] = self.fan_global_time
+            self.data['fan']['energy'] = self.fan_energy
         with open(configuration.stats_log_file, 'w') as f:
             json.dump(self.data, f)
 
@@ -107,6 +112,13 @@ class CtahrStats(threading.Thread):
             elif self.ext_temp < self.ext_temp_min:
                 self.ext_temp_min = self.ext_temp
 
+    def update_fan_stats(self):
+        self.fan_global_time = (self.fan_global_time +
+            self.fan_up_time/3600)
+        self.fan_energy = (self.fan_global_time *
+            configuration.fan_power/1e3)
+        self.fan_up_time = 0
+
     def stop(self):
         self.running = False
 
@@ -115,6 +127,7 @@ class CtahrStats(threading.Thread):
             if self.update_values():
                 self.do_math()
             if (time.time() - self.log_time) > 10:
+                self.update_fan_stats()
                 self.save_to_file()
             time.sleep(1)
         print "[-] Stopping stats module"

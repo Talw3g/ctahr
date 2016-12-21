@@ -25,15 +25,11 @@ class CtahrFan(threading.Thread):
 
 
         self.starting_time_s = None
+        self.up_time = 0
+        self.daily_up_time = 0
 
     def force(self, b):
- #       with self.lock:
-        if b:
-            self.state = 'STARTING'
-            self.app.logic.fan_force = True
-        else:
-            self.state = 'STOPPING'
-            self.app.logic.fan_force = False
+        self.app.logic.fan_force = b
 
     def servo_set(self, cmd):
         GPIO.output(configuration.servo_power_pin, GPIO.HIGH)
@@ -52,8 +48,8 @@ class CtahrFan(threading.Thread):
 
     def update_state_machine(self):
         if self.state == 'IDLE':
-            # nothing to do
-            pass
+            if self.app.logic.fan or self.app.buttons.fan:
+                self.state = 'STARTING'
 
         elif self.state == 'STARTING':
             self.servo_set('OPEN')
@@ -62,11 +58,15 @@ class CtahrFan(threading.Thread):
             self.state = 'RUNNING'
 
         elif self.state == 'RUNNING':
-            pass
+            if not self.app.logic.fan:
+                self.state = 'STOPPING'
 
         elif self.state == 'STOPPING':
             self.servo_set('CLOSE')
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
+            self.up_time = time.time() - self.starting_time_s
+            self.daily_up_time = self.daily_up_time + self.up_time
+            self.app.stats.fan_up_time = self.fan_up_time
             self.state = 'IDLE'
 
     def stop(self):

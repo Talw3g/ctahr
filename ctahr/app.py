@@ -44,13 +44,13 @@ class CtahrApplication:
         self.logic = CtahrLogic(self)
         self.logic.start()
 
-        # Starting fan manager
-        self.fan = CtahrFan(self)
-        self.fan.start()
-
         # Starting buttons manager
         self.buttons = CtahrButtons(self)
         self.buttons.start()
+
+        # Starting fan manager
+        self.fan = CtahrFan(self)
+        self.fan.start()
 
         # Starting display manager
         self.display = CtahrDisplay(self)
@@ -85,10 +85,10 @@ class CtahrApplication:
         self.stats.join()
         self.security.stop()
         self.security.join()
-        self.fan.stop()
-        self.fan.join()
         self.display.stop()
         self.display.join()
+        self.fan.stop()
+        self.fan.join()
         self.buttons.stop()
         self.buttons.join()
         self.logic.stop()
