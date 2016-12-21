@@ -18,6 +18,8 @@ class CtahrButtons(threading.Thread):
         self.heater_state = 'WAIT'
         self.dehum_state = 'WAIT'
         self.fan = False
+        self.heater = False
+        self.dehum = False
 
         self.running = True
 
@@ -63,21 +65,21 @@ class CtahrButtons(threading.Thread):
         if self.heater_state == 'WAIT':
             if GPIO.input(configuration.heater_lever_pin) == 1:
                 self.heater_state = 'UP'
-                self.app.logic.heater_force = True
+                self.heater = True
         elif self.heater_state == 'UP':
             if GPIO.input(configuration.heater_lever_pin) == 0:
                 self.heater_state = 'WAIT'
-                self.app.logic.heater_force = False
+                self.heater = False
 
     def update_dehum(self):
         if self.dehum_state == 'WAIT':
             if GPIO.input(configuration.dehum_lever_pin) == 1:
                 self.dehum_state = 'UP'
-                self.app.logic.dehum_force = True
+                self.dehum = True
         elif self.dehum_state == 'UP':
             if GPIO.input(configuration.dehum_lever_pin) == 0:
                 self.dehum_state = 'WAIT'
-                self.app.logic.dehum_force = False
+                self.dehum = False
 
     def stop(self):
         self.running = False

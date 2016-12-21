@@ -86,7 +86,7 @@ class CtahrLogic(threading.Thread):
         else:
             return False
 
-    def do_math(self):
+    def calc_err_targ(self):
         self.temp_targ_err = configuration.temp_target - self.int_temp
         self.temp_ext_err = self.ext_temp - self.int_temp
         if self.temp_targ_err < -configuration.delta_targ_H:
@@ -97,12 +97,8 @@ class CtahrLogic(threading.Thread):
 
 
     def decide_ventilate(self):
-        if self.fan_vote[0]:
-            self.fan = True
-        elif self.fan_vote[1] and not self.dehum:
-            self.fan = True
-        else:
-            self.fan = False
+        temp_control, daily_airing = self.fan_vote
+        self.fan = temp_control or (daily_airing and not self.dehum)
 
 
     def stop(self):
@@ -114,7 +110,7 @@ class CtahrLogic(threading.Thread):
     def run(self):
         while self.running:
             if self.update_values():
-                self.do_math()
+                self.calc_err_targ()
             self.update_temp()
             self.update_hygro()
             self.decide_ventilate()

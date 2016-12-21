@@ -3,14 +3,14 @@ import threading,time,os
 from datetime import datetime
 from mailing import CtahrMailing
 
-class CtahrSecurity(threading.Thread):
+class CtahrSafety(threading.Thread):
 #    daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
         self.running = True
-        print "[+] Starting security module"
+        print "[+] Starting safety module"
 
         self.int_time = time.time()
         self.ext_time = time.time()
@@ -50,4 +50,4 @@ class CtahrSecurity(threading.Thread):
             ext_values = self.app.thermohygro_exterior.get()
             self.check_freshness(int_values, ext_values)
             time.sleep(1)
-        print "[-] Stopping security module"
+        print "[-] Stopping safety module"

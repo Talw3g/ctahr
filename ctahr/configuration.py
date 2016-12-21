@@ -56,3 +56,5 @@ delta_hygro = 5
 
 ## POWER VALUES ##
 fan_power = 100
+heater_power = 1500
+dehum_power = 600

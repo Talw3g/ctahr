@@ -3,15 +3,15 @@ import threading,time
 import RPi.GPIO as GPIO
 import configuration
 
-class CtahrHeater(threading.Thread):
+class CtahrDehum(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
-        print "[+] Starting heater manager"
+        print "[+] Starting dehum manager"
 
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
-        GPIO.setup(configuration.heater_relay_pin, GPIO.OUT,
+        GPIO.setup(configuration.dehum_relay_pin, GPIO.OUT,
             initial = GPIO.LOW)
         self.state = 'OFF'
         self.running = True
@@ -19,26 +19,26 @@ class CtahrHeater(threading.Thread):
 
     def update_state(self):
         if self.state == 'OFF':
-            if self.app.logic.heat or self.app.buttons.heater:
+            if self.app.logic.dehum or self.app.buttons.dehum:
                 self.state = 'STARTING'
 
         elif self.state == 'STARTING':
-            GPIO.output(configuration.heater_relay_pin, GPIO.HIGH)
+            GPIO.output(configuration.dehum_relay_pin, GPIO.HIGH)
             self.starting_time = time.time()
             self.state = 'ON'
 
         elif self.state == 'ON':
-            if not self.app.logic.heat and not self.app.buttons.heater:
+            if not self.app.logic.dehum and not self.app.buttons.dehum:
                 self.state = 'STOPPING'
 
         elif self.state == 'STOPPING':
-            GPIO.output(configuration.heater_relay_pin, GPIO.LOW)
-            self.app.stats.heater_up_time = time.time() - self.starting_time
+            GPIO.output(configuration.dehum_relay_pin, GPIO.LOW)
+            self.app.stats.dehum_up_time = time.time() - self.starting_time
             self.state = 'OFF'
 
     def stop(self):
         self.running = False
-        GPIO.output(configuration.heater_relay_pin, GPIO.LOW)
+        GPIO.output(configuration.dehum_relay_pin, GPIO.LOW)
 
 
     def run(self):
@@ -46,4 +46,4 @@ class CtahrHeater(threading.Thread):
             self.update_state()
             time.sleep(1)
 
-        print "[-] Stopping heater manager"
+        print "[-] Stopping dehum manager"

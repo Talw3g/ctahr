@@ -1,4 +1,5 @@
 
+from __future__ import division
 import threading,time,os
 import json
 import configuration
@@ -13,11 +14,15 @@ class CtahrStats(threading.Thread):
         self.lock = threading.Lock()
         self.running = True
         self.fan_up_time = 0
+        self.heater_up_time = 0
+        self.dehum_up_time = 0
         self.data = ({'int':{'temp':{'min':None, 'max':None},
             'hygro':{'min':None, 'max':None}},
             'ext':{'temp':{'min':None, 'max':None},
             'hygro':{'min':None, 'max':None}},
-            'fan':{'energy':None, 'time':None}})
+            'fan':{'energy':None, 'time':None},
+            'heater':{'energy':None, 'time':None},
+            'dehum':{'energy':None, 'time':None}})
         self.reset_hygro_temp()
         self.log_time = time.time()
         self.get_from_file()
@@ -41,6 +46,10 @@ class CtahrStats(threading.Thread):
                 self.ext_temp_min = self.data['ext']['temp']['min']
                 self.fan_global_time = self.data['fan']['time']
                 self.fan_energy = self.data['fan']['energy']
+                self.heater_global_time = self.data['heater']['time']
+                self.heater_energy = self.data['heater']['energy']
+                self.dehum_global_time = self.data['dehum']['time']
+                self.dehum_energy = self.data['dehum']['energy']
 
 
     def save_to_file(self):
@@ -55,6 +64,10 @@ class CtahrStats(threading.Thread):
             self.data['ext']['temp']['min'] = self.ext_temp_min
             self.data['fan']['time'] = self.fan_global_time
             self.data['fan']['energy'] = self.fan_energy
+            self.data['heater']['time'] = self.heater_global_time
+            self.data['heater']['energy'] = self.heater_energy
+            self.data['dehum']['time'] = self.dehum_global_time
+            self.data['dehum']['energy'] = self.dehum_energy
         with open(configuration.stats_log_file, 'w') as f:
             json.dump(self.data, f)
 
@@ -115,9 +128,23 @@ class CtahrStats(threading.Thread):
     def update_fan_stats(self):
         self.fan_global_time = (self.fan_global_time +
             self.fan_up_time/3600)
-        self.fan_energy = (self.fan_global_time *
-            configuration.fan_power/1e3)
+        self.fan_energy = round(self.fan_global_time *
+            configuration.fan_power/1e3, 1)
         self.fan_up_time = 0
+
+    def update_heater_stats(self):
+        self.heater_global_time = (self.heater_global_time +
+            self.heater_up_time/3600)
+        self.heater_energy = round(self.heater_global_time *
+            configuration.heater_power/1e3, 1)
+        self.heater_up_time = 0
+
+    def update_dehum_stats(self):
+        self.dehum_global_time = (self.dehum_global_time +
+            self.dehum_up_time/3600)
+        self.dehum_energy = round(self.dehum_global_time *
+            configuration.dehum_power/1e3, 1)
+        self.dehum_up_time = 0
 
     def stop(self):
         self.running = False
@@ -128,6 +155,9 @@ class CtahrStats(threading.Thread):
                 self.do_math()
             if (time.time() - self.log_time) > 10:
                 self.update_fan_stats()
+                self.update_heater_stats()
+                self.update_dehum_stats()
                 self.save_to_file()
+                self.log_time = time.time()
             time.sleep(1)
         print "[-] Stopping stats module"

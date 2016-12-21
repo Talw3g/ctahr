@@ -9,10 +9,12 @@ from display import CtahrDisplay
 from th_sensor import CtahrThermoHygroSensor
 from relay import CtahrRelay
 from logic import CtahrLogic
-from security import CtahrSecurity
+from safety import CtahrSafety
 from stats import CtahrStats
 from buttons import CtahrButtons
 from fan import CtahrFan
+from heater import CtahrHeater
+from dehum import CtahrDehum
 
 class CtahrApplication:
 
@@ -36,8 +38,6 @@ class CtahrApplication:
         self.thermohygro_exterior.start()
 
         # Creating controlled output objects
-        self.heater = CtahrRelay(configuration.heater_relay_pin)
-        self.dehum = CtahrRelay(configuration.dehum_relay_pin)
         self.led_run = CtahrRelay(configuration.led_run_pin)
 
         # Starting regulation daemon
@@ -52,13 +52,21 @@ class CtahrApplication:
         self.fan = CtahrFan(self)
         self.fan.start()
 
+        # Starting heater manager
+        self.heater = CtahrHeater(self)
+        self.heater.start()
+
+        # Starting dehum manager
+        self.dehum = CtahrDehum(self)
+        self.dehum.start()
+
         # Starting display manager
         self.display = CtahrDisplay(self)
         self.display.start()
 
-        # Starting security daemon
-        self.security = CtahrSecurity(self)
-        self.security.start()
+        # Starting safety daemon
+        self.safety = CtahrSafety(self)
+        self.safety.start()
 
         # Starting stats daemon
         self.stats = CtahrStats(self)
@@ -83,10 +91,14 @@ class CtahrApplication:
 
         self.stats.stop()
         self.stats.join()
-        self.security.stop()
-        self.security.join()
+        self.safety.stop()
+        self.safety.join()
         self.display.stop()
         self.display.join()
+        self.dehum.stop()
+        self.dehum.join()
+        self.heater.stop()
+        self.heater.join()
         self.fan.stop()
         self.fan.join()
         self.buttons.stop()
