@@ -1,5 +1,6 @@
 
 import threading,time,os
+import monotonic
 from datetime import datetime
 from mailing import CtahrMailing
 
@@ -12,8 +13,8 @@ class CtahrSafety(threading.Thread):
         self.running = True
         print "[+] Starting safety module"
 
-        self.int_time = time.time()
-        self.ext_time = time.time()
+        self.int_time = monotonic.time.time()
+        self.ext_time = monotonic.time.time()
 
         self.mail = CtahrMailing()
 
@@ -23,10 +24,10 @@ class CtahrSafety(threading.Thread):
         if ext_values[3] != 0:
             self.ext_time = ext_values[2]
 
-        if (time.time() - self.int_time) > 300:
+        if (monotonic.time.time() - self.int_time) > 300:
             self.kill('int_outdated',int_values)
 
-        if (time.time() - self.ext_time) > 300:
+        if (monotonic.time.time() - self.ext_time) > 300:
             self.kill('ext_outdated',ext_values)
 
     def kill(self, reason, values):

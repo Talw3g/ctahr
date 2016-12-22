@@ -1,5 +1,6 @@
 
 import os,sys,time
+import monotonic
 import threading
 import RPi.GPIO as GPIO
 import configuration
@@ -127,9 +128,9 @@ class CtahrDisplay(threading.Thread):
         while self.running:
 #            self.clear()
             self.light_state()
-            if (time.time() - self.t_state) > 0.5:
+            if (monotonic.time.time() - self.t_state) > 0.5:
                 self.update_state()
-                self.t_state = time.time()
+                self.t_state = monotonic.time.time()
             time.sleep(0.1)
 
         self.clear()

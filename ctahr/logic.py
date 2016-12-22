@@ -1,5 +1,6 @@
 
 import threading,time
+import monotonic
 import configuration
 
 class CtahrLogic(threading.Thread):
@@ -22,7 +23,7 @@ class CtahrLogic(threading.Thread):
         self.daily_uptime = 0
         self.int_temp = 0
         self.ext_temp = 0
-        self.aired_time = time.time()
+        self.aired_time = monotonic.time.time()
 
 
     def update_temp(self):
@@ -107,13 +108,13 @@ class CtahrLogic(threading.Thread):
 
     def daily_airing(self):
         temp_optimal = self.airing_err < configuration.delta_targ_H
-        unaired = (time.time() - self.aired_time) > configuration.daily_period
+        unaired = (monotonic.time.time() - self.aired_time) > configuration.daily_period
         damp = self.ext_hygro > self.hygro_target
         self.daily_uptime = self.app.fan.get_uptime()
 
         if self.daily_uptime > configuration.daily_airing_time:
             self.app.fan.reset_uptime()
-            self.aired_time = time.time()
+            self.aired_time = monotonic.time.time()
             self.fan_vote[1] = False
         elif temp_optimal and unaired and not damp:
             self.fan_vote[1] = True

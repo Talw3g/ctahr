@@ -1,5 +1,6 @@
 
 import time,csv
+import monotonic
 from multiprocessing import Process,Array
 import Adafruit_DHT as DHT
 from dev_filter import StdDevFilter
@@ -13,7 +14,7 @@ class CtahrThermoHygroSensor:
         print "[+] Starting " + self.name + " sensors module"
 
         self.process = None
-        self.values_wrapper = Array('d', [0, 0, time.time(), 0])
+        self.values_wrapper = Array('d', [0, 0, monotonic.time.time(), 0])
 
     def get(self):
         """ Return a (hygro, temperature) tuple in floats (% hum, deg C),
@@ -48,7 +49,7 @@ class CtahrThermoHygroSensor:
 
                 if valid_H and valid_T:
                     valid = 1
-                values_wrapper[:] = round(hygro,1), round(temp,1), time.time(), valid
+                values_wrapper[:] = round(hygro,1), round(temp,1), monotonic.time.time(), valid
 
             else:
                 values_wrapper[3] = 0

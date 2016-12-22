@@ -1,5 +1,6 @@
 
 import threading,time
+import monotonic
 import RPi.GPIO as GPIO
 import configuration
 
@@ -24,7 +25,7 @@ class CtahrHeater(threading.Thread):
 
         elif self.state == 'STARTING':
             GPIO.output(configuration.heater_relay_pin, GPIO.HIGH)
-            self.starting_time = time.time()
+            self.starting_time = monotonic.time.time()
             self.state = 'ON'
 
         elif self.state == 'ON':
@@ -33,7 +34,7 @@ class CtahrHeater(threading.Thread):
 
         elif self.state == 'STOPPING':
             GPIO.output(configuration.heater_relay_pin, GPIO.LOW)
-            self.app.stats.heater_uptime = time.time() - self.starting_time
+            self.app.stats.heater_uptime = monotonic.time.time() - self.starting_time
             self.state = 'OFF'
 
     def stop(self):

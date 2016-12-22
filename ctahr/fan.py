@@ -1,5 +1,6 @@
 
 import threading,time
+import monotonic
 import RPi.GPIO as GPIO
 import configuration
 
@@ -50,8 +51,8 @@ class CtahrFan(threading.Thread):
                 self.state = 'STARTING'
 
         elif self.state == 'STARTING':
-            self.current_ts = time.time()
-            self.cycle_ts = time.time()
+            self.current_ts = monotonic.time.time()
+            self.cycle_ts = monotonic.time.time()
             self.servo_set('OPEN')
             GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
             self.state = 'RUNNING'
@@ -61,15 +62,15 @@ class CtahrFan(threading.Thread):
                 self.state = 'STOPPING'
 
         elif self.state == 'STOPPING':
-            self.uptime += time.time() - self.current_ts
-            self.cycle_uptime = time.time() - self.cycle_ts
+            self.uptime += monotonic.time.time() - self.current_ts
+            self.cycle_uptime = monotonic.time.time() - self.cycle_ts
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
             self.servo_set('CLOSE')
             self.state = 'IDLE'
 
     def get_uptime(self):
         if self.app.logic.fan or self.app.buttons.fan:
-            current_uptime = (self.uptime + time.time()
+            current_uptime = (self.uptime + monotonic.time.time()
                 - self.current_ts)
         else:
             current_uptime = self.uptime
@@ -78,7 +79,7 @@ class CtahrFan(threading.Thread):
     def reset_uptime(self):
         self.uptime = 0
         if self.state == 'RUNNING':
-            self.current_ts = time.time()
+            self.current_ts = monotonic.time.time()
 
     def stop(self):
         self.running = False
