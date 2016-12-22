@@ -4,6 +4,7 @@ import signal
 import threading
 from utils import ctxt,GREEN
 import configuration
+import RPi.GPIO as GPIO
 from display import CtahrDisplay
 from th_sensor import CtahrThermoHygroSensor
 from relay import CtahrRelay
@@ -21,6 +22,10 @@ class CtahrApplication:
         self.not_running = threading.Event()
 
         print "[+] Starting Ctahr"
+
+        # Setting up watchdog
+        self.watchdog = CtahrRelay(configuration.watchdog_pin)
+        self.watchdog.activate(False)
 
         # gracefull shutdown signal handler
         signal.signal(signal.SIGTERM, self.shutdown)

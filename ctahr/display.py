@@ -17,7 +17,10 @@ class CtahrDisplay(threading.Thread):
         self.serial = Serial(
             configuration.display_serial_device,
             configuration.display_serial_speed)
+        # disables autoscroll:
         self.serial.write('\xfe\x52')
+        # reset display contrast:
+        self.serial.write('\xfe\x91\x64')
         self.clear()
 
         # Configuring light sensor
