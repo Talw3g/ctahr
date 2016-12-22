@@ -35,21 +35,21 @@ class CtahrButtons(threading.Thread):
         if self.reset_state == 'WAIT':
             if GPIO.input(configuration.reset_lever_pin) == 0:
                 self.reset_state = 'UP'
-                self.reset_up_time = time.time()
+                self.reset_uptime = time.time()
         elif self.reset_state == 'UP':
-            if (time.time() - self.reset_up_time) > 5:
+            if (time.time() - self.reset_uptime) > 5:
                 self.app.stats.reset_global_times()
-            elif (time.time() - self.reset_up_time) > 3:
+            elif (time.time() - self.reset_uptime) > 3:
                 self.app.stats.reset_hygro_temp()
                 self.app.display.state = (
                     self.app.display.states_list[self.app.display.states_indice])
-            elif (time.time() - self.reset_up_time) > 1:
+            elif (time.time() - self.reset_uptime) > 1:
                 self.app.display.state = 'RESET'
 
             if GPIO.input(configuration.reset_lever_pin) == 1:
                 self.reset_state = 'DOWN'
         elif self.reset_state == 'DOWN':
-            if (time.time() - self.reset_up_time) < 0.5:
+            if (time.time() - self.reset_uptime) < 0.5:
                 self.app.display.cycle_states()
             self.reset_state = 'WAIT'
 

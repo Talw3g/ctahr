@@ -49,8 +49,8 @@ delta_freeze_H = 3
 delta_freeze_L = 1
 
 # Daily airing
-daily_period = 5
-daily_airing_time = 10
+daily_period = 86400
+daily_airing_time = 3600
 
 # Hygrometry thresholds
 hygro_target_winter = 75

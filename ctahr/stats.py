@@ -13,9 +13,8 @@ class CtahrStats(threading.Thread):
         self.app = app
         self.lock = threading.Lock()
         self.running = True
-        self.fan_up_time = 0
-        self.heater_up_time = 0
-        self.dehum_up_time = 0
+        self.heater_uptime = 0
+        self.dehum_uptime = 0
         self.data = ({'int':{'temp':{'min':None, 'max':None},
             'hygro':{'min':None, 'max':None}},
             'ext':{'temp':{'min':None, 'max':None},
@@ -131,25 +130,22 @@ class CtahrStats(threading.Thread):
                 self.ext_temp_min = self.ext_temp
 
     def update_fan_stats(self):
-        self.fan_global_time = (self.fan_global_time +
-            self.fan_up_time/3600)
+        self.fan_global_time += self.app.fan.cycle_uptime/3600
         self.fan_energy = round(self.fan_global_time *
             configuration.fan_power/1e3, 1)
-        self.fan_up_time = 0
+        self.app.fan.cycle_uptime = 0
 
     def update_heater_stats(self):
-        self.heater_global_time = (self.heater_global_time +
-            self.heater_up_time/3600)
+        self.heater_global_time += self.heater_uptime/3600
         self.heater_energy = round(self.heater_global_time *
             configuration.heater_power/1e3, 1)
-        self.heater_up_time = 0
+        self.heater_uptime = 0
 
     def update_dehum_stats(self):
-        self.dehum_global_time = (self.dehum_global_time +
-            self.dehum_up_time/3600)
+        self.dehum_global_time += self.dehum_uptime/3600
         self.dehum_energy = round(self.dehum_global_time *
             configuration.dehum_power/1e3, 1)
-        self.dehum_up_time = 0
+        self.dehum_uptime = 0
 
     def stop(self):
         self.running = False
@@ -158,10 +154,10 @@ class CtahrStats(threading.Thread):
         while self.running:
             if self.update_values():
                 self.calc_extremum()
-            if (time.time() - self.log_time) > 10:
                 self.update_fan_stats()
                 self.update_heater_stats()
                 self.update_dehum_stats()
+            if (time.time() - self.log_time) > 10:
                 self.save_to_file()
                 self.log_time = time.time()
             time.sleep(1)

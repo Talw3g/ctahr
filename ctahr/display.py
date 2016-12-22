@@ -98,11 +98,12 @@ class CtahrDisplay(threading.Thread):
             self.serial.write(msg)
 
         elif self.state == 'POWER':
-            msg = ('Fan Energy: ' + str(self.app.stats.fan_energy)
+            msg = (' ENERGY CONSUMPTION\n'
+                + 'Fan: ' + str(self.app.stats.fan_energy)
                 + 'KWh\n'
-                + 'Heater Energy: ' + str(self.app.stats.heater_energy)
+                + 'Heater: ' + str(self.app.stats.heater_energy)
                 + 'KWh\n'
-                + 'Dehum Energy: ' + str(self.app.stats.dehum_energy)
+                + 'Dehum: ' + str(self.app.stats.dehum_energy)
                 + 'KWh')
             self.serial.write('\xfe\x48')
             self.serial.write(msg)

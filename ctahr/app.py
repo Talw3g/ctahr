@@ -4,7 +4,6 @@ import signal
 import threading
 from utils import ctxt,GREEN
 import configuration
-import RPi.GPIO as GPIO
 from display import CtahrDisplay
 from th_sensor import CtahrThermoHygroSensor
 from relay import CtahrRelay

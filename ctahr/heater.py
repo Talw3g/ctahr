@@ -33,7 +33,7 @@ class CtahrHeater(threading.Thread):
 
         elif self.state == 'STOPPING':
             GPIO.output(configuration.heater_relay_pin, GPIO.LOW)
-            self.app.stats.heater_up_time = time.time() - self.starting_time
+            self.app.stats.heater_uptime = time.time() - self.starting_time
             self.state = 'OFF'
 
     def stop(self):

@@ -19,7 +19,7 @@ class CtahrLogic(threading.Thread):
         self.hygro_err = 0
         self.running = True
         self.block_dehum = False
-        self.daily_up_time = 0
+        self.daily_uptime = 0
         self.int_temp = 0
         self.ext_temp = 0
         self.aired_time = time.time()
@@ -109,9 +109,9 @@ class CtahrLogic(threading.Thread):
         temp_optimal = self.airing_err < configuration.delta_targ_H
         unaired = (time.time() - self.aired_time) > configuration.daily_period
         damp = self.ext_hygro > self.hygro_target
-        self.daily_up_time = self.app.fan.get_uptime()
+        self.daily_uptime = self.app.fan.get_uptime()
 
-        if self.daily_up_time > configuration.daily_airing_time:
+        if self.daily_uptime > configuration.daily_airing_time:
             self.app.fan.reset_uptime()
             self.aired_time = time.time()
             self.fan_vote[1] = False
@@ -140,7 +140,5 @@ class CtahrLogic(threading.Thread):
             self.update_temp()
             self.update_hygro()
             self.decide_ventilate()
-            print self.daily_up_time
-            print 'fan: ',self.fan
             time.sleep(1)
         print "[-] Stopping logic module"

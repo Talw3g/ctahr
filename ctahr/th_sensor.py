@@ -32,15 +32,15 @@ class CtahrThermoHygroSensor:
     def run(values_wrapper, pin, name):
         vs_filter = StdDevFilter(3,20)
         while True:
-            if name == 'interior':
-                f = '/opt/ctahr/ctahr/int.csv'
-            else:
-                f = '/opt/ctahr/ctahr/ext.csv'
-            for row in csv.reader(open(f,'rb'), delimiter=','):
-                hygro,temp = row
-                hygro = float(hygro)
-                temp = float(temp)
-           # hygro,temp = DHT.read_retry(DHT.DHT22, pin)
+           # if name == 'interior':
+           #     f = '/opt/ctahr/ctahr/int.csv'
+           # else:
+           #     f = '/opt/ctahr/ctahr/ext.csv'
+           # for row in csv.reader(open(f,'rb'), delimiter=','):
+           #     hygro,temp = row
+           #     hygro = float(hygro)
+           #     temp = float(temp)
+            hygro,temp = DHT.read_retry(DHT.DHT22, pin)
 
             if hygro != None and temp != None:
                 hygro, valid_H = vs_filter.do(hygro)
@@ -55,13 +55,3 @@ class CtahrThermoHygroSensor:
 
             time.sleep(3)
 
-if __name__ == '__main__':
-    cth = CtahrThermoHygroSensor(17,"x")
-    cth.start()
-    time.sleep(1)
-    print cth.get()
-    time.sleep(1)
-    print cth.get()
-    time.sleep(1)
-    print cth.get()
-    cth.stop()

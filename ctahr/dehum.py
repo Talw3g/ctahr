@@ -33,7 +33,7 @@ class CtahrDehum(threading.Thread):
 
         elif self.state == 'STOPPING':
             GPIO.output(configuration.dehum_relay_pin, GPIO.LOW)
-            self.app.stats.dehum_up_time = time.time() - self.starting_time
+            self.app.stats.dehum_uptime = time.time() - self.starting_time
             self.state = 'OFF'
 
     def stop(self):

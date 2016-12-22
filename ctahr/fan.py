@@ -23,8 +23,10 @@ class CtahrFan(threading.Thread):
         self.pwm = GPIO.PWM(configuration.servo_pwm_pin, 50)
         self.pwm.start(configuration.servo_dutycycle_close)
 
-        self.starting_time_s = None
-        self.up_time = 0
+        self.current_ts = None
+        self.cycle_ts = None
+        self.uptime = 0
+        self.cycle_uptime = 0
 
 
     def servo_set(self, cmd):
@@ -48,7 +50,8 @@ class CtahrFan(threading.Thread):
                 self.state = 'STARTING'
 
         elif self.state == 'STARTING':
-            self.starting_time_s = time.time()
+            self.current_ts = time.time()
+            self.cycle_ts = time.time()
             self.servo_set('OPEN')
             GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
             self.state = 'RUNNING'
@@ -58,23 +61,24 @@ class CtahrFan(threading.Thread):
                 self.state = 'STOPPING'
 
         elif self.state == 'STOPPING':
-            self.up_time += time.time() - self.starting_time_s
+            self.uptime += time.time() - self.current_ts
+            self.cycle_uptime = time.time() - self.cycle_ts
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
             self.servo_set('CLOSE')
             self.state = 'IDLE'
 
     def get_uptime(self):
         if self.app.logic.fan or self.app.buttons.fan:
-            current_uptime = (self.up_time + time.time()
-                - self.starting_time_s)
+            current_uptime = (self.uptime + time.time()
+                - self.current_ts)
         else:
-            current_uptime = self.up_time
+            current_uptime = self.uptime
         return current_uptime
 
     def reset_uptime(self):
-        self.up_time = 0
+        self.uptime = 0
         if self.state == 'RUNNING':
-            self.starting_time_s = time.time()
+            self.current_ts = time.time()
 
     def stop(self):
         self.running = False
