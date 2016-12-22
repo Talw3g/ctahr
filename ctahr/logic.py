@@ -52,6 +52,9 @@ class CtahrLogic(threading.Thread):
             if (abs(self.temp_targ_err) < configuration.delta_targ_L or
                 abs(self.temp_ext_err) < configuration.delta_ext_L):
                 self.temp_state = 'CHECK'
+            elif self.temp_targ_err > configuration.delta_freeze_H:
+                self.temp_state = 'HEAT'
+                self.fan_vote[0] = False
             else:
                 self.fan_vote[0] = True
 
@@ -65,16 +68,16 @@ class CtahrLogic(threading.Thread):
     def update_hygro(self):
         if self.hygro_state == 'CHECK':
             if (self.hygro_err < -configuration.delta_hygro and
-                    not self.block.dehum):
+                    not self.block_dehum):
                 self.hygro_state = 'DEHUM'
             else:
                 self.dehum = False
 
         elif self.hygro_state == 'DEHUM':
-            if (self.hygro_err > 0 or self.block.dehum):
+            if (self.hygro_err > 0 or self.block_dehum):
                 self.hygro_state = 'CHECK'
             else:
-                self.dehum = False
+                self.dehum = True
 
 
     def update_values(self):
@@ -106,8 +109,9 @@ class CtahrLogic(threading.Thread):
         damp = self.ext_hygro > self.hygro_target
 
         if self.daily_up_time > configuration.daily_airing_time:
-            self.app.fan.daily_up_time = 0
+            self.daily_up_time = 0
             self.aired_time = time.time()
+            self.fan_vote[1] = False
         elif temp_optimal and unaired and not damp:
             self.fan_vote[1] = True
         else:
