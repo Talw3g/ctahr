@@ -1,7 +1,8 @@
+
 import time,csv
 from multiprocessing import Process,Array
-
 import Adafruit_DHT as DHT
+from dev_filter import StdDevFilter
 
 class CtahrThermoHygroSensor:
     daemon = True
@@ -29,29 +30,29 @@ class CtahrThermoHygroSensor:
 
     @staticmethod
     def run(values_wrapper, pin, name):
+        vs_filter = StdDevFilter(3,20)
         while True:
-           # if name == 'interior':
-           #     f = '/opt/ctahr/ctahr/int.csv'
-           # else:
-           #     f = '/opt/ctahr/ctahr/ext.csv'
-           # for row in csv.reader(open(f,'rb'), delimiter=','):
-           #     hygro,temp = row
-           #     hygro = float(hygro)
-           #     temp = float(temp)
-            hygro,temp = DHT.read_retry(DHT.DHT22, pin)
-            if hygro != None and temp != None:
-                try:
-                    var_temp = abs(prev_temp - temp)
-                except:
-                    var_temp = 0
+            if name == 'interior':
+                f = '/opt/ctahr/ctahr/int.csv'
+            else:
+                f = '/opt/ctahr/ctahr/ext.csv'
+            for row in csv.reader(open(f,'rb'), delimiter=','):
+                hygro,temp = row
+                hygro = float(hygro)
+                temp = float(temp)
+           # hygro,temp = DHT.read_retry(DHT.DHT22, pin)
 
-                if var_temp < 5:
-                    values_wrapper[:] = round(hygro,1), round(temp,1), time.time(), 1
-                    prev_temp = temp
-                else:
-                    values_wrapper[3] = 0
+            if hygro != None and temp != None:
+                hygro, valid_H = vs_filter.do(hygro)
+                temp, valid_T = vs_filter.do(temp)
+
+                if valid_H and valid_T:
+                    valid = 1
+                values_wrapper[:] = round(hygro,1), round(temp,1), time.time(), valid
+
             else:
                 values_wrapper[3] = 0
+
             time.sleep(3)
 
 if __name__ == '__main__':

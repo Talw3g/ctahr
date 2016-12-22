@@ -1,4 +1,4 @@
-
+## Code from JDRobotter : https://github.com/JDRobotter ##
 
 DEFAULT = '\033[49m\033[39m'
 RED = '\033[91m'

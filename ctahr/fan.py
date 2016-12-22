@@ -25,8 +25,6 @@ class CtahrFan(threading.Thread):
 
         self.starting_time_s = None
         self.up_time = 0
-        self.daily_up_time = 0
-        self.last_loop_time = time.time()
 
 
     def servo_set(self, cmd):
@@ -50,29 +48,33 @@ class CtahrFan(threading.Thread):
                 self.state = 'STARTING'
 
         elif self.state == 'STARTING':
+            self.starting_time_s = time.time()
             self.servo_set('OPEN')
             GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
-            self.starting_time_s = time.time()
             self.state = 'RUNNING'
 
         elif self.state == 'RUNNING':
             if not self.app.logic.fan and not self.app.buttons.fan:
                 self.state = 'STOPPING'
-            else:
-                t_loop = time.time() - self.last_loop_time
-                self.app.logic.daily_up_time = (self.app.logic.daily_up_time
-                    + t_loop)
-                self.up_time = self.up_time + t_loop
-                self.app.stats.fan_up_time = self.up_time
 
         elif self.state == 'STOPPING':
+            self.up_time += time.time() - self.starting_time_s
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
             self.servo_set('CLOSE')
-            #self.up_time = time.time() - self.starting_time_s
-            #self.app.logic.daily_up_time = (self.app.logic.daily_up_time
-            #    + self.up_time)
             self.state = 'IDLE'
-            #self.app.stats.fan_up_time = self.up_time
+
+    def get_uptime(self):
+        if self.app.logic.fan or self.app.buttons.fan:
+            current_uptime = (self.up_time + time.time()
+                - self.starting_time_s)
+        else:
+            current_uptime = self.up_time
+        return current_uptime
+
+    def reset_uptime(self):
+        self.up_time = 0
+        if self.state == 'RUNNING':
+            self.starting_time_s = time.time()
 
     def stop(self):
         self.running = False
@@ -81,9 +83,7 @@ class CtahrFan(threading.Thread):
 
     def run(self):
         while self.running:
-#            with self.lock:
             self.update_state_machine()
-            self.last_loop_time = time.time()
             time.sleep(0.1)
         print "[-] Stopping fan manager"
 
