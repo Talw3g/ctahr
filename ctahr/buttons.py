@@ -37,7 +37,9 @@ class CtahrButtons(threading.Thread):
                 self.reset_state = 'UP'
                 self.reset_up_time = time.time()
         elif self.reset_state == 'UP':
-            if (time.time() - self.reset_up_time) > 3:
+            if (time.time() - self.reset_up_time) > 5:
+                self.app.stats.reset_global_times()
+            elif (time.time() - self.reset_up_time) > 3:
                 self.app.stats.reset_hygro_temp()
                 self.app.display.state = (
                     self.app.display.states_list[self.app.display.states_indice])

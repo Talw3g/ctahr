@@ -98,8 +98,13 @@ class CtahrStats(threading.Thread):
             self.ext_temp_min = self.ext_temp
 
 
+    def reset_global_times(self):
+        self.fan_global_time = 0
+        self.heater_global_time = 0
+        self.dehum_global_time = 0
 
-    def do_math(self):
+
+    def calc_extremum(self):
         with self.lock:
             # Interior hygrometry
             if self.int_hygro > self.int_hygro_max:
@@ -152,7 +157,7 @@ class CtahrStats(threading.Thread):
     def run(self):
         while self.running:
             if self.update_values():
-                self.do_math()
+                self.calc_extremum()
             if (time.time() - self.log_time) > 10:
                 self.update_fan_stats()
                 self.update_heater_stats()
