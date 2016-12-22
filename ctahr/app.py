@@ -24,10 +24,6 @@ class CtahrApplication:
 
         print "[+] Starting Ctahr"
 
-        # Setting up watchdog
-        self.watchdog = CtahrRelay(configuration.watchdog_pin)
-        self.watchdog.activate(False)
-
         # gracefull shutdown signal handler
         signal.signal(signal.SIGTERM, self.shutdown)
         signal.signal(signal.SIGINT, self.shutdown)

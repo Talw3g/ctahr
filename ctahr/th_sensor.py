@@ -49,6 +49,8 @@ class CtahrThermoHygroSensor:
 
                 if valid_H and valid_T:
                     valid = 1
+                else:
+                    valid = 0
                 values_wrapper[:] = round(hygro,1), round(temp,1), monotonic.time.time(), valid
 
             else:
