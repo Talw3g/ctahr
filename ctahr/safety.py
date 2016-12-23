@@ -18,7 +18,6 @@ class CtahrSafety(threading.Thread):
         self.ext_time = monotonic.time.time()
 
         self.mail = CtahrMailing()
-        self.network = self.mail.connect()
 
     def check_freshness(self, int_values, ext_values):
         if int_values[3] != 0:
@@ -36,7 +35,7 @@ class CtahrSafety(threading.Thread):
         if reason == 'int_outdated':
             subject = 'Interior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            if self.network:
+            if self.mail.connect():
                 self.mail.send_mail(subject, message)
             else:
                 with open(configuration.safety_log_file, 'a') as f:
@@ -45,13 +44,14 @@ class CtahrSafety(threading.Thread):
         if reason == 'ext_outdated':
             subject = 'Exterior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            if self.network:
+            if self.mail.connect():
                 self.mail.send_mail(subject, message)
             else:
                 with open(configuration.safety_log_file, 'a') as f:
                     f.write(subject + message + '\n')
 
         os.system("shutdown -r now")
+        self.running = False
 
     def stop(self):
         self.running = False
