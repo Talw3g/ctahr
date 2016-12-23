@@ -3,6 +3,7 @@ import threading,time,os
 import monotonic
 from datetime import datetime
 from mailing import CtahrMailing
+import configuration
 
 class CtahrSafety(threading.Thread):
 #    daemon = True
@@ -17,6 +18,7 @@ class CtahrSafety(threading.Thread):
         self.ext_time = monotonic.time.time()
 
         self.mail = CtahrMailing()
+        self.network = self.mail.connect()
 
     def check_freshness(self, int_values, ext_values):
         if int_values[3] != 0:
@@ -34,11 +36,20 @@ class CtahrSafety(threading.Thread):
         if reason == 'int_outdated':
             subject = 'Interior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            self.mail.send_mail(subject, message)
+            if self.network:
+                self.mail.send_mail(subject, message)
+            else:
+                with open(configuration.safety_log_file, 'a') as f:
+                    f.write(subject + message + '\n')
+
         if reason == 'ext_outdated':
             subject = 'Exterior values outdated (>5min old)'
             message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            self.mail.send_mail(subject, message)
+            if self.network:
+                self.mail.send_mail(subject, message)
+            else:
+                with open(configuration.safety_log_file, 'a') as f:
+                    f.write(subject + message + '\n')
 
         os.system("shutdown -r now")
 

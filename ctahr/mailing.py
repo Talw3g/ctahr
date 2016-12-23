@@ -7,8 +7,13 @@ import private
 class CtahrMailing:
 
     def __init__(self):
-        self.server = SMTP(private.smtp_server_address, private.smtp_server_port)
+        pass
 
+    def connect(self):
+        try:
+            self.server = SMTP(private.smtp_server_address, private.smtp_server_port, timeout=15)
+        except:
+            return False
 
     def send_mail(self, subject, message):
         msg = MIMEMultipart()
