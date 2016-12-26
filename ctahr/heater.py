@@ -45,6 +45,6 @@ class CtahrHeater(threading.Thread):
     def run(self):
         while self.running:
             self.update_state()
-            time.sleep(1)
+            time.sleep(0.1)
 
         print "[-] Stopping heater manager"

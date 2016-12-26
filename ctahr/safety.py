@@ -21,9 +21,9 @@ class CtahrSafety(threading.Thread):
 
     def check_freshness(self, int_values, ext_values):
         if int_values[3] != 0:
-            self.int_time = int_values[2]
+            self.int_time = monotonic.time.time()
         if ext_values[3] != 0:
-            self.ext_time = ext_values[2]
+            self.ext_time = monotonic.time.time()
 
         if (monotonic.time.time() - self.int_time) > 300:
             self.kill('int_outdated',int_values)

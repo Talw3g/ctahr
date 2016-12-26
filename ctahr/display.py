@@ -4,6 +4,7 @@ import monotonic
 import threading
 import RPi.GPIO as GPIO
 import configuration
+import display_lib as lib
 from serial import Serial
 
 class CtahrDisplay(threading.Thread):
@@ -23,6 +24,9 @@ class CtahrDisplay(threading.Thread):
         # reset display contrast:
         self.serial.write('\xfe\x91\x64')
         self.clear()
+        # Create waterdrop and thermometer symbols:
+        self.serial.write(lib.waterdrop())
+        self.serial.write(lib.thermo())
 
         # Configuring light sensor
         GPIO.setmode(GPIO.BCM)
@@ -31,7 +35,7 @@ class CtahrDisplay(threading.Thread):
         # Initializing variables
         self.app = app
         self.state = 'CURRENT'
-        self.states_list = ['CURRENT','TEMP','HYGRO','POWER']
+        self.states_list = ['CURRENT','TEMP','POWER']
         self.states_indice = 0
         self.t_state = 0
         self.reset_toggle = False
@@ -70,47 +74,49 @@ class CtahrDisplay(threading.Thread):
     def update_state(self):
         if self.state == 'CURRENT':
             self.update_values()
-            msg = ('Interior Temp:' + str(self.int_temp) + '\xb2C\n'
-                + 'Exterior Temp:' + str(self.ext_temp) + '\xb2C\n'
-                + 'Interior Hygro:' + str(self.int_hygro) + '\x25\n'
-                + 'Exterior Hygro:' + str(self.ext_hygro)+ '\x25')
+            msg = ('INT:\n\nEXT:')
             self.serial.write('\xfe\x48')
             self.serial.write(msg)
+            self.serial.write(lib.goto(1,9))
+            self.serial.write(chr(1))
+            self.serial.write(lib.goto(3,9))
+            self.serial.write(chr(1))
+            self.serial.write(lib.goto(2,9))
+            self.serial.write(chr(0))
+            self.serial.write(lib.goto(4,9))
+            self.serial.write(chr(0))
+            self.serial.write(lib.backwards(1,16,self.int_temp,'T'))
+            self.serial.write(lib.backwards(2,16,self.int_hygro,'H'))
+            self.serial.write(lib.backwards(3,16,self.ext_temp,'T'))
+            self.serial.write(lib.backwards(4,16,self.ext_hygro,'H'))
+
 
         elif self.state == 'TEMP':
-            msg = ('Interior MAX: ' + str(self.app.stats.int_temp_max)
-                + '\xb2C\n'
-                + 'Interior MIN: ' + str(self.app.stats.int_temp_min)
-                + '\xb2C\n'
-                + 'Exterior MAX: ' + str(self.app.stats.ext_temp_max)
-                + '\xb2C\n'
-                + 'Exterior MIN: ' + str(self.app.stats.ext_temp_min)
-                + '\xb2C')
+            msg = ('Int max:\n    min:\n'
+                + 'Ext max:\n    min:\n')
             self.serial.write('\xfe\x48')
             self.serial.write(msg)
+            self.serial.write(lib.backwards(
+                1,16,self.app.stats.int_temp_max, 'T'))
+            self.serial.write(lib.backwards(
+                2,16,self.app.stats.int_temp_min, 'T'))
+            self.serial.write(lib.backwards(
+                3,16,self.app.stats.ext_temp_max, 'T'))
+            self.serial.write(lib.backwards(
+                4,16,self.app.stats.ext_temp_min, 'T'))
 
-        elif self.state == 'HYGRO':
-            msg = ('Interior MAX: ' + str(self.app.stats.int_hygro_max)
-                + '\x25\n'
-                + 'Interior MIN: ' + str(self.app.stats.int_hygro_min)
-                + '\x25\n'
-                + 'Exterior MAX: ' + str(self.app.stats.ext_hygro_max)
-                + '\x25\n'
-                + 'Exterior MIN: ' + str(self.app.stats.ext_hygro_min)
-                + '\x25')
-            self.serial.write('\xfe\x48')
-            self.serial.write(msg)
 
         elif self.state == 'POWER':
             msg = (' ENERGY CONSUMPTION\n'
-                + 'Fan: ' + str(self.app.stats.fan_energy)
-                + 'KWh\n'
-                + 'Heater: ' + str(self.app.stats.heater_energy)
-                + 'KWh\n'
-                + 'Dehum: ' + str(self.app.stats.dehum_energy)
-                + 'KWh')
+                + 'Fan:\nHeater:\nDehum:')
             self.serial.write('\xfe\x48')
             self.serial.write(msg)
+            self.serial.write(lib.backwards(
+                2,20,self.app.stats.fan_energy, 'E'))
+            self.serial.write(lib.backwards(
+                3,20,self.app.stats.heater_energy, 'E'))
+            self.serial.write(lib.backwards(
+                4,20,self.app.stats.dehum_energy, 'E'))
 
         elif self.state == 'RESET':
             self.clear()
