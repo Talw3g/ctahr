@@ -34,10 +34,25 @@ class StdDevFilter:
         # return mean value and standard deviation (square root of variance)
         return mx,math.sqrt(variance)
 
-    def do(self, x):
-        """ Apply filter on value """
+    def limits(self, x, typ):
+        if typ == 'T':
+            if x > -30 and x < 60:
+                return True
+            else:
+                return False
+        elif typ == 'H':
+            if x > 0 and x < 100:
+                return True
+            else:
+                return False
 
-        self.insert_value(x)
+    def do(self, x, typ):
+        """ Apply filter on value """
+        if self.limits(x,typ):
+            self.insert_value(x)
+        else:
+            return 0, False
+
         mean,stddev = self.mean_stddev()
 
         # limit dispersion, refuse new value when too far away from mean

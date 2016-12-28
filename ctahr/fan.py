@@ -69,7 +69,7 @@ class CtahrFan(threading.Thread):
             self.state = 'IDLE'
 
     def get_uptime(self):
-        if self.app.logic.fan or self.app.buttons.fan:
+        if self.state == 'STARTING' or self.state == 'RUNNING':
             current_uptime = (self.uptime + monotonic.time.time()
                 - self.current_ts)
         else:

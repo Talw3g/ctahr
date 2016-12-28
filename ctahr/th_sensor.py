@@ -44,8 +44,8 @@ class CtahrThermoHygroSensor:
             hygro,temp = DHT.read_retry(DHT.DHT22, pin)
 
             if hygro != None and temp != None:
-                hygro, valid_H = vs_filter.do(hygro)
-                temp, valid_T = vs_filter.do(temp)
+                hygro, valid_H = vs_filter.do(hygro,'H')
+                temp, valid_T = vs_filter.do(temp,'T')
 
                 if valid_H and valid_T:
                     valid = 1
