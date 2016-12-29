@@ -2,13 +2,16 @@
 import threading,time
 import monotonic
 import configuration
+from relay import CtahrRelay
 
 class CtahrLogic(threading.Thread):
     daemon = True
     def __init__(self, app):
         threading.Thread.__init__(self)
+        print "[+] Starting logic module"
         self.lock = threading.Lock()
         self.app = app
+        self.led_run = CtahrRelay(configuration.led_run_pin)
         self.temp_state = 'CHECK'
         self.hygro_state = 'CHECK'
         self.fan_vote = [False,False]
@@ -24,6 +27,7 @@ class CtahrLogic(threading.Thread):
         self.int_temp = 0
         self.ext_temp = 0
         self.aired_time = monotonic.time.time()
+        self.watchdog = monotonic.time.time()
 
 
     def update_temp(self):
@@ -141,5 +145,10 @@ class CtahrLogic(threading.Thread):
             self.update_temp()
             self.update_hygro()
             self.decide_ventilate()
+            self.led_run.activate(True)
+            time.sleep(0.01)
+            self.led_run.activate(False)
+            self.watchdog = monotonic.time.time()
             time.sleep(1)
+        self.led_run.activate(False)
         print "[-] Stopping logic module"
