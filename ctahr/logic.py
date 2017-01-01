@@ -1,6 +1,7 @@
 
 import threading,time
 import monotonic
+from datetime import datetime
 import configuration
 from relay import CtahrRelay
 
@@ -131,6 +132,18 @@ class CtahrLogic(threading.Thread):
         self.fan = temp_control or (daily_airing and not self.dehum)
 
 
+    def indicators(self):
+        with open(configuration.indicators_file, 'w') as f:
+            f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            f.write("\nINT temp: " + str(self.int_temp))
+            f.write("\nINT hygro: " + str(self.int_hygro))
+            f.write("\nEXT temp: " + str(self.ext_temp))
+            f.write("\nEXT hygro: " + str(self.ext_hygro))
+            f.write("\nFan: " + str(self.fan))
+            f.write("\nHeater: " + str(self.heat))
+            f.write("\nDehum: " + str(self.dehum) + "\n")
+
+
     def stop(self):
         self.running = False
         self.fan = False
@@ -142,6 +155,7 @@ class CtahrLogic(threading.Thread):
             if self.update_values():
                 self.calc_err_targ()
                 self.daily_airing()
+                self.indicators()
             self.update_temp()
             self.update_hygro()
             self.decide_ventilate()

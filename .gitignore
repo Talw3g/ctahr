@@ -2,3 +2,6 @@
 *.swp
 *.json
 private.py
+*.csv
+*.log
+indicators.txt
