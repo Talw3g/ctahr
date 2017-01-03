@@ -39,6 +39,7 @@ led_run_pin = 16
 stats_log_file = ctahr_absolute_path + 'ctahr/stats.json'
 safety_log_file = ctahr_absolute_path + 'ctahr/safety.log'
 indicators_file = ctahr_absolute_path + 'ctahr/indicators.txt'
+rrdtool_file = ctahr_absolute_path + 'rrdtool/ctahr.rrd'
 
 ## REGULATION FIXED VALUES ##
 # Temperature thresholds

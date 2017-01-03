@@ -96,6 +96,8 @@ class CtahrLogic(threading.Thread):
             with self.lock:
                 self.int_hygro, self.int_temp = int_values[:2]
                 self.ext_hygro, self.ext_temp = ext_values[:2]
+
+                self.app.rrd.log()
             return True
         else:
             return False

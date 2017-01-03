@@ -1,5 +1,5 @@
 
-import time,csv
+import time,csv,os
 import monotonic
 from multiprocessing import Process,Array
 import Adafruit_DHT as DHT

@@ -14,6 +14,7 @@ from buttons import CtahrButtons
 from fan import CtahrFan
 from heater import CtahrHeater
 from dehum import CtahrDehum
+from rrd_logging import CtahrLogging
 
 class CtahrApplication:
 
@@ -35,6 +36,9 @@ class CtahrApplication:
         self.thermohygro_exterior = CtahrThermoHygroSensor(
             configuration.thermohygro_sensor_exterior_pin, 'exterior')
         self.thermohygro_exterior.start()
+
+        # Create rrd log object
+        self.rrd = CtahrLogging(self)
 
         # Starting regulation daemon
         self.logic = CtahrLogic(self)
