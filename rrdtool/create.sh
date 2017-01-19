@@ -12,7 +12,7 @@ rrdtool create ctahr.rrd \
   DS:fan_energy:GAUGE:300:U:U \
   DS:heater_energy:GAUGE:300:U:U \
   DS:dehum_energy:GAUGE:300:U:U \
-  RRA:AVERAGE:0.5:1:28800  \
+  RRA:AVERAGE:0.5:1:86400  \
   RRA:AVERAGE:0.5:60:43200 \
   RRA:AVERAGE:0.5:3600:8760  \
-  RRA:AVERAGE:0.5:28800:10950 
+  RRA:AVERAGE:0.5:28800:10950

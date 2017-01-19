@@ -5,3 +5,5 @@ private.py
 *.csv
 *.log
 indicators.txt
+*.rrd
+*.png
