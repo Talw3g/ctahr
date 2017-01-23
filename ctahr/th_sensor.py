@@ -31,7 +31,8 @@ class CtahrThermoHygroSensor:
 
     @staticmethod
     def run(values_wrapper, pin, name):
-        vs_filter = StdDevFilter(3,20)
+        temp_filter = StdDevFilter(3,20)
+        hygro_filter = StdDevFilter(3,20)
         while True:
            # if name == 'interior':
            #     f = '/opt/ctahr/ctahr/int.csv'
@@ -44,8 +45,8 @@ class CtahrThermoHygroSensor:
             hygro,temp = DHT.read_retry(DHT.DHT22, pin)
 
             if hygro != None and temp != None:
-                hygro, valid_H = vs_filter.do(hygro,'H')
-                temp, valid_T = vs_filter.do(temp,'T')
+                hygro, valid_H = hygro_filter.do(hygro,'H')
+                temp, valid_T = hygro_filter.do(temp,'T')
 
                 if valid_H and valid_T:
                     valid = 1
