@@ -40,6 +40,10 @@ class CtahrApplication:
         # Create rrd log object
         self.rrd = CtahrLogging(self)
 
+        # Starting stats daemon
+        self.stats = CtahrStats(self)
+        self.stats.start()
+
         # Starting regulation daemon
         self.logic = CtahrLogic(self)
         self.logic.start()
@@ -68,10 +72,6 @@ class CtahrApplication:
         self.safety = CtahrSafety(self)
         self.safety.start()
 
-        # Starting stats daemon
-        self.stats = CtahrStats(self)
-        self.stats.start()
-
         self.led_run_status = False
 
 
@@ -86,8 +86,6 @@ class CtahrApplication:
         while not self.not_running.is_set():
             self.not_running.wait(1)
 
-        self.stats.stop()
-        self.stats.join()
         self.safety.stop()
         self.safety.join()
         self.display.stop()
@@ -102,6 +100,8 @@ class CtahrApplication:
         self.buttons.join()
         self.logic.stop()
         self.logic.join()
+        self.stats.stop()
+        self.stats.join()
         self.thermohygro_exterior.stop()
         self.thermohygro_interior.stop()
 

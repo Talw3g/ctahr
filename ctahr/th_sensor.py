@@ -45,6 +45,16 @@ class CtahrThermoHygroSensor:
             hygro,temp = DHT.read_retry(DHT.DHT22, pin)
 
             if hygro != None and temp != None:
+                if name == 'interior':
+                    log_file = '/opt/ctahr/rrdtool/int_raw.csv'
+                elif name == 'exterior':
+                    log_file = '/opt/ctahr/rrdtool/ext_raw.csv'
+
+                with open(log_file, 'ab') as fout:
+                    log = csv.writer(fout, delimiter=';', quotechar='"',
+                        quoting=csv.QUOTE_NONNUMERIC)
+                    log.writerow([time.time(), temp, hygro])
+
                 hygro, valid_H = hygro_filter.do(hygro,'H')
                 temp, valid_T = hygro_filter.do(temp,'T')
 

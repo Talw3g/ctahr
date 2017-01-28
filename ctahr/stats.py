@@ -152,6 +152,7 @@ class CtahrStats(threading.Thread):
         self.running = False
 
     def run(self):
+        time.sleep(2)
         while self.running:
             if self.update_values():
                 self.calc_extremum()
