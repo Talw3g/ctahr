@@ -4,7 +4,7 @@ import threading
 import RPi.GPIO as GPIO
 from serial import Serial
 from . import configuration
-import .display_lib as lib
+from . import display_lib as lib
 
 class CtahrDisplay(threading.Thread):
     daemon = True
@@ -19,9 +19,9 @@ class CtahrDisplay(threading.Thread):
             configuration.display_serial_device,
             configuration.display_serial_speed)
         # disables autoscroll:
-        self.serial.write('\xfe\x52')
+        self.serial.write(bytes.fromhex('fe52'))
         # reset display contrast:
-        self.serial.write('\xfe\x91\x64')
+        self.serial.write(bytes.fromhex('fe9164'))
         self.clear()
         # Create waterdrop and thermometer symbols:
         self.serial.write(lib.waterdrop())
@@ -55,14 +55,14 @@ class CtahrDisplay(threading.Thread):
 
     def clear(self):
         """ Clear display """
-        self.serial.write('\xfe\x58')
+        self.serial.write(bytes.fromhex('fe58'))
 
     def light_state(self):
         if GPIO.input(configuration.light_sensor_pin) == 1:
-            self.serial.write('\xfe\x46')
+            self.serial.write(bytes.fromhex('fe46'))
             self.clear()
         else:
-            self.serial.write('\xfe\x42\0')
+            self.serial.write(bytes.fromhex('fe42\0'))
 
     def cycle_states(self):
         self.states_indice = ((self.states_indice + 1) % len(self.states_list))
@@ -73,8 +73,8 @@ class CtahrDisplay(threading.Thread):
     def update_state(self):
         if self.state == 'CURRENT':
             self.update_values()
-            msg = ('INT:\n\nEXT:')
-            self.serial.write('\xfe\x48')
+            msg = bytes('INT:\n\nEXT:', encoding = 'utf8')
+            self.serial.write(bytes.fromhex('fe48'))
             self.serial.write(msg)
             self.serial.write(lib.goto(1,9))
             self.serial.write(chr(1))
