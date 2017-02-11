@@ -7,3 +7,4 @@ private.py
 indicators.txt
 *.rrd
 *.png
+.vim_list
