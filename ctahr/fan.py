@@ -1,8 +1,7 @@
 
 import threading,time
-import monotonic
 import RPi.GPIO as GPIO
-import configuration
+from . import configuration
 
 class CtahrFan(threading.Thread):
     def __init__(self, app):
@@ -13,6 +12,7 @@ class CtahrFan(threading.Thread):
         self.state = 'IDLE'
         self.running = True
 
+        print("[+] Starting fan manager")
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.fan_relay_pin, GPIO.OUT,
             initial = GPIO.LOW)
@@ -51,8 +51,8 @@ class CtahrFan(threading.Thread):
                 self.state = 'STARTING'
 
         elif self.state == 'STARTING':
-            self.current_ts = monotonic.time.time()
-            self.cycle_ts = monotonic.time.time()
+            self.current_ts = time.monotonic()
+            self.cycle_ts = time.monotonic()
             self.servo_set('OPEN')
             GPIO.output(configuration.fan_relay_pin, GPIO.HIGH)
             self.state = 'RUNNING'
@@ -62,15 +62,15 @@ class CtahrFan(threading.Thread):
                 self.state = 'STOPPING'
 
         elif self.state == 'STOPPING':
-            self.uptime += monotonic.time.time() - self.current_ts
-            self.cycle_uptime = monotonic.time.time() - self.cycle_ts
+            self.uptime += time.monotonic() - self.current_ts
+            self.cycle_uptime = time.monotonic() - self.cycle_ts
             GPIO.output(configuration.fan_relay_pin, GPIO.LOW)
             self.servo_set('CLOSE')
             self.state = 'IDLE'
 
     def get_uptime(self):
         if self.state == 'STARTING' or self.state == 'RUNNING':
-            current_uptime = (self.uptime + monotonic.time.time()
+            current_uptime = (self.uptime + time.monotonic()
                 - self.current_ts)
         else:
             current_uptime = self.uptime
@@ -79,7 +79,7 @@ class CtahrFan(threading.Thread):
     def reset_uptime(self):
         self.uptime = 0
         if self.state == 'RUNNING':
-            self.current_ts = monotonic.time.time()
+            self.current_ts = time.monotonic()
 
     def stop(self):
         self.running = False
@@ -90,6 +90,6 @@ class CtahrFan(threading.Thread):
         while self.running:
             self.update_state_machine()
             time.sleep(0.1)
-        print "[-] Stopping fan manager"
+        print("[-] Stopping fan manager")
 
 

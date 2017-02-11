@@ -1,6 +1,6 @@
 
 import os
-import configuration
+from . import configuration
 
 class CtahrLogging():
 

@@ -1,11 +1,10 @@
 
 import os,sys,time
-import monotonic
 import threading
 import RPi.GPIO as GPIO
-import configuration
-import display_lib as lib
 from serial import Serial
+from . import configuration
+import .display_lib as lib
 
 class CtahrDisplay(threading.Thread):
     daemon = True
@@ -13,7 +12,7 @@ class CtahrDisplay(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.running = True
-        print "[+] Starting display manager"
+        print("[+] Starting display manager")
 
         # Configuring display
         self.serial = Serial(
@@ -50,9 +49,9 @@ class CtahrDisplay(threading.Thread):
         int_values = self.app.thermohygro_interior.get()
         ext_values = self.app.thermohygro_exterior.get()
         if int_values[3] != 0:
-            self.int_hygro, self.int_temp = int_values[:2]
+            self.int_hygro, self.int_temp, *rest = int_values
         if ext_values[3] != 0:
-            self.ext_hygro, self.ext_temp = ext_values[:2]
+            self.ext_hygro, self.ext_temp, *rest = ext_values
 
     def clear(self):
         """ Clear display """
@@ -134,10 +133,10 @@ class CtahrDisplay(threading.Thread):
         while self.running:
 #            self.clear()
             self.light_state()
-            if (monotonic.time.time() - self.t_state) > 0.5:
+            if (time.monotonic() - self.t_state) > 0.5:
                 self.update_state()
-                self.t_state = monotonic.time.time()
+                self.t_state = time.monotonic()
             time.sleep(0.1)
 
         self.clear()
-        print "[-] Stopping display manager"
+        print("[-] Stopping display manager")

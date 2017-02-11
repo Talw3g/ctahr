@@ -1,16 +1,14 @@
 
-from __future__ import division
 import threading,time,os
-import monotonic
 import json
-import configuration
+from . import configuration
 
 class CtahrStats(threading.Thread):
     daemon = True
 
     def __init__(self, app):
         threading.Thread.__init__(self)
-        print "[+] Starting stats module"
+        print("[+] Starting stats module")
         self.app = app
         self.lock = threading.Lock()
         self.running = True
@@ -24,7 +22,7 @@ class CtahrStats(threading.Thread):
             'heater':{'energy':None, 'time':None},
             'dehum':{'energy':None, 'time':None}})
         self.reset_hygro_temp()
-        self.log_time = monotonic.time.time()
+        self.log_time = time.monotonic()
         self.get_from_file()
 
 
@@ -159,8 +157,8 @@ class CtahrStats(threading.Thread):
                 self.update_fan_stats()
                 self.update_heater_stats()
                 self.update_dehum_stats()
-            if (monotonic.time.time() - self.log_time) > 10:
+            if (time.monotonic() - self.log_time) > 10:
                 self.save_to_file()
-                self.log_time = monotonic.time.time()
+                self.log_time = time.monotonic()
             time.sleep(1)
-        print "[-] Stopping stats module"
+        print("[-] Stopping stats module")

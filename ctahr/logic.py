@@ -1,15 +1,14 @@
 
 import threading,time
-import monotonic
 from datetime import datetime
-import configuration
-from relay import CtahrRelay
+from . import configuration
+from .relay import CtahrRelay
 
 class CtahrLogic(threading.Thread):
     daemon = True
     def __init__(self, app):
         threading.Thread.__init__(self)
-        print "[+] Starting logic module"
+        print("[+] Starting logic module")
         self.lock = threading.Lock()
         self.app = app
         self.led_run = CtahrRelay(configuration.led_run_pin)
@@ -27,8 +26,8 @@ class CtahrLogic(threading.Thread):
         self.daily_uptime = 0
         self.int_temp = 0
         self.ext_temp = 0
-        self.aired_time = monotonic.time.time()
-        self.watchdog = monotonic.time.time()
+        self.aired_time = time.monotonic()
+        self.watchdog = time.monotonic()
 
 
     def update_temp(self):
@@ -94,8 +93,8 @@ class CtahrLogic(threading.Thread):
         int_valid, ext_valid = int_values[3], ext_values[3]
         if int_valid != 0 and ext_valid != 0:
             with self.lock:
-                self.int_hygro, self.int_temp = int_values[:2]
-                self.ext_hygro, self.ext_temp = ext_values[:2]
+                self.int_hygro, self.int_temp, *rest = int_values
+                self.ext_hygro, self.ext_temp, *rest = ext_values
 
                 self.app.rrd.log()
             return True
@@ -115,13 +114,13 @@ class CtahrLogic(threading.Thread):
 
     def daily_airing(self):
         temp_optimal = self.airing_err < configuration.delta_targ_H
-        unaired = (monotonic.time.time() - self.aired_time) > configuration.daily_period
+        unaired = (time.monotonic() - self.aired_time) > configuration.daily_period
         damp = self.ext_hygro > self.hygro_target
         self.daily_uptime = self.app.fan.get_uptime()
 
         if self.daily_uptime > configuration.daily_airing_time:
             self.app.fan.reset_uptime()
-            self.aired_time = monotonic.time.time()
+            self.aired_time = time.monotonic()
             self.fan_vote[1] = False
         elif temp_optimal and unaired and not damp:
             self.fan_vote[1] = True
@@ -164,7 +163,7 @@ class CtahrLogic(threading.Thread):
             self.led_run.activate(True)
             time.sleep(0.01)
             self.led_run.activate(False)
-            self.watchdog = monotonic.time.time()
+            self.watchdog = time.monotonic()
             time.sleep(1)
         self.led_run.activate(False)
-        print "[-] Stopping logic module"
+        print("[-] Stopping logic module")

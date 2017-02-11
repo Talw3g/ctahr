@@ -1,7 +1,6 @@
 
 import time,threading
-import monotonic
-import configuration
+from . import configuration
 import RPi.GPIO as GPIO
 
 class CtahrButtons(threading.Thread):
@@ -12,7 +11,7 @@ class CtahrButtons(threading.Thread):
         self.app = app
         self.lock = threading.Lock()
 
-        print "[+] Starting buttons manager"
+        print("[+] Starting buttons manager")
 
         self.reset_state = 'WAIT'
         self.fan_state = 'WAIT'
@@ -36,21 +35,21 @@ class CtahrButtons(threading.Thread):
         if self.reset_state == 'WAIT':
             if GPIO.input(configuration.reset_lever_pin) == 0:
                 self.reset_state = 'UP'
-                self.reset_uptime = monotonic.time.time()
+                self.reset_uptime = time.monotonic()
         elif self.reset_state == 'UP':
-            if (monotonic.time.time() - self.reset_uptime) > 5:
+            if (time.monotonic() - self.reset_uptime) > 5:
                 self.app.stats.reset_global_times()
-            elif (monotonic.time.time() - self.reset_uptime) > 3:
+            elif (time.monotonic() - self.reset_uptime) > 3:
                 self.app.stats.reset_hygro_temp()
                 self.app.display.state = (
                     self.app.display.states_list[self.app.display.states_indice])
-            elif (monotonic.time.time() - self.reset_uptime) > 1:
+            elif (time.monotonic() - self.reset_uptime) > 1:
                 self.app.display.state = 'RESET'
 
             if GPIO.input(configuration.reset_lever_pin) == 1:
                 self.reset_state = 'DOWN'
         elif self.reset_state == 'DOWN':
-            if (monotonic.time.time() - self.reset_uptime) < 0.5:
+            if (time.monotonic() - self.reset_uptime) < 0.5:
                 self.app.display.cycle_states()
             self.reset_state = 'WAIT'
 
@@ -94,4 +93,4 @@ class CtahrButtons(threading.Thread):
             self.update_heater()
             self.update_dehum()
             time.sleep(0.01)
-        print "[-] Stopping buttons manager"
+        print("[-] Stopping buttons manager")

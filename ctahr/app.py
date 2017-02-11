@@ -1,27 +1,25 @@
 
-import time
-import monotonic
 import signal
 import threading
-import configuration
+from . import configuration
 import RPi.GPIO as GPIO
-from display import CtahrDisplay
-from th_sensor import CtahrThermoHygroSensor
-from logic import CtahrLogic
-from safety import CtahrSafety
-from stats import CtahrStats
-from buttons import CtahrButtons
-from fan import CtahrFan
-from heater import CtahrHeater
-from dehum import CtahrDehum
-from rrd_logging import CtahrLogging
+from .display import CtahrDisplay
+from .th_sensor import CtahrThermoHygroSensor
+from .logic import CtahrLogic
+from .safety import CtahrSafety
+from .stats import CtahrStats
+from .buttons import CtahrButtons
+from .fan import CtahrFan
+from .heater import CtahrHeater
+from .dehum import CtahrDehum
+from .rrd_logging import CtahrLogging
 
 class CtahrApplication:
 
     def __init__(self):
         self.not_running = threading.Event()
 
-        print "[+] Starting Ctahr"
+        print("[+] Starting Ctahr")
 
         # gracefull shutdown signal handler
         signal.signal(signal.SIGTERM, self.shutdown)
@@ -78,7 +76,7 @@ class CtahrApplication:
     def shutdown(self, signum, frame):
         # perform a gracefull shutdown here ;)
 
-        print "[-] SIGNAL",signum,"received, shutting down gracefully"
+        print("[-] SIGNAL",signum,"received, shutting down gracefully")
         #
         self.not_running.set()
 
@@ -106,4 +104,4 @@ class CtahrApplication:
         self.thermohygro_interior.stop()
 
         GPIO.cleanup()
-        print "[-] Ctahr as stopped"
+        print("[-] Ctahr as stopped")

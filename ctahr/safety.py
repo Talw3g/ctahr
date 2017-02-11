@@ -1,9 +1,8 @@
 
 import threading,time,os
-import monotonic
 from datetime import datetime
-from mailing import CtahrMailing
-import configuration
+from .mailing import CtahrMailing
+from . import configuration
 
 class CtahrSafety(threading.Thread):
 #    daemon = True
@@ -12,29 +11,29 @@ class CtahrSafety(threading.Thread):
         threading.Thread.__init__(self)
         self.app = app
         self.running = True
-        print "[+] Starting safety module"
+        print("[+] Starting safety module")
 
-        self.int_time = monotonic.time.time()
-        self.ext_time = monotonic.time.time()
+        self.int_time = time.monotonic()
+        self.ext_time = time.monotonic()
 
         self.mail = CtahrMailing()
 
 
     def check_freshness(self, int_values, ext_values):
         if int_values[3] != 0:
-            self.int_time = monotonic.time.time()
+            self.int_time = time.monotonic()
         if ext_values[3] != 0:
-            self.ext_time = monotonic.time.time()
+            self.ext_time = time.monotonic()
 
-        if (monotonic.time.time() - self.int_time) > 300:
+        if (time.monotonic() - self.int_time) > 300:
             self.kill('int_outdated',int_values)
 
-        if (monotonic.time.time() - self.ext_time) > 300:
+        if (time.monotonic() - self.ext_time) > 300:
             self.kill('ext_outdated',ext_values)
 
 
     def logic_alive(self):
-        if monotonic.time.time() - self.app.logic.watchdog > 120:
+        if time.monotonic() - self.app.logic.watchdog > 120:
             self.kill('logic dead',self.app.logic.watchdog)
         else:
             pass
@@ -81,4 +80,4 @@ class CtahrSafety(threading.Thread):
             self.check_freshness(int_values, ext_values)
             self.logic_alive()
             time.sleep(1)
-        print "[-] Stopping safety module"
+        print("[-] Stopping safety module")

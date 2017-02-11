@@ -1,5 +1,4 @@
 ## Code from JDRobotter : https://github.com/JDRobotter ##
-from __future__ import division
 import math
 
 class StdDevFilter:
