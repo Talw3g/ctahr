@@ -14,19 +14,6 @@ class CtahrDisplay(threading.Thread):
         self.running = True
         print("[+] Starting display manager")
 
-        # Configuring display
-        self.serial = Serial(
-            configuration.display_serial_device,
-            configuration.display_serial_speed)
-        # disables autoscroll:
-        self.serial.write(bytes.fromhex('fe52'))
-        # reset display contrast:
-        self.serial.write(bytes.fromhex('fe9164'))
-        self.clear()
-        # Create waterdrop and thermometer symbols:
-        self.serial.write(lib.waterdrop())
-        self.serial.write(lib.thermo())
-
         # Configuring light sensor
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.light_sensor_pin, GPIO.IN)
@@ -52,10 +39,6 @@ class CtahrDisplay(threading.Thread):
             self.int_hygro, self.int_temp, *rest = int_values
         if ext_values[3] != 0:
             self.ext_hygro, self.ext_temp, *rest = ext_values
-
-    def clear(self):
-        """ Clear display """
-        self.serial.write(bytes.fromhex('fe58'))
 
     def light_state(self):
         if GPIO.input(configuration.light_sensor_pin) == 1:
