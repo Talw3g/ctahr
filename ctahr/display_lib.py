@@ -120,5 +120,5 @@ class DisplayLib:
                 hexa = '0' + hexa
 
             bits = bytes.fromhex(hexa)
-            print(hexa,bits)
+            #print(hexa,bits)
             self.serial.write(bits)

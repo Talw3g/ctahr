@@ -1,6 +1,6 @@
 
 import os
-import rrdtool as rrd
+from rrdtool import update
 from . import configuration
 
 class CtahrLogging():
@@ -9,7 +9,7 @@ class CtahrLogging():
         self.app = app
 
     def log(self):
-        rrd.update(configuration.rrdtool_file,"N:%f:%f:%f:%f:%d:%d:%d:%f:%f:%f"
+        update(configuration.rrdtool_file,"N:%f:%f:%f:%f:%d:%d:%d:%f:%f:%f"
             %(self.app.logic.int_temp, self.app.logic.ext_temp,
             self.app.logic.int_hygro, self.app.logic.ext_hygro,
             int(self.app.logic.fan), int(self.app.logic.heat),

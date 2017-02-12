@@ -12,6 +12,7 @@ class CtahrMailing:
     def connect(self):
         try:
             self.server = SMTP(private.smtp_server_address, private.smtp_server_port)
+            return True
         except:
             return False
 
