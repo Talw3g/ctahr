@@ -1,81 +1,105 @@
 
-from serial import Serial
+#from serial import Serial
 from . import configuration
 
-class DisplayLib
+class DisplayLib:
 
     def __init__(self):
         # Configuring display
-        self.serial = Serial(
-            configuration.display_serial_device,
-            configuration.display_serial_speed)
+#        self.serial = Serial(
+#            configuration.display_serial_device,
+#            configuration.display_serial_speed)
         # disables autoscroll:
-        self.write(bytes.fromhex('fe52'))
+        self.write([chr(254),chr(82)])
         # reset display contrast:
-        self.write(bytes.fromhex('fe9164'))
+        self.write([chr(254),chr(145),chr(100)])
         self.clear()
         # Create waterdrop and thermometer symbols:
         self.waterdrop()
         self.thermo()
 
+
     def backwards(self, row, col, msg, typ):
         """ Returns an instruction str to write 'msg' backwards, starting
         at position [col,row], and append the right typ: degC, % or KWh"""
+        instr = []
         if typ == 'T':
             start = col - 6
             width = 5 - len(str(msg))
-            instr = self.clr_zone(row,start,width)
+            instr += self.clr_zone(row,start,width)
             instr += self.goto(row,col)
         else:
-            instr = goto(row,col)
+            instr += self.goto(row,col)
+
         msg = list(str(msg))
         if typ == 'T':
-            msg.append('\xb2')
+            msg.append(chr(178))
             msg.append('C')
         elif typ == 'H':
-            msg.append('\x25')
+            msg.append(chr(37))
         elif typ == 'E':
             msg.append('K')
             msg.append('W')
             msg.append('h')
-        msg.reverse()
-        for i in msg:
-            instr += i
-            instr += '\xfe\x4c'
-            instr += '\xfe\x4c'
-        return instr
+
+        for i in reversed(msg):
+            instr.append(i)
+            instr.extend([chr(254),chr(76)] * 2)
+
+        self.write(instr)
+
 
     def waterdrop(self):
-        """ Returns the instruction str to store the waterdrop symbol in
-        slot x00"""
-        instr = '\xfe\x4e\x00'
-        instr += '\x04\x04\x0A\x0A\x11\x11\x11\x0E'
+        """ Stores the waterdrop symbol in slot 0"""
+        instr = [chr(254),chr(78),chr(0)]
+        instr.extend([chr(4)] * 2)
+        instr.extend([chr(10)] * 2)
+        instr.extend([chr(17)] * 3)
+        instr.append(chr(14))
         self.write(instr)
+
 
     def thermo(self):
-        """ Returns the instruction str to store the thermometer symbol in
-        slot x01"""
-        instr = '\xfe\x4e\x01'
-        instr += '\04\x0A\x0A\x0E\x0E\x1F\x1F\x0E'
+        """ Stores the thermometer symbol in slot 1"""
+        instr = [chr(254),chr(78),chr(1)]
+        instr.append(chr(4))
+        instr.extend([chr(10)] * 2)
+        instr.extend([chr(14)] * 2)
+        instr.extend([chr(31)] * 2)
+        instr.append(chr(14))
         self.write(instr)
 
+
     def goto(self,row,col):
-        instr = '\xfe\x47'
-        instr += chr(col)
-        instr += chr(row)
-        self.write(instr)
+        instr = [chr(254),chr(71)]
+        instr.append(chr(col))
+        instr.append(chr(row))
+        return instr
+
 
     def clr_zone(self,row,col,width):
         """ Returns the instruction str to clear the zone starting
         at [col,row] and 'width' slot-wide"""
-        instr = goto(row,col)
-        for i in range(0,width):
-            instr += ' '
-        self.write(instr)
+        instr = self.goto(row,col)
+        instr.extend([chr(32)] * width)
+        return instr
+
 
     def clear(self):
         """ Clear display """
-        self.write(bytes.fromhex('fe58'))
+        self.write([chr(254),chr(88)])
+
 
     def write(self,msg):
-        self.serial.write(msg)
+        instr = []
+        if type(msg) == str:
+            for i in list(msg):
+                instr.append(chr(ord(i)))
+        elif type(msg) == list:
+            instr = msg
+        else:
+            print('Error: requires list or str, got',type(msg))
+
+        for byte in instr:
+            print(ord(byte))
+            #self.serial.write(byte)
