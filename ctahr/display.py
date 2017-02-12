@@ -4,7 +4,7 @@ import threading
 import RPi.GPIO as GPIO
 from serial import Serial
 from . import configuration
-from . import display_lib as lib
+from .display_lib import DisplayLib
 
 class CtahrDisplay(threading.Thread):
     daemon = True
@@ -19,6 +19,7 @@ class CtahrDisplay(threading.Thread):
         GPIO.setup(configuration.light_sensor_pin, GPIO.IN)
 
         # Initializing variables
+        self.lib = DisplayLib()
         self.app = app
         self.state = 'CURRENT'
         self.states_list = ['CURRENT','TEMP','POWER']
@@ -42,70 +43,60 @@ class CtahrDisplay(threading.Thread):
 
     def light_state(self):
         if GPIO.input(configuration.light_sensor_pin) == 1:
-            self.serial.write(bytes.fromhex('fe46'))
-            self.clear()
+            self.lib.backlight(False)
+            self.lib.clear()
         else:
-            self.serial.write(bytes.fromhex('fe42\0'))
+            self.lib.backlight(True)
 
     def cycle_states(self):
         self.states_indice = ((self.states_indice + 1) % len(self.states_list))
         self.state = self.states_list[self.states_indice]
-        self.clear()
+        self.lib.clear()
         self.t_state = 0
 
     def update_state(self):
         if self.state == 'CURRENT':
             self.update_values()
-            msg = bytes('INT:\n\nEXT:', encoding = 'utf8')
-            self.serial.write(bytes.fromhex('fe48'))
-            self.serial.write(msg)
-            self.serial.write(lib.goto(1,9))
-            self.serial.write(chr(1))
-            self.serial.write(lib.goto(3,9))
-            self.serial.write(chr(1))
-            self.serial.write(lib.goto(2,9))
-            self.serial.write(chr(0))
-            self.serial.write(lib.goto(4,9))
-            self.serial.write(chr(0))
-            self.serial.write(lib.backwards(1,16,self.int_temp,'T'))
-            self.serial.write(lib.backwards(2,16,self.int_hygro,'H'))
-            self.serial.write(lib.backwards(3,16,self.ext_temp,'T'))
-            self.serial.write(lib.backwards(4,16,self.ext_hygro,'H'))
-
+            self.lib.home()
+            self.lib.write('INT:\n\nEXT:')
+            self.lib.write(self.lib.goto(1,9))
+            self.lib.write(chr(1))
+            self.lib.write(self.lib.goto(3,9))
+            self.lib.write(chr(1))
+            self.lib.write(self.lib.goto(2,9))
+            self.lib.write(chr(0))
+            self.lib.write(self.lib.goto(4,9))
+            self.lib.write(chr(0))
+            self.lib.backwards(1,16,self.int_temp,'T')
+            self.lib.backwards(2,16,self.int_hygro,'H')
+            self.lib.backwards(3,16,self.ext_temp,'T')
+            self.lib.backwards(4,16,self.ext_hygro,'H')
 
         elif self.state == 'TEMP':
+            self.lib.home()
             msg = ('Int max:\n    min:\n'
                 + 'Ext max:\n    min:\n')
-            self.serial.write('\xfe\x48')
-            self.serial.write(msg)
-            self.serial.write(lib.backwards(
-                1,16,self.app.stats.int_temp_max, 'T'))
-            self.serial.write(lib.backwards(
-                2,16,self.app.stats.int_temp_min, 'T'))
-            self.serial.write(lib.backwards(
-                3,16,self.app.stats.ext_temp_max, 'T'))
-            self.serial.write(lib.backwards(
-                4,16,self.app.stats.ext_temp_min, 'T'))
-
+            self.lib.write(msg)
+            self.lib.backwards(1,16,self.app.stats.int_temp_max, 'T')
+            self.lib.backwards(2,16,self.app.stats.int_temp_min, 'T')
+            self.lib.backwards(3,16,self.app.stats.ext_temp_max, 'T')
+            self.lib.backwards(4,16,self.app.stats.ext_temp_min, 'T')
 
         elif self.state == 'POWER':
+            self.lib.home()
             msg = (' ENERGY CONSUMPTION\n'
                 + 'Fan:\nHeater:\nDehum:')
-            self.serial.write('\xfe\x48')
-            self.serial.write(msg)
-            self.serial.write(lib.backwards(
-                2,20,self.app.stats.fan_energy, 'E'))
-            self.serial.write(lib.backwards(
-                3,20,self.app.stats.heater_energy, 'E'))
-            self.serial.write(lib.backwards(
-                4,20,self.app.stats.dehum_energy, 'E'))
+            self.lib.write(msg)
+            self.lib.backwards(2,20,self.app.stats.fan_energy, 'E')
+            self.lib.backwards(3,20,self.app.stats.heater_energy, 'E')
+            self.lib.backwards(4,20,self.app.stats.dehum_energy, 'E')
 
         elif self.state == 'RESET':
-            self.clear()
+            self.lib.clear()
             if not self.reset_toggle:
+                self.lib.home()
                 msg = '\n        RESET'
-                self.serial.write('\xfe\x48')
-                self.serial.write(msg)
+                self.lib.write(msg)
             self.reset_toggle = not self.reset_toggle
 
 
@@ -114,12 +105,11 @@ class CtahrDisplay(threading.Thread):
 
     def run(self):
         while self.running:
-#            self.clear()
             self.light_state()
             if (time.monotonic() - self.t_state) > 0.5:
                 self.update_state()
                 self.t_state = time.monotonic()
             time.sleep(0.1)
 
-        self.clear()
+        self.lib.clear()
         print("[-] Stopping display manager")

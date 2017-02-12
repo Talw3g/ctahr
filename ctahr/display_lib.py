@@ -1,14 +1,14 @@
 
-#from serial import Serial
+from serial import Serial
 from . import configuration
 
 class DisplayLib:
 
     def __init__(self):
         # Configuring display
-#        self.serial = Serial(
-#            configuration.display_serial_device,
-#            configuration.display_serial_speed)
+        self.serial = Serial(
+            configuration.display_serial_device,
+            configuration.display_serial_speed)
         # disables autoscroll:
         self.write([chr(254),chr(82)])
         # reset display contrast:
@@ -77,12 +77,23 @@ class DisplayLib:
         return instr
 
 
+    def home(self):
+        self.write([chr(254),chr(72)])
+
+
     def clr_zone(self,row,col,width):
         """ Returns the instruction str to clear the zone starting
         at [col,row] and 'width' slot-wide"""
         instr = self.goto(row,col)
         instr.extend([chr(32)] * width)
         return instr
+
+
+    def backlight(self,state):
+        if state:
+            self.write([chr(254),chr(66)])
+        else:
+            self.write([chr(254),chr(70)])
 
 
     def clear(self):
@@ -93,13 +104,21 @@ class DisplayLib:
     def write(self,msg):
         instr = []
         if type(msg) == str:
-            for i in list(msg):
-                instr.append(chr(ord(i)))
+            instr = list(msg)
         elif type(msg) == list:
             instr = msg
+        elif type(msg) == float or type(msg) == int:
+            instr = list(str(msg))
         else:
-            print('Error: requires list or str, got',type(msg))
+            print('Error: invalid type.',
+                'Available types: [list, str, float, int], got',type(msg))
+            return
 
-        for byte in instr:
-            print(ord(byte))
-            #self.serial.write(byte)
+        for char in instr:
+            hexa = hex(ord(char))[2:]
+            if len(hexa) == 1:
+                hexa = '0' + hexa
+
+            bits = bytes.fromhex(hexa)
+            print(hexa,bits)
+            self.serial.write(bits)
