@@ -12,8 +12,6 @@ class CtahrDisplay(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.running = True
-        print("[+] Starting display manager")
-
         # Configuring light sensor
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.light_sensor_pin, GPIO.IN)
@@ -104,6 +102,8 @@ class CtahrDisplay(threading.Thread):
         self.running = False
 
     def run(self):
+        print("[+] Starting display manager")
+
         while self.running:
             self.light_state()
             if (time.monotonic() - self.t_state) > 0.5:

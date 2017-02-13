@@ -25,49 +25,33 @@ class CtahrApplication:
         signal.signal(signal.SIGTERM, self.shutdown)
         signal.signal(signal.SIGINT, self.shutdown)
 
-        # Starting interior sensor daemon
+        # Creating every module objects
         self.thermohygro_interior = CtahrThermoHygroSensor(
             configuration.thermohygro_sensor_interior_pin, 'interior')
-        self.thermohygro_interior.start()
-
-        # Starting exterior sensor daemon
         self.thermohygro_exterior = CtahrThermoHygroSensor(
             configuration.thermohygro_sensor_exterior_pin, 'exterior')
-        self.thermohygro_exterior.start()
-
-        # Create rrd log object
-        self.rrd = CtahrLogging(self)
-
-        # Starting stats daemon
-        self.stats = CtahrStats(self)
-        self.stats.start()
-
-        # Starting regulation daemon
         self.logic = CtahrLogic(self)
-        self.logic.start()
-
-        # Starting buttons manager
         self.buttons = CtahrButtons(self)
-        self.buttons.start()
-
-        # Starting fan manager
         self.fan = CtahrFan(self)
-        self.fan.start()
-
-        # Starting heater manager
         self.heater = CtahrHeater(self)
-        self.heater.start()
-
-        # Starting dehum manager
         self.dehum = CtahrDehum(self)
-        self.dehum.start()
-
-        # Starting display manager
         self.display = CtahrDisplay(self)
-        self.display.start()
-
-        # Starting safety daemon
         self.safety = CtahrSafety(self)
+        self.rrd = CtahrLogging(self)
+        self.stats = CtahrStats(self)
+        print('objects created')
+
+
+        # Starting every threads
+        self.thermohygro_interior.start()
+        self.thermohygro_exterior.start()
+        self.logic.start()
+        self.buttons.start()
+        self.fan.start()
+        self.heater.start()
+        self.dehum.start()
+        self.display.start()
+        self.stats.start()
         self.safety.start()
 
         self.led_run_status = False

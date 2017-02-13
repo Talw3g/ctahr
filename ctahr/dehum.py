@@ -7,8 +7,6 @@ class CtahrDehum(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
-        print("[+] Starting dehum manager")
-
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(configuration.dehum_relay_pin, GPIO.OUT,
@@ -42,6 +40,8 @@ class CtahrDehum(threading.Thread):
 
 
     def run(self):
+        print("[+] Starting dehum manager")
+
         while self.running:
             self.update_state()
             time.sleep(0.1)

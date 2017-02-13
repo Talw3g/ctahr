@@ -11,8 +11,6 @@ class CtahrButtons(threading.Thread):
         self.app = app
         self.lock = threading.Lock()
 
-        print("[+] Starting buttons manager")
-
         self.reset_state = 'WAIT'
         self.fan_state = 'WAIT'
         self.heater_state = 'WAIT'
@@ -87,6 +85,8 @@ class CtahrButtons(threading.Thread):
         self.running = False
 
     def run(self):
+        print("[+] Starting buttons manager")
+
         while self.running:
             self.update_reset()
             self.update_fan()
