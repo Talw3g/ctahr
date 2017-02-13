@@ -11,8 +11,6 @@ class CtahrFan(threading.Thread):
         self.app = app
         self.state = 'IDLE'
         self.running = True
-
-        print("[+] Starting fan manager")
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(configuration.fan_relay_pin, GPIO.OUT,
             initial = GPIO.LOW)
@@ -87,6 +85,8 @@ class CtahrFan(threading.Thread):
         self.servo_set('CLOSE')
 
     def run(self):
+        print("[+] Starting fan manager")
+
         while self.running:
             self.update_state_machine()
             time.sleep(0.1)

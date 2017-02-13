@@ -8,7 +8,6 @@ class CtahrStats(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
-        print("[+] Starting stats module")
         self.app = app
         self.lock = threading.Lock()
         self.running = True
@@ -150,6 +149,7 @@ class CtahrStats(threading.Thread):
         self.running = False
 
     def run(self):
+        print("[+] Starting stats module")
         time.sleep(2)
         while self.running:
             if self.update_values():

@@ -11,8 +11,6 @@ class CtahrSafety(threading.Thread):
         threading.Thread.__init__(self)
         self.app = app
         self.running = True
-        print("[+] Starting safety module")
-
         self.int_time = time.monotonic()
         self.ext_time = time.monotonic()
 
@@ -74,6 +72,8 @@ class CtahrSafety(threading.Thread):
 
 
     def run(self):
+        print("[+] Starting safety module")
+
         while self.running:
             int_values = self.app.thermohygro_interior.get()
             ext_values = self.app.thermohygro_exterior.get()

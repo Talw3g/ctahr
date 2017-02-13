@@ -7,8 +7,6 @@ class CtahrHeater(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
         self.app = app
-        print("[+] Starting heater manager")
-
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)
         GPIO.setup(configuration.heater_relay_pin, GPIO.OUT,
@@ -42,6 +40,8 @@ class CtahrHeater(threading.Thread):
 
 
     def run(self):
+        print("[+] Starting heater manager")
+
         while self.running:
             self.update_state()
             time.sleep(0.1)

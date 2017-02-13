@@ -8,7 +8,6 @@ class CtahrLogic(threading.Thread):
     daemon = True
     def __init__(self, app):
         threading.Thread.__init__(self)
-        print("[+] Starting logic module")
         self.lock = threading.Lock()
         self.app = app
         self.led_run = CtahrRelay(configuration.led_run_pin)
@@ -152,6 +151,7 @@ class CtahrLogic(threading.Thread):
         self.dehum = False
 
     def run(self):
+        print("[+] Starting logic module")
         while self.running:
             if self.update_values():
                 self.calc_err_targ()
