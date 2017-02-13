@@ -30,7 +30,7 @@ class CtahrThermoHygroSensor:
 
     @staticmethod
     def run(values_wrapper, pin, name):
-        print("[+] Starting", self.name, "sensors module")
+        print("[+] Starting", name, "sensors module")
         temp_filter = StdDevFilter(3,20)
         hygro_filter = StdDevFilter(3,20)
         while True:

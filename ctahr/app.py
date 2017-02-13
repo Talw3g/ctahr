@@ -25,11 +25,15 @@ class CtahrApplication:
         signal.signal(signal.SIGTERM, self.shutdown)
         signal.signal(signal.SIGINT, self.shutdown)
 
-        # Creating every module objects
+        # Creating and starting sensors processes
         self.thermohygro_interior = CtahrThermoHygroSensor(
             configuration.thermohygro_sensor_interior_pin, 'interior')
         self.thermohygro_exterior = CtahrThermoHygroSensor(
             configuration.thermohygro_sensor_exterior_pin, 'exterior')
+        self.thermohygro_interior.start()
+        self.thermohygro_exterior.start()
+
+        # Creating remaining module objects
         self.logic = CtahrLogic(self)
         self.buttons = CtahrButtons(self)
         self.fan = CtahrFan(self)
@@ -39,12 +43,8 @@ class CtahrApplication:
         self.safety = CtahrSafety(self)
         self.rrd = CtahrLogging(self)
         self.stats = CtahrStats(self)
-        print('objects created')
-
 
         # Starting every threads
-        self.thermohygro_interior.start()
-        self.thermohygro_exterior.start()
         self.logic.start()
         self.buttons.start()
         self.fan.start()
