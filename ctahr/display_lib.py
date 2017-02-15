@@ -10,9 +10,9 @@ class DisplayLib:
             configuration.display_serial_device,
             configuration.display_serial_speed)
         # disables autoscroll:
-        self.write([chr(254),chr(82)])
+        self.write(b'\xfe\x52')
         # reset display contrast:
-        self.write([chr(254),chr(145),chr(100)])
+        self.write(b'\xfe\x91\x64')
         self.clear()
         # Create waterdrop and thermometer symbols:
         self.waterdrop()
@@ -22,100 +22,81 @@ class DisplayLib:
     def backwards(self, row, col, msg, typ):
         """ Returns an instruction str to write 'msg' backwards, starting
         at position [col,row], and append the right typ: degC, % or KWh"""
-        instr = []
+        msg = str(msg)
+        prefix = b''
         if typ == 'T':
-            start = col - 6
-            width = 5 - len(str(msg))
-            instr += self.clr_zone(row,start,width)
-            instr += self.goto(row,col)
-        else:
-            instr += self.goto(row,col)
+            start_clr = col - 6
+            width = 5 - len(msg)
+            prefix += self.clr_zone(row,start_clr,width)
 
-        msg = list(str(msg))
+        msg = bytes(msg, encoding='ascii')
         if typ == 'T':
-            msg.append(chr(178))
-            msg.append('C')
+            msg += b'\xb2C'
         elif typ == 'H':
-            msg.append(chr(37))
+            msg += b'\x25'
         elif typ == 'E':
-            msg.append('K')
-            msg.append('W')
-            msg.append('h')
+            msg += b'KWh'
 
-        for i in reversed(msg):
-            instr.append(i)
-            instr.extend([chr(254),chr(76)] * 2)
+        start = col - (len(msg)-1)
+        prefix += self.goto(row,start)
+        instr = prefix + msg
 
         self.write(instr)
 
 
     def waterdrop(self):
         """ Stores the waterdrop symbol in slot 0"""
-        instr = [chr(254),chr(78),chr(0)]
-        instr.extend([chr(4)] * 2)
-        instr.extend([chr(10)] * 2)
-        instr.extend([chr(17)] * 3)
-        instr.append(chr(14))
+        instr = b'\xfe\x78\x00'
+        instr += b'\x04\x0a\x0a\x11\x11\x11\x0e'
         self.write(instr)
 
 
     def thermo(self):
         """ Stores the thermometer symbol in slot 1"""
-        instr = [chr(254),chr(78),chr(1)]
-        instr.append(chr(4))
-        instr.extend([chr(10)] * 2)
-        instr.extend([chr(14)] * 2)
-        instr.extend([chr(31)] * 2)
-        instr.append(chr(14))
+        instr = b'\xfe\x78\x01'
+        instr += b'\x04\x0a\x0a\x0e\x0e\x1f\x1f\x0e'
         self.write(instr)
 
 
     def goto(self,row,col):
-        instr = [chr(254),chr(71)]
-        instr.append(chr(col))
-        instr.append(chr(row))
+        instr = b'\xfe\x47'
+        instr += bytes([col,row])
         return instr
 
 
     def home(self):
-        self.write([chr(254),chr(72)])
+        self.write(b'\xfe\x48')
 
 
     def clr_zone(self,row,col,width):
         """ Returns the instruction str to clear the zone starting
         at [col,row] and 'width' slot-wide"""
         instr = self.goto(row,col)
-        instr.extend([chr(32)] * width)
+        instr += b'\x20' * width
         return instr
 
 
     def backlight(self,state):
         if state:
-            self.write([chr(254),chr(66)])
+            self.write(b'\xfe\x42')
         else:
-            self.write([chr(254),chr(70)])
+            self.write(b'\xfe\x46')
 
 
     def clear(self):
         """ Clear display """
-        self.write([chr(254),chr(88)])
+        self.write(b'\xfe\x58')
 
 
     def write(self,msg):
-        instr = []
         if type(msg) == str:
-            instr = list(msg)
-        elif type(msg) == list:
+            instr = bytes(msg, encoding = 'ascii')
+        elif type(msg) == bytes:
             instr = msg
-        elif type(msg) == float or type(msg) == int:
-            instr = list(str(msg))
         else:
             print('Error: invalid type.',
-                'Available types: [list, str, float, int], got',type(msg))
+                'Available types: bytes or str, got',type(msg))
             return
 
-        for char in instr:
-            hexa = '{:02x}'.format(ord(char))
-            bits = bytes.fromhex(hexa)
-            #print(ord(char),hexa,bits)
-            self.serial.write(bits)
+        #print(instr)
+        self.serial.write(instr)
