@@ -56,7 +56,9 @@ class CtahrDisplay(threading.Thread):
         if self.state == 'CURRENT':
             self.update_values()
             self.lib.home()
-            self.lib.write('INT:\n\nEXT:')
+            self.lib.write('INT:')
+            self.lib.write(self.lib.goto(3,1))
+            self.lib.write('EXT:')
             self.lib.write(self.lib.goto(1,9))
             self.lib.write(chr(1))
             self.lib.write(self.lib.goto(3,9))

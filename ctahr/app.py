@@ -85,7 +85,9 @@ class CtahrApplication:
         self.stats.stop()
         self.stats.join()
         self.thermohygro_exterior.stop()
+        self.thermohygro_exterior.process.join()
         self.thermohygro_interior.stop()
+        self.thermohygro_interior.process.join()
 
         GPIO.cleanup()
         print("[-] Ctahr as stopped")

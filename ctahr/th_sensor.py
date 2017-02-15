@@ -1,6 +1,6 @@
 
 import time,csv,os
-from multiprocessing import Process,Array
+from multiprocessing import Process,Array,Event
 import Adafruit_DHT as DHT
 from .dev_filter import StdDevFilter
 
@@ -12,6 +12,7 @@ class CtahrThermoHygroSensor:
         self.name = name
 
         self.process = None
+        self.quit_event = Event()
         self.values_wrapper = Array('d', [0, 0, time.monotonic(), 0])
 
     def get(self):
@@ -21,19 +22,19 @@ class CtahrThermoHygroSensor:
 
     def start(self):
         self.process = Process(target=self.run,
-            args=(self.values_wrapper,self.pin, self.name))
+            args=(self.values_wrapper,self.pin, self.name, self.quit_event))
         self.process.start()
 
     def stop(self):
-        if self.process is not None:
-            self.process.terminate()
+        self.quit_event.set()
 
     @staticmethod
-    def run(values_wrapper, pin, name):
+    def run(values_wrapper, pin, name, quit_event):
         print("[+] Starting", name, "sensors module")
+
         temp_filter = StdDevFilter(3,20)
         hygro_filter = StdDevFilter(3,20)
-        while True:
+        while not quit_event.is_set():
            # if name == 'interior':
            #     f = '/opt/ctahr/ctahr/int.csv'
            # else:
@@ -67,5 +68,7 @@ class CtahrThermoHygroSensor:
             else:
                 values_wrapper[3] = 0
 
-            time.sleep(3)
+            quit_event.wait(timeout = 3)
+
+        print("[+] Stopping", name, "sensors module")
 

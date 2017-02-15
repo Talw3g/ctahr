@@ -117,5 +117,5 @@ class DisplayLib:
         for char in instr:
             hexa = '{:02x}'.format(ord(char))
             bits = bytes.fromhex(hexa)
-#            print(hexa,bits)
+            #print(ord(char),hexa,bits)
             self.serial.write(bits)
