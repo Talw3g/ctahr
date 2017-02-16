@@ -22,14 +22,7 @@ class DisplayLib:
     def backwards(self, row, col, msg, typ):
         """ Returns an instruction str to write 'msg' backwards, starting
         at position [col,row], and append the right typ: degC, % or KWh"""
-        msg = str(msg)
-        prefix = b''
-        if typ == 'T':
-            start_clr = col - 6
-            width = 5 - len(msg)
-            prefix += self.clr_zone(row,start_clr,width)
-
-        msg = bytes(msg, encoding='ascii')
+        msg = bytes(str(msg), encoding='ascii')
         if typ == 'T':
             msg += b'\xb2C'
         elif typ == 'H':
@@ -37,6 +30,9 @@ class DisplayLib:
         elif typ == 'E':
             msg += b'KWh'
 
+        start_clr = col - 6
+        width = 7 - len(msg)
+        prefix = self.clr_zone(row,start_clr,width)
         start = col - (len(msg)-1)
         prefix += self.goto(row,start)
         instr = prefix + msg
@@ -97,6 +93,9 @@ class DisplayLib:
             print('Error: invalid type.',
                 'Available types: bytes or str, got',type(msg))
             return
+
+#        with open('/tmp/serial_write.log', 'ab') as f: #           f.write(instr)
+#           f.write(instr)
 
         #print(instr)
         self.serial.write(instr)
