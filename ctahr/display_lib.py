@@ -1,5 +1,6 @@
 
 from serial import Serial
+import math
 from . import configuration
 
 class DisplayLib:
@@ -19,9 +20,9 @@ class DisplayLib:
         self.thermo()
 
 
-    def backwards(self, row, col, msg, typ):
-        """ Returns an instruction str to write 'msg' backwards, starting
-        at position [col,row], and append the right typ: degC, % or KWh"""
+    def justify_R(self, row, col, msg, typ):
+        """ Writes 'msg' justified to the right, starting at position [col,row],
+        and append the right typ: degC, % or KWh"""
         msg = bytes(str(msg), encoding='ascii')
         if typ == 'T':
             msg += b'\xb2C'
@@ -29,6 +30,8 @@ class DisplayLib:
             msg += b'\x25'
         elif typ == 'E':
             msg += b'KWh'
+        else:
+            pass
 
         start_clr = col - 6
         width = 7 - len(msg)
@@ -38,6 +41,17 @@ class DisplayLib:
         instr = prefix + msg
 
         self.write(instr)
+
+
+    def center(self, row, msg):
+        """ Writes 'msg' centered on [row] """
+        msg = bytes(str(msg), encoding='ascii')
+        start = max(11 - math.ceil(len(msg)/2),1)
+        instr = self.goto(row, start)
+        instr += msg
+
+        self.write(instr)
+
 
 
     def waterdrop(self):

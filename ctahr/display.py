@@ -67,36 +67,41 @@ class CtahrDisplay(threading.Thread):
             self.lib.write(b'x00')
             self.lib.write(self.lib.goto(4,9))
             self.lib.write(b'x00')
-            self.lib.backwards(1,16,self.int_temp,'T')
-            self.lib.backwards(2,16,self.int_hygro,'H')
-            self.lib.backwards(3,16,self.ext_temp,'T')
-            self.lib.backwards(4,16,self.ext_hygro,'H')
+            self.lib.justify_R(1,16,self.int_temp,'T')
+            self.lib.justify_R(2,16,self.int_hygro,'H')
+            self.lib.justify_R(3,16,self.ext_temp,'T')
+            self.lib.justify_R(4,16,self.ext_hygro,'H')
 
         elif self.state == 'TEMP':
             self.lib.home()
-            msg = ('Int max:\n    min:\n'
-                + 'Ext max:\n    min:\n')
-            self.lib.write(msg)
-            self.lib.backwards(1,16,self.app.stats.int_temp_max, 'T')
-            self.lib.backwards(2,16,self.app.stats.int_temp_min, 'T')
-            self.lib.backwards(3,16,self.app.stats.ext_temp_max, 'T')
-            self.lib.backwards(4,16,self.app.stats.ext_temp_min, 'T')
+            self.lib.write('Int max:')
+            self.lib.write(self.lib.goto(2,5))
+            self.lib.write('min:')
+            self.lib.write(self.lib.goto(3,1))
+            self.lib.write('Ext max:')
+            self.lib.write(self.lib.goto(3,5))
+            self.lib.write('min:')
+            self.lib.justify_R(1,16,self.app.stats.int_temp_max, 'T')
+            self.lib.justify_R(2,16,self.app.stats.int_temp_min, 'T')
+            self.lib.justify_R(3,16,self.app.stats.ext_temp_max, 'T')
+            self.lib.justify_R(4,16,self.app.stats.ext_temp_min, 'T')
 
         elif self.state == 'POWER':
-            self.lib.home()
-            msg = (' ENERGY CONSUMPTION\n'
-                + 'Fan:\nHeater:\nDehum:')
-            self.lib.write(msg)
-            self.lib.backwards(2,20,self.app.stats.fan_energy, 'E')
-            self.lib.backwards(3,20,self.app.stats.heater_energy, 'E')
-            self.lib.backwards(4,20,self.app.stats.dehum_energy, 'E')
+            self.lib.center('ENERGY CONSUMPTION')
+            self.lib.write(self.lib.goto(2,1))
+            self.lib.write('Fan:')
+            self.lib.write(self.lib.goto(3,1))
+            self.lib.write('Heater:')
+            self.lib.write(self.lib.goto(4,1))
+            self.lib.write('Dehum:')
+            self.lib.justify_R(2,20,self.app.stats.fan_energy, 'E')
+            self.lib.justify_R(3,20,self.app.stats.heater_energy, 'E')
+            self.lib.justify_R(4,20,self.app.stats.dehum_energy, 'E')
 
         elif self.state == 'RESET':
             self.lib.clear()
             if not self.reset_toggle:
-                self.lib.home()
-                msg = '\n        RESET'
-                self.lib.write(msg)
+                self.lib.center('RESET')
             self.reset_toggle = not self.reset_toggle
 
 
