@@ -8,8 +8,8 @@ class DisplayLib:
     def __init__(self):
         # Configuring display
         self.serial = Serial(
-            configuration.display_serial_device,
-            configuration.display_serial_speed)
+            self.configuration.display_serial_device,
+            self.configuration.display_serial_speed)
         # disables autoscroll:
         self.write(b'\xfe\x52')
         # reset display contrast:
@@ -56,14 +56,14 @@ class DisplayLib:
 
     def waterdrop(self):
         """ Stores the waterdrop symbol in slot 0"""
-        instr = b'\xfe\x78\x00'
-        instr += b'\x04\x0a\x0a\x11\x11\x11\x0e'
+        instr = b'\xfe\x4e\x00'
+        instr += b'\x04\x04\x0a\x0a\x11\x11\x11\x0e'
         self.write(instr)
 
 
     def thermo(self):
         """ Stores the thermometer symbol in slot 1"""
-        instr = b'\xfe\x78\x01'
+        instr = b'\xfe\x4e\x01'
         instr += b'\x04\x0a\x0a\x0e\x0e\x1f\x1f\x0e'
         self.write(instr)
 
