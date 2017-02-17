@@ -79,7 +79,7 @@ class CtahrDisplay(threading.Thread):
             self.lib.write('min:')
             self.lib.write(self.lib.goto(3,1))
             self.lib.write('Ext max:')
-            self.lib.write(self.lib.goto(3,5))
+            self.lib.write(self.lib.goto(4,5))
             self.lib.write('min:')
             self.lib.justify_R(1,16,self.app.stats.int_temp_max, 'T')
             self.lib.justify_R(2,16,self.app.stats.int_temp_min, 'T')
@@ -87,7 +87,7 @@ class CtahrDisplay(threading.Thread):
             self.lib.justify_R(4,16,self.app.stats.ext_temp_min, 'T')
 
         elif self.state == 'POWER':
-            self.lib.center('ENERGY CONSUMPTION')
+            self.lib.center(1,'ENERGY CONSUMPTION')
             self.lib.write(self.lib.goto(2,1))
             self.lib.write('Fan:')
             self.lib.write(self.lib.goto(3,1))
@@ -101,7 +101,7 @@ class CtahrDisplay(threading.Thread):
         elif self.state == 'RESET':
             self.lib.clear()
             if not self.reset_toggle:
-                self.lib.center('RESET')
+                self.lib.center(2,'RESET')
             self.reset_toggle = not self.reset_toggle
 
 
