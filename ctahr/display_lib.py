@@ -88,7 +88,7 @@ class DisplayLib:
 
     def backlight(self,state):
         if state:
-            self.write(b'\xfe\x42')
+            self.write(b'\xfe\x42\x00')
         else:
             self.write(b'\xfe\x46')
 
