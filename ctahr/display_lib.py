@@ -8,8 +8,8 @@ class DisplayLib:
     def __init__(self):
         # Configuring display
         self.serial = Serial(
-            self.configuration.display_serial_device,
-            self.configuration.display_serial_speed)
+            configuration.display_serial_device,
+            configuration.display_serial_speed)
         # disables autoscroll:
         self.write(b'\xfe\x52')
         # reset display contrast:
@@ -108,7 +108,7 @@ class DisplayLib:
                 'Available types: bytes or str, got',type(msg))
             return
 
-#        with open('/tmp/serial_write.log', 'ab') as f: #           f.write(instr)
+#        with open('/tmp/serial_write.log', 'ab') as f:
 #           f.write(instr)
 
         #print(instr)
