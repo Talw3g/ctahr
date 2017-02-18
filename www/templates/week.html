@@ -6,7 +6,7 @@
         <span class="md-title">Last 7 days</span>
       </md-card-header-text>
     </md-card-header>
-    <div ng-controller="GraphController" ng-init="init(604800,'%A')">
+    <div ng-controller="GraphController" ng-init="init(604800,'%A','%A %e/%m/%Y %H:%M')">
       <nvd3 options="options" data="data"></nvd3>
     </div>
     </md-card-header>

@@ -24,9 +24,10 @@ function GraphController($http, $scope) {
 
   $scope.running = true;
 
-  $scope.init = function(period_s,format) {
+  $scope.init = function(period_s,format,hdr_format) {
     $scope.period_s = period_s;
     $scope.format = format;
+    $scope.hdr_format = hdr_format;
 
     $scope.refresh();
   }
@@ -93,7 +94,30 @@ function GraphController($http, $scope) {
               axisLabelDistance: -10,
               showMaxMin: false
           },
-
+          interactiveLayer: {
+              tooltip: {
+                  enabled: true,
+                  contentGenerator: function(d) {
+                      var date = new Date(d.value);
+                      var format = d3.time.format($scope.hdr_format);
+                      var header = format(date);
+                      var headerhtml = `<thead><tr><td colspan='3'>
+                              <strong class='x-value'>` + header + `</strong>
+                              </td></tr></thead>`;
+                      var bodyhtml = "<tbody>";
+                      var series = d.series;
+                      series.forEach(function(c) {
+                          bodyhtml = bodyhtml +
+                              `<tr><td class='legend-color-guide'>
+                              <div style='background-color: ` + c.color + `;'>
+                              </div></td><td class='key'>` + c.key + `</td>
+                              <td class='value'>` + c.value + `</td></tr>`;
+                      });
+                      bodyhtml = bodyhtml+"</tbody>";
+                      return "<table>"+headerhtml+''+bodyhtml+"</table>";
+                  }
+              }
+          },
           showLegend: true,
           clipEdge: true,
           duration: 1000,
