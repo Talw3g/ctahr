@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<head>
+<html lang="en" ng-app="ctahr-app" ng-controller="AppController as app">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Cache-control" content="public">
+  <meta name="description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+  <title>CTAHR ({{status.temperature}})</title>
+  <link rel="stylesheet" href="./src/components/angular-material/angular-material.min.css"/>
+  <link rel="stylesheet" href="./app.css"/>
+
+  <style>
+
+
+  </style>
+
+</head>
+
+<body layout="column" >
+  <md-toolbar layout="row" layout-align="center center">
+    <h2 class="md-flex">{{status.temperature}}°C</h2>
+  </md-toolbar>
+  <!-- Container #1 (see wireframe) -->
+  <md-content class="md-padding" flex>
+    <md-nav-bar nav-bar-aria-label="navigation links" md-selected-nav-item="navitem">
+      <md-nav-item md-nav-sref="day" name="day" >Day</md-nav-item>
+      <md-nav-item md-nav-sref="week" name="week" >Week</md-nav-item>
+      <md-nav-item md-nav-sref="month" name="month" >Month</md-nav-item>
+      <md-nav-item md-nav-sref="year" name="year" >Year</md-nav-item>
+    </md-nav-bar>
+    <!-- angular ui router template insertion -->
+    <div id="content" ui-view></div>
+  </md-content>
+
+  <script src="./src/components/angular/angular.min.js"></script>
+  <script src="./src/components/angular-material/angular-material.min.js"></script>
+  <script src="./src/components/angular-aria/angular-aria.js"></script>
+  <script src="./src/components/angular-animate/angular-animate.js"></script>
+  <script src="./src/components/angular-messages/angular-messages.js"></script>
+  <script src="./src/components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="./src/app.js" type="text/javascript"></script>
+  <script src="./src/components/d3/d3.min.js"></script>
+  <script src="./src/components/nvd3//build/nv.d3.min.js"></script> <!-- or use another assembly -->
+  <script src="./src/components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+  <link rel="stylesheet" href="./src/components/nvd3/build/nv.d3.min.css">
+
+</body>
+</html>

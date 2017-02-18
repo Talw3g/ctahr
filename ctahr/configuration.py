@@ -1,7 +1,8 @@
 
 import os
 
-ctahr_absolute_path = '/opt/ctahr/'
+root_folder = '/opt/ctahr/'
+port = 51641
 
 ## PIN CONFIGURATION ##
 # Display
@@ -39,10 +40,13 @@ watchdog_pin = 20
 powerstate_pin = 23
 led_run_pin = 16
 
-stats_log_file = os.path.join(ctahr_absolute_path, 'ctahr/stats.json')
-safety_log_file = os.path.join(ctahr_absolute_path, 'ctahr/safety.log')
-indicators_file = os.path.join(ctahr_absolute_path, 'ctahr/indicators.txt')
-rrdtool_file = os.path.join(ctahr_absolute_path, 'rrdtool/ctahr.rrd')
+
+## FILES LOCATIONS ##
+stats_log_file = os.path.join(root_folder, 'ctahr/stats.json')
+safety_log_file = os.path.join(root_folder, 'ctahr/safety.log')
+indicators_file = os.path.join(root_folder, 'ctahr/indicators.txt')
+rrdtool_file = os.path.join(root_folder, 'rrdtool/ctahr.rrd')
+
 
 ## REGULATION FIXED VALUES ##
 # Temperature thresholds

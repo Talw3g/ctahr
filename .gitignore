@@ -8,3 +8,4 @@ indicators.txt
 *.rrd
 *.png
 .vim_list
+www/src/components/*

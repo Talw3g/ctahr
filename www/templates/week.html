@@ -1,0 +1,15 @@
+
+<div flex-xs flex-gt-xs="100" layout="column">
+  <md-card>
+    <md-card-header>
+      <md-card-header-text layout-align="center center">
+        <span class="md-title">Last 7 days</span>
+      </md-card-header-text>
+    </md-card-header>
+    <div ng-controller="GraphController" ng-init="init(604800,'%A')">
+      <nvd3 options="options" data="data"></nvd3>
+    </div>
+    </md-card-header>
+  </md-card>
+</div>
+
