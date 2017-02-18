@@ -53,10 +53,6 @@ function GraphController($http, $scope) {
     $scope.running = false;
   });
 
-  $scope.$watch('$scope.chart_title', function() {
-    $scope.options.title.text = $scope.chart_title;
-  });
-
   $scope.options = {
       chart: {
           type: 'multiChart',
@@ -104,14 +100,7 @@ function GraphController($http, $scope) {
 
           callback: function(chart){
               console.log("!!! lineChart callback !!!");
-              console.log($scope.chart_title)
           }
-      },
-      title: {
-          enable: false,
-          text: 'Title',
-          width: 50,
-          textAlign: 'center'
       },
   };
 }

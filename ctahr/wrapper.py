@@ -50,8 +50,8 @@ class JSONWrapper():
         for j,*rest in enumerate(data):
             # Zipping each values list with timestamp list
             data[j]['values'] = list(zip(x,data[j]['values']))
-            # Decimating to keep approx. 1500 points
-            resolution = max(1,int(len(data[j]['values'])/1500))
+            # Decimating to keep approx. 800 points
+            resolution = max(1,int(len(data[j]['values'])/800))
             data[j]['values'] = data[j]['values'][::resolution]
 
         return json.dumps(data)
