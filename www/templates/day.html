@@ -5,6 +5,7 @@
         <span class="md-title">Last 24 hours</span>
       </md-card-header-text>
     </md-card-header>
+    <md-button ng-click="increase()">Heat</md-button>
     <div ng-controller="GraphController" ng-init="init(86400,'%a-%Hh','%A %e/%m/%Y %H:%M')">
       <nvd3 options="options" data="data"></nvd3>
     </div>

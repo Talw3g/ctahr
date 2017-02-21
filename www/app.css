@@ -2,7 +2,7 @@
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
+  font-size: 80px;  /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -48,3 +48,26 @@
 /* Rules for using icons as white on a dark background. */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+
+
+.main_value {
+  font-size: 80px;
+  margin: -10px 0px -10px 0px;
+  text-align: right;
+}
+.max_value {
+  font-size: 25px;
+  margin: 0px 0px 0px 0px;
+  text-align: right;
+  color: #FF991D;
+}
+.min_value {
+  font-size: 25px;
+  margin: 0px 0px 0px 0px;
+  text-align: right;
+  color: #02CCA0;
+}
+
+
+

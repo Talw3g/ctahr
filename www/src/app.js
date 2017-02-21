@@ -3,6 +3,14 @@ function AppController($http, $scope) {
 
   var refresh_timeout_ms = 3000;
 
+  $scope.increase = function() {
+    $http.get('/api/increase').then(response => {
+      console.log(response)},
+      function errorCallback(response) {
+        console.log(response);
+      });
+  }
+
   $scope.refresh = function() {
     // fetch status
     $http.get('/api/status').then(response => {
@@ -121,10 +129,6 @@ function GraphController($http, $scope) {
           showLegend: true,
           clipEdge: true,
           duration: 1000,
-
-          callback: function(chart){
-              console.log("!!! lineChart callback !!!");
-          }
       },
   };
 }
@@ -136,6 +140,10 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
       $urlRouterProvider.otherwise('/');
 
       $stateProvider
+        .state('dashboard', {
+          url:'/',
+          templateUrl:'templates/dashboard.html',
+        })
         .state('day', {
           url:'/',
           templateUrl:'templates/day.html',
@@ -157,6 +165,12 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
       $mdThemingProvider.theme('default')
           .primaryPalette('blue-grey')
           .accentPalette('orange');
+      $mdThemingProvider.theme('blue-grey')
+          .backgroundPalette('blue-grey', {
+            'hue-1': '100',
+            'hue-2': '100',
+            'hue-3': 'A100'})
+          .dark();
     })
   .controller('AppController', AppController)
   .controller('GraphController', GraphController);

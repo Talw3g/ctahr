@@ -50,13 +50,34 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Expires','0')
             self.end_headers()
 
-            obj = {
-                'temperature':self.server.app.dummy.temp,
-            }
+            obj = {'int_temp':self.server.app.dummy.int_temp,
+                'int_temp_min':self.server.app.dummy.int_temp_min,
+                'int_temp_max':self.server.app.dummy.int_temp_min,
+                'ext_temp':self.server.app.dummy.ext_temp,
+                'ext_temp_min':self.server.app.dummy.ext_temp_min,
+                'ext_temp_max':self.server.app.dummy.ext_temp_min,
+                'int_hygro':self.server.app.dummy.int_hygro,
+                'ext_hygro':self.server.app.dummy.ext_hygro,
+                'fan_status':self.server.app.dummy.fan_status,
+                'heater_status':self.server.app.dummy.heater_status,
+                'dehum_status':self.server.app.dummy.dehum_status,
+                'fan_energy':self.server.app.dummy.fan_energy,
+                'heater_energy':self.server.app.dummy.heater_energy,
+                'dehum_energy':self.server.app.dummy.dehum_energy}
 
             self.wfile.write(
                 json.dumps(obj).encode()
             )
+            return
+
+        elif path == 'api/increase':
+            self.send_response(200)
+            self.send_header('Content-Type','application/json')
+            self.send_header('Cache-Control','no-cache, no-store, must-revalidate')
+            self.send_header('Pragma','no-cache')
+            self.send_header('Expires','0')
+            self.end_headers()
+            self.server.app.dummy.increase()
             return
 
         elif path.startswith('api/data'):
