@@ -2,7 +2,7 @@
   font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
-  font-size: 80px;  /* Preferred icon size */
+  font-size: 24px;  /* Preferred icon size */
   display: inline-block;
   line-height: 1;
   text-transform: none;
@@ -40,6 +40,11 @@
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
+.material-icons.md-80 {
+  font-size: 80px;
+  height: 80px;
+  line-height: 93px;
+}
 
 /* Rules for using icons as black on a light background. */
 .material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
@@ -53,12 +58,12 @@
 
 .main_value {
   font-size: 80px;
-  margin: -10px 0px -10px 0px;
+  margin: 0px 10px -10px 70px;
   text-align: right;
 }
 .max_value {
   font-size: 25px;
-  margin: 0px 0px 0px 0px;
+  margin: 0px 0px -10px 0px;
   text-align: right;
   color: #FF991D;
 }
@@ -69,5 +74,11 @@
   color: #02CCA0;
 }
 
+.cst_tile {
+  padding: 15px 15px 15px 15px;
+  background-color: #597DFF;
+}
 
+.light_grey {
+}
 

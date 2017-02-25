@@ -6,7 +6,7 @@ from . import configuration
 
 import os,sys,json
 
-import io, gzip
+import io,gzip,re
 
 class MyHTTPServer(ThreadingMixIn,HTTPServer):
     pass
@@ -111,14 +111,24 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             return
 
+
         self.send_response(200)
         self.send_header('Cache-Control','public, max-age=86400')
 
         # fetch file and compress it
         data = open(realpath,'rb').read()
-        content = gzip.compress(data)
+        if path.endswith('woff'):
+            content = data
+            self.send_header('Content-Encoding','identity')
+            self.send_header('Content-Type', 'font/woff')
+        elif path.endswith('woff2'):
+            content = data
+            self.send_header('Content-Encoding','identity')
+            self.send_header('Content-Type', 'font/woff2')
+        else:
+            content = gzip.compress(data)
+            self.send_header('Content-Encoding','gzip')
         self.send_header('Content-Length', str(len(data)))
-        self.send_header('Content-Encoding','gzip')
         self.end_headers()
 
  #       print("serving",realpath)
