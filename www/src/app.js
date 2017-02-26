@@ -145,7 +145,7 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
           templateUrl:'templates/dashboard.html',
         })
         .state('day', {
-          url:'/',
+          url:'/day',
           templateUrl:'templates/day.html',
         })
         .state('week', {
