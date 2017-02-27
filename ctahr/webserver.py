@@ -3,7 +3,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from socketserver import ThreadingMixIn
 import threading
 from . import configuration
-
+from . import private
+from base64 import b64decode
 import os,sys,json
 
 import io,gzip,re
@@ -29,9 +30,36 @@ class MyRequestHandler(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass # nothing to do
 
+    def user_authorized(self):
+        try:
+            return self._user_authorized()
+        except Exception as e:
+            raise
+            print(str(e))
+            return False
+
+    def _user_authorized(self):
+        if "Authorization" not in self.headers:
+            return False
+        auth = self.headers['Authorization']
+        a_type, b64 = auth.split(' ')
+        if a_type.lower() != 'basic':
+            return False
+        user, passwd = b64decode(b64).decode('utf8').split(':')
+        if passwd == private.password:
+            return True
+        return False
+
+
     def do_GET(self):
 
         path,params,args = self._parse_url()
+
+        if not self.user_authorized():
+            self.send_response(401)
+            self.send_header('WWW-Authenticate','Basic')
+            self.end_headers()
+            return
 
 #        print(path,params,args)
 
