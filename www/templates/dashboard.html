@@ -1,26 +1,28 @@
-<!--
-<md-content class="md-padding" layout-xs="column" layout="row">
-  <div flex-xs="" flex-gt-xs="40"layout="column">
-    <md-card md-theme="{{ showDarkTheme ? 'default' : 'default' }}" md-theme-watch="">
-          <md-card-title>
-            <md-card-title-text layout-align="center center">
-              <span>
-                <h3 class="max_value">35.4°C</h3>
-                <div style="clear: both">
-                  <md-icon md-font-library="material-icons">home</md-icon>
-                  <h3 style="float: right" class="main_value">18.5°C</h3>
-                </div>
-                <h3 class="min_value">10.7°C</h3>
-              </span>
-            </md-card-title-text>
-          </md-card-title>
-        </md-card>
+<div layout="column" class="main_container bord">
+  <div layout="row" layout-align="center" flex-gt-xs="33" class="bord">
+    <div layout="column" layout-align="center center" flex="20" class="bord">
+      <md-icon class="md-80" md-font-set="material-icons">home</md-icon>
+    </div>
+    <div layout="column" flex class="bord">
+      <div flex layout="column" layout-align="end" class="bord">
+        <h3 class="max_value">35.4°C</h3>
       </div>
-    </md-card>
+      <div flex layout="column" layout-align="center" class="bord" layout-wrap>
+        <h3 class="main_value">18.5°C | 82.7%</h3>
+      </div>
+      <div flex layout="column" layout-align="start" class="bord">
+        <h3 class="min_value">10.7°C</h3>
+      </div>
+    </div>
   </div>
-</md-content>
---!>
-<div flex-xs="" flex-gt-xs="100" layout="column">
+  <div flex-gt-xs="33" class="bord">
+    <h3 class="main_value">18.5°C</h3>
+  </div>
+  <div flex class="bord">
+  tigidi
+  </div>
+</div>
+<!--
   <md-grid-list md-cols-gt-md="6" md-cols-xs="2" md-row-height="1:1" md-gutter="12px" md-gutter-gt-sm="8px">
 
     <md-grid-tile md-rowspan="1" md-colspan="2" class="cst_tile">
@@ -47,4 +49,4 @@
       </md-grid-tile-footer>
     </md-grid-tile>
   </md-grid-list>
-</div>
+  --!>

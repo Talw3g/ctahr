@@ -9,3 +9,4 @@ indicators.txt
 *.png
 .vim_list
 www/src/components/*
+files

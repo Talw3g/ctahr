@@ -45,9 +45,9 @@
   line-height: 48px;
 }
 .material-icons.md-80 {
-  font-size: 80px;
-  height: 80px;
-  line-height: 93px;
+  font-size: 12vw;
+  height: 12vw;
+  width: 12vw;
 }
 
 /* Rules for using icons as black on a light background. */
@@ -60,27 +60,36 @@
 
 
 
+
+/* Custom classes*/
+:root {
+  --text-coef: 1vw;
+}
+
 .main_value {
-  font-size: 80px;
-  margin: 0px 10px -10px 70px;
-  text-align: right;
+  font-size: calc(var(--text-coef) * 7);
+  margin: 0px;
+  text-align: center;
 }
 .max_value {
-  font-size: 25px;
-  margin: 0px 0px -10px 0px;
-  text-align: right;
+  font-size: calc(var(--text-coef) * 3);
+  margin: 0px;
+  text-align: center;
   color: #FF991D;
 }
 .min_value {
-  font-size: 25px;
-  margin: 0px 0px 0px 0px;
-  text-align: right;
+  font-size: calc(var(--text-coef) * 3);
+  margin: 0px;
+  text-align: center;
   color: #02CCA0;
 }
 
-.cst_tile {
-  padding: 15px 15px 15px 15px;
-/*  background-color: #597DFF;*/
+.main_container {
+  height: 80vh;
+  padding: 2vmin;
 }
 
-
+.bord {
+  border-style: solid;
+  border-width: 1px;
+}
