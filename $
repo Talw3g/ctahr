@@ -44,18 +44,11 @@
   height: 48px;
   line-height: 48px;
 }
-.material-icons.md-large {
+.material-icons.md-80 {
   font-size: calc(var(--text-coef) * 13);
   height: calc(var(--text-coef) * 13);
   line-height: calc(var(--text-coef) * 13);
   width: calc(var(--text-coef) * 13);
-}
-
-.material-icons.md-medium {
-  font-size: calc(var(--text-coef) * 10);
-  height: calc(var(--text-coef) * 10);
-  line-height: calc(var(--text-coef) * 10);
-  width: calc(var(--text-coef) * 10);
 }
 
 /* Rules for using icons as black on a light background. */
@@ -97,14 +90,6 @@
   color: #02CCA0;
 }
 
-.power_value {
-  font-size: calc(var(--text-coef) * 3.4);
-  line-height: calc(var(--text-coef) * 3.4);
-  height: calc(var(--text-coef) * 3.4);
-  margin: 0px calc(var(--text-coef) * 1);
-  color: var(--dark-color);
-}
-
 .main_container {
   min-height: 40vw;
   height: calc(88vh - 48px);
@@ -119,35 +104,7 @@
   background-image: url("images/bckgnd1.png");
   background-size: cover;
   border-style: solid;
-  border-width: 3px;
-  border-color: var(--dark-color);
-}
-
-.exterior {
-  background-image: url("images/bckgnd1.png");
-  background-size: cover;
-  border-style: solid;
-  border-top-style: none;
-  border-width: 3px;
-  border-color: var(--dark-color);
-}
-
-.power {
-  background-image: none;
-  background-size: cover;
-  border-style: solid;
-  border-top-style: none;
-  border-width: 3px;
-  border-color: var(--dark-color);
-}
-
-.power_tile {
-  background-image: none;
-  background-size: cover;
-  border-style: none;
-  border-left-style: solid;
-  border-width: 3px;
-  border-color: var(--dark-color);
+  border-width: 1px;
 }
 
 .value_bord {

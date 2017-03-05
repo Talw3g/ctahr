@@ -1,65 +1,86 @@
 <div layout="column" class="main_container">
-  <div flex="33" layout="row" layout-align="center" class="bord">
-    <div layout="column" layout-align="center center" flex="20" class="bord">
-      <md-icon class="md-80" md-font-set="material-icons">home</md-icon>
+  <div flex="33" layout="row" layout-align="center" class="interior">
+    <div layout="column" layout-align="center center" flex="20" >
+      <md-icon class="md-large" md-font-set="material-icons">home</md-icon>
     </div>
-    <div flex layout-xs="column" layout="row" layout-align="center" class="bord">
-      <div flex layout="column" layout-align="center" class="bord">
-        <div flex layout="column" layout-align="end center" layout-align-xs="end start" class="bord">
+    <div flex layout="row" layout-align="center" >
+      <div flex layout="column" layout-align="center" >
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">15.4°C</h3>
+        </div>
+        <div layout="column" layout-align="center center" >
+          <h3 class="main_value">12.5°C</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">8.9°C</h3>
+        </div>
+      </div>
+      <div flex layout="column" layout-align="center">
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">85.2%</h3>
+        </div>
+        <div layout="column" layout-align="center center" class="value_bord" >
+          <h3 class="main_value">79.0%</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">76.4%</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div flex="33" layout="row" layout-align="center" class="exterior">
+    <div layout="column" layout-align="center center" flex="20" >
+      <md-icon class="md-large" md-font-set="material-icons">terrain</md-icon>
+    </div>
+    <div flex layout="row" layout-align="center" >
+      <div flex layout="column" layout-align="center" >
+        <div flex layout="column" layout-align="end center" >
           <h3 class="max_value">35.4°C</h3>
         </div>
-        <div layout="column" layout-align="center center" layout-align-xs="center start" class="bord">
+        <div layout="column" layout-align="center center" >
           <h3 class="main_value">18.5°C</h3>
         </div>
-        <div flex layout="column" layout-align="start center" layout-align-xs="start start" class="bord">
+        <div flex layout="column" layout-align="start center" >
           <h3 class="min_value">10.7°C</h3>
         </div>
       </div>
-      <div flex layout="column" layout-align="center" class="bord">
-        <div flex layout="column" layout-align="end center" layout-align-xs="end end" class="bord">
+      <div flex layout="column" layout-align="center">
+        <div flex layout="column" layout-align="end center" >
           <h3 class="max_value">99.9%</h3>
         </div>
-        <div layout="column" layout-align="center center" layout-align-xs="center end" class="bord">
+        <div layout="column" layout-align="center center" class="value_bord" >
           <h3 class="main_value">82.7%</h3>
         </div>
-        <div flex layout="column" layout-align="start center" layout-align-xs="start end" class="bord">
+        <div flex layout="column" layout-align="start center" >
           <h3 class="min_value">53.9%</h3>
         </div>
       </div>
     </div>
   </div>
-  <div flex="33" class="bord">
-    <h3 class="main_value">18.5°C</h3>
-  </div>
-  <div flex class="bord">
-  tigidi
+  <div flex layout="row" class="power">
+    <div flex layout="column">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" md-font-set="material-icons">toys</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">37.4 KWh</h3>
+      </div>
+    </div>
+    <div flex layout="column" class="power_tile">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" md-font-set="material-icons">whatshot</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">1240.7 KWh</h3>
+      </div>
+    </div>
+    <div flex layout="column" class="power_tile">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" md-font-set="material-icons">wb_cloudy</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">354.1 KWh</h3>
+      </div>
+    </div>
   </div>
 </div>
-<!--
-  <md-grid-list md-cols-gt-md="6" md-cols-xs="2" md-row-height="1:1" md-gutter="12px" md-gutter-gt-sm="8px">
-
-    <md-grid-tile md-rowspan="1" md-colspan="2" class="cst_tile">
-      <md-grid-tile-title>
-        <h3 class="max_value">35.4°C</h3>
-        <div style="clear: both">
-          <md-icon style="float: left" class="md-80" md-font-set="material-icons">home</md-icon>
-          <h3 style="float: right" class="main_value">18.5°C</h3>
-        </div>
-        <h3 class="min_value">10.7°C</h3>
-      </md-grid-tile-title>
-    </mdi-grid-tile>
-
-
-    <md-grid-tile class="green">
-      <md-grid-tile-footer>
-        <h3>#2: (1r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-
-    <md-grid-tile class="yellow">
-      <md-grid-tile-footer>
-        <h3>#3: (1r x 1c)</h3>
-      </md-grid-tile-footer>
-    </md-grid-tile>
-  </md-grid-list>
-  --!>
