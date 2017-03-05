@@ -173,5 +173,5 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
           .dark();
     })
   .controller('AppController', AppController)
-  .controller('GraphController', GraphController);
+  .controller('GraphController', GraphController)
 

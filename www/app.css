@@ -63,36 +63,38 @@
 
 /* Custom classes*/
 :root {
-  --text-coef: 1vw;
+  --text-coef: 0.8vmax;
 }
 
 .main_value {
   font-size: calc(var(--text-coef) * 7);
   line-height: calc(var(--text-coef) * 7);
   height: calc(var(--text-coef) * 7);
-  margin: 0px;
-  text-align: center;
+  margin: 0px calc(var(--text-coef) * 1);
+  color: #363D45;
 }
 .max_value {
   font-size: calc(var(--text-coef) * 3);
   line-height: calc(var(--text-coef) * 3);
   margin: 0px;
-  margin-right: calc(var(--text-coef) * 15);
-  text-align: center;
+  margin-left: calc(var(--text-coef) * 15);
   color: #FF991D;
 }
 .min_value {
   font-size: calc(var(--text-coef) * 3);
   line-height: calc(var(--text-coef) * 3);
   margin: 0px;
-  margin-right: calc(var(--text-coef) * 15);
-  text-align: center;
+  margin-left: calc(var(--text-coef) * 15);
   color: #02CCA0;
 }
 
 .main_container {
+  min-height: 40vw;
   height: calc(88vh - 48px);
   padding: 2vmin;
+  width: 95vw;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .bord {
@@ -103,14 +105,8 @@
 ._md-toolbar-transitions {
   height: 8vh;
 }
+/*
 .md-padding {
   padding-top: 1vh;
 }
-/*
 
-.md-nav-item {
-  height: 8vh;
-}
-._md-nav-button {
-  height: 8vh;
-}

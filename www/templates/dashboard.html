@@ -1,24 +1,34 @@
-<div layout="column" class="main_container bord">
-  <div layout="row" layout-align="center" flex-gt-xs="33" class="bord">
+<div layout="column" class="main_container">
+  <div flex="33" layout="row" layout-align="center" class="bord">
     <div layout="column" layout-align="center center" flex="20" class="bord">
       <md-icon class="md-80" md-font-set="material-icons">home</md-icon>
     </div>
-    <div flex layout="column" layout-align="center" class="bord">
-      <div flex layout="column" layout-align="end">
-        <h3 class="max_value">35.4°C</h3>
+    <div flex layout-xs="column" layout="row" layout-align="center" class="bord">
+      <div flex layout="column" layout-align="center" class="bord">
+        <div flex layout="column" layout-align="end center" layout-align-xs="end start" class="bord">
+          <h3 class="max_value">35.4°C</h3>
+        </div>
+        <div layout="column" layout-align="center center" layout-align-xs="center start" class="bord">
+          <h3 class="main_value">18.5°C</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" layout-align-xs="start start" class="bord">
+          <h3 class="min_value">10.7°C</h3>
+        </div>
       </div>
-      <div layout="row" layout-align="center">
-        <h3 class="main_value">18.5°C</h3>
+      <div flex layout="column" layout-align="center" class="bord">
+        <div flex layout="column" layout-align="end center" layout-align-xs="end end" class="bord">
+          <h3 class="max_value">99.9%</h3>
+        </div>
+        <div layout="column" layout-align="center center" layout-align-xs="center end" class="bord">
+          <h3 class="main_value">82.7%</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" layout-align-xs="start end" class="bord">
+          <h3 class="min_value">53.9%</h3>
+        </div>
       </div>
-      <div flex layout="column" layout-align="start">
-        <h3 class="min_value">10.7°C</h3>
-      </div>
-    </div>
-    <div flex layout="column" layout-align="center" class="bord">
-      <h3 class="main_value">82.7%</h3>
     </div>
   </div>
-  <div flex-gt-xs="33" class="bord">
+  <div flex="33" class="bord">
     <h3 class="main_value">18.5°C</h3>
   </div>
   <div flex class="bord">
