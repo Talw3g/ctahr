@@ -175,3 +175,11 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
   .controller('AppController', AppController)
   .controller('GraphController', GraphController)
 
+	hover_in = function(alt_content,ID) {
+        document.getElementById(ID).innerHTML = alt_content;
+  }
+
+  hover_out = function(content,ID) {
+      	document.getElementById(ID).innerHTML = content;
+  }
+
