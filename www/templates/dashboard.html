@@ -1,86 +1,96 @@
-<div layout="column" class="main_container">
-  <div flex="33" layout="row" layout-align="center" class="interior">
-    <div layout="column" layout-align="center center" flex="20" >
-      <md-icon class="md-large" md-font-set="material-icons">home</md-icon>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript">
+    </script>
+  </head>
+
+  <body>
+    <div layout="column" class="main_container">
+      <div flex="33" layout="row" layout-align="center" class="interior">
+        <div onmouseover="power_status()" layout="column" layout-align="center center" flex="20" >
+          <md-icon class="md-large" md-font-set="material-icons">home</md-icon>
+        </div>
+        <div flex layout="row" layout-align="center" >
+          <div flex layout="column" layout-align="center" >
+            <div flex layout="column" layout-align="end center" >
+              <h3 class="max_value">15.4°C</h3>
+            </div>
+            <div layout="column" layout-align="center center" >
+              <h3 class="main_value">12.5°C</h3>
+            </div>
+            <div flex layout="column" layout-align="start center" >
+              <h3 class="min_value">8.9°C</h3>
+            </div>
+          </div>
+          <div flex layout="column" layout-align="center">
+            <div flex layout="column" layout-align="end center" >
+              <h3 class="max_value">85.2%</h3>
+            </div>
+            <div layout="column" layout-align="center center" class="value_bord" >
+              <h3 class="main_value">79.0%</h3>
+            </div>
+            <div flex layout="column" layout-align="start center" >
+              <h3 class="min_value">76.4%</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div flex="33" layout="row" layout-align="center" class="exterior">
+        <div layout="column" layout-align="center center" flex="20" >
+          <md-icon class="md-large" md-font-set="material-icons">terrain</md-icon>
+        </div>
+        <div flex layout="row" layout-align="center" >
+          <div flex layout="column" layout-align="center" >
+            <div flex layout="column" layout-align="end center" >
+              <h3 class="max_value">35.4°C</h3>
+            </div>
+            <div layout="column" layout-align="center center" >
+              <h3 class="main_value">18.5°C</h3>
+            </div>
+            <div flex layout="column" layout-align="start center" >
+              <h3 class="min_value">10.7°C</h3>
+            </div>
+          </div>
+          <div flex layout="column" layout-align="center">
+            <div flex layout="column" layout-align="end center" >
+              <h3 class="max_value">99.9%</h3>
+            </div>
+            <div layout="column" layout-align="center center" class="value_bord" >
+              <h3 class="main_value">82.7%</h3>
+            </div>
+            <div flex layout="column" layout-align="start center" >
+              <h3 class="min_value">53.9%</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div flex layout="row" class="power">
+        <div flex layout="column" onmouseover="hover_in('5&euro;','fan')" onmouseout="hover_out('37.4 KWh','fan')">
+          <div flex layout="column" layout-align="center center">
+            <md-icon id="fan_logo" class="md-medium" md-font-set="material-icons">toys</md-icon>
+          </div>
+          <div flex="25" layout="column" layout-align="start center">
+            <h3 id="fan" class="power_value">37.4 KWh</h3>
+          </div>
+        </div>
+        <div flex layout="column" class="power_tile" onmouseover="hover_in('161&euro;','heat')" onmouseout="hover_out('1240.7 KWh','heat')">
+          <div flex layout="column" layout-align="center center">
+            <md-icon id="heater_logo" class="md-medium" md-font-set="material-icons">whatshot</md-icon>
+          </div>
+          <div flex="25" layout="column" layout-align="start center">
+            <h3 id="heat" class="power_value">1240.7 KWh</h3>
+          </div>
+        </div>
+        <div flex layout="column" class="power_tile" onmouseover="hover_in('46&euro;','dehum')" onmouseout="hover_out('354.1 KWh','dehum')">
+          <div flex layout="column" layout-align="center center">
+            <md-icon id="dehum_logo" class="md-medium" md-font-set="material-icons">wb_cloudy</md-icon>
+          </div>
+          <div flex="25" layout="column" layout-align="start center">
+            <h3 id="dehum" class="power_value">354.1 KWh</h3>
+          </div>
+        </div>
+      </div>
     </div>
-    <div flex layout="row" layout-align="center" >
-      <div flex layout="column" layout-align="center" >
-        <div flex layout="column" layout-align="end center" >
-          <h3 class="max_value">15.4°C</h3>
-        </div>
-        <div layout="column" layout-align="center center" >
-          <h3 class="main_value">12.5°C</h3>
-        </div>
-        <div flex layout="column" layout-align="start center" >
-          <h3 class="min_value">8.9°C</h3>
-        </div>
-      </div>
-      <div flex layout="column" layout-align="center">
-        <div flex layout="column" layout-align="end center" >
-          <h3 class="max_value">85.2%</h3>
-        </div>
-        <div layout="column" layout-align="center center" class="value_bord" >
-          <h3 class="main_value">79.0%</h3>
-        </div>
-        <div flex layout="column" layout-align="start center" >
-          <h3 class="min_value">76.4%</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div flex="33" layout="row" layout-align="center" class="exterior">
-    <div layout="column" layout-align="center center" flex="20" >
-      <md-icon class="md-large" md-font-set="material-icons">terrain</md-icon>
-    </div>
-    <div flex layout="row" layout-align="center" >
-      <div flex layout="column" layout-align="center" >
-        <div flex layout="column" layout-align="end center" >
-          <h3 class="max_value">35.4°C</h3>
-        </div>
-        <div layout="column" layout-align="center center" >
-          <h3 class="main_value">18.5°C</h3>
-        </div>
-        <div flex layout="column" layout-align="start center" >
-          <h3 class="min_value">10.7°C</h3>
-        </div>
-      </div>
-      <div flex layout="column" layout-align="center">
-        <div flex layout="column" layout-align="end center" >
-          <h3 class="max_value">99.9%</h3>
-        </div>
-        <div layout="column" layout-align="center center" class="value_bord" >
-          <h3 class="main_value">82.7%</h3>
-        </div>
-        <div flex layout="column" layout-align="start center" >
-          <h3 class="min_value">53.9%</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div flex layout="row" class="power">
-    <div flex layout="column">
-      <div flex layout="column" layout-align="center center">
-        <md-icon class="md-medium" md-font-set="material-icons">toys</md-icon>
-      </div>
-      <div flex="25" layout="column" layout-align="start center" onmouseover="hover_in('5&euro;','fan')" onmouseout="hover_out('37.4 KWh','fan')">
-        <h3 id="fan" class="power_value">37.4 KWh</h3>
-      </div>
-    </div>
-    <div flex layout="column" class="power_tile">
-      <div flex layout="column" layout-align="center center">
-        <md-icon class="md-medium" md-font-set="material-icons">whatshot</md-icon>
-      </div>
-      <div flex="25" layout="column" layout-align="start center" onmouseover="hover_in('161&euro;','heat')" onmouseout="hover_out('1240.7 KWh','heat')">
-        <h3 id="heat" class="power_value">1240.7 KWh</h3>
-      </div>
-    </div>
-    <div flex layout="column" class="power_tile">
-      <div flex layout="column" layout-align="center center">
-        <md-icon class="md-medium" md-font-set="material-icons">wb_cloudy</md-icon>
-      </div>
-      <div flex="25" layout="column" layout-align="start center" onmouseover="hover_in('46&euro;','dehum')" onmouseout="hover_out('354.1 KWh','dehum')">
-        <h3 id="dehum" class="power_value">354.1 KWh</h3>
-      </div>
-    </div>
-  </div>
-</div>
+  </body>
+</html>

@@ -87,7 +87,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 'int_hygro':self.server.app.dummy.int_hygro,
                 'ext_hygro':self.server.app.dummy.ext_hygro,
                 'fan_status':self.server.app.dummy.fan_status,
-                'heater_status':self.server.app.dummy.heater_status,
+                'heater_status':str(self.server.app.dummy.heater_status),
                 'dehum_status':self.server.app.dummy.dehum_status,
                 'fan_energy':self.server.app.dummy.fan_energy,
                 'heater_energy':self.server.app.dummy.heater_energy,

@@ -19,6 +19,7 @@ class DummyValues:
 
     def increase(self):
         self.int_temp = round(self.int_temp + 0.1, 1)
+        self.heater_status = not self.heater_status
 
     def reset(self):
         self.int_temp_min = self.int_temp
