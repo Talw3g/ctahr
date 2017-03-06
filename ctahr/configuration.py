@@ -71,3 +71,4 @@ delta_hygro = 5
 fan_power = 100
 heater_power = 1500
 dehum_power = 600
+rate = 0.146

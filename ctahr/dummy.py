@@ -9,7 +9,11 @@ class DummyValues:
         self.ext_temp_min = -5.7
         self.ext_temp_max = 19.3
         self.int_hygro = 76.3
+        self.int_hygro_min = 74.6
+        self.int_hygro_max = 88.7
         self.ext_hygro = 93.5
+        self.ext_hygro_min = 57.2
+        self.ext_hygro_max = 98.7
         self.fan_status = False
         self.heater_status = False
         self.dehum_status = False

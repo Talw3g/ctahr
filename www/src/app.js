@@ -15,7 +15,18 @@ function AppController($http, $scope) {
     // fetch status
     $http.get('/api/status').then(response => {
         $scope.status = response.data;
-        window.gen_status = $scope.status;
+        if ($scope.status.fan_status)
+          $scope.fan_color = '#0FFF37';
+        else
+          $scope.fan_color = 'md-primary';
+        if ($scope.status.heater_status)
+          $scope.heater_color = '#0FFF37';
+        else
+          $scope.heater_color = 'md-primary';
+        if ($scope.status.dehum_status)
+          $scope.dehum_color = '#0FFF37';
+        else
+          $scope.dehum_color = 'md-primary';
       },
       function errorCallback(response) {
         console.log(response);
@@ -184,19 +195,3 @@ hover_out = function(content,ID) {
     	document.getElementById(ID).innerHTML = content;
 }
 
-function power_status() {
-  console.log('power_status updated');
-  if (status.fan_status)
-    document.getElementById("fan_logo").style.color = '#0FFF37';
-  else
-    document.getElementById("fan_logo").style.color = '#363D45';
-  if (window.gen_status.heater_status == 'True')
-    document.getElementById("heater_logo").style.color = '#0FFF37';
-  else
-    document.getElementById("heater_logo").style.color = '#363D45';
-  if (status.dehum_status)
-    document.getElementById("dehum_logo").style.color = '#0FFF37';
-  else
-    document.getElementById("dehum_logo").style.color = '#363D45';
-  document.getElementById("fan_logo").style.color = '#0FFF37';
-}
