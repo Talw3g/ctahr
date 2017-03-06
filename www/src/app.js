@@ -1,4 +1,4 @@
-function AppController($http, $scope) {
+function AppController($http, $scope, $mdDialog) {
   var self = this;
 
   var refresh_timeout_ms = 3000;
@@ -16,15 +16,15 @@ function AppController($http, $scope) {
     $http.get('/api/status').then(response => {
         $scope.status = response.data;
         if ($scope.status.fan_status)
-          $scope.fan_color = '#0FFF37';
+          $scope.fan_color = '#4CAF50';
         else
           $scope.fan_color = 'md-primary';
         if ($scope.status.heater_status)
-          $scope.heater_color = '#0FFF37';
+          $scope.heater_color = '#4CAF50';
         else
           $scope.heater_color = 'md-primary';
         if ($scope.status.dehum_status)
-          $scope.dehum_color = '#0FFF37';
+          $scope.dehum_color = '#4CAF50';
         else
           $scope.dehum_color = 'md-primary';
       },
@@ -33,6 +33,23 @@ function AppController($http, $scope) {
       });
     setTimeout($scope.refresh, refresh_timeout_ms);
   }
+
+  $scope.showConfirm = function(ev) {
+    var confirm = $mdDialog.confirm()
+          .title('Reset min/max values ?')
+          .ariaLabel('Reset')
+          .targetEvent(ev)
+          .ok('YES !')
+          .cancel('Oh, no !')
+          .clickOutsideToClose(true);
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.result = 'min/max values were reset';
+    }, function() {
+      $scope.result = 'Aborted';
+    });
+  };
+
   $scope.refresh();
 
 }

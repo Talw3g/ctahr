@@ -1,96 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script type="text/javascript">
-    </script>
-  </head>
-
-  <body>
-    <div layout="column" class="main_container">
-      <div flex="33" layout="row" layout-align="center" class="interior">
-        <div layout="column" layout-align="center center" flex="20" >
-          <md-icon class="md-large" md-font-set="material-icons">home</md-icon>
+<div layout="column" class="main_container">
+  <div flex="33" layout="row" layout-align="center" class="interior">
+    <div layout="column" layout-align="center center" flex="20" >
+      <md-icon class="md-large" md-font-set="material-icons">home</md-icon>
+    </div>
+    <div flex layout="row" layout-align="center" >
+      <div flex layout="column" layout-align="center" >
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">{{status.int_temp_max}}°C</h3>
         </div>
-        <div flex layout="row" layout-align="center" >
-          <div flex layout="column" layout-align="center" >
-            <div flex layout="column" layout-align="end center" >
-              <h3 class="max_value">{{status.int_temp_max}}°C</h3>
-            </div>
-            <div layout="column" layout-align="center center" >
-              <h3 class="main_value">{{status.int_temp}}°C</h3>
-            </div>
-            <div flex layout="column" layout-align="start center" >
-              <h3 class="min_value">{{status.int_temp_min}}°C</h3>
-            </div>
-          </div>
-          <div flex layout="column" layout-align="center">
-            <div flex layout="column" layout-align="end center" >
-              <h3 class="max_value">{{status.int_hygro_max}}%</h3>
-            </div>
-            <div layout="column" layout-align="center center" class="value_bord" >
-              <h3 class="main_value">{{status.int_hygro}}%</h3>
-            </div>
-            <div flex layout="column" layout-align="start center" >
-              <h3 class="min_value">{{status.int_hygro_min}}%</h3>
-            </div>
-          </div>
+        <div layout="column" layout-align="center center" >
+          <h3 class="main_value">{{status.int_temp}}°C</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">{{status.int_temp_min}}°C</h3>
         </div>
       </div>
-      <div flex="33" layout="row" layout-align="center" class="exterior">
-        <div layout="column" layout-align="center center" flex="20" >
-          <md-icon class="md-large" md-font-set="material-icons">terrain</md-icon>
+      <div flex layout="column" layout-align="center">
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">{{status.int_hygro_max}}%</h3>
         </div>
-        <div flex layout="row" layout-align="center" >
-          <div flex layout="column" layout-align="center" >
-            <div flex layout="column" layout-align="end center" >
-              <h3 class="max_value">{{status.ext_temp_max}}°C</h3>
-            </div>
-            <div layout="column" layout-align="center center" >
-              <h3 class="main_value">{{status.ext_temp}}°C</h3>
-            </div>
-            <div flex layout="column" layout-align="start center" >
-              <h3 class="min_value">{{status.ext_temp_min}}°C</h3>
-            </div>
-          </div>
-          <div flex layout="column" layout-align="center">
-            <div flex layout="column" layout-align="end center" >
-              <h3 class="max_value">{{status.ext_hygro_max}}%</h3>
-            </div>
-            <div layout="column" layout-align="center center" class="value_bord" >
-              <h3 class="main_value">{{status.ext_hygro}}%</h3>
-            </div>
-            <div flex layout="column" layout-align="start center" >
-              <h3 class="min_value">{{status.ext_hygro_min}}%</h3>
-            </div>
-          </div>
+        <div layout="column" layout-align="center center" class="value_bord" >
+          <h3 class="main_value">{{status.int_hygro}}%</h3>
         </div>
-      </div>
-      <div flex layout="row" class="power">
-        <div flex layout="column" ng-init="content1=status.fan_energy + ' kWh'" ng-mouseover="content1=status.fan_price + '&euro;'" ng-mouseout="content1=status.fan_energy + ' kWh'">
-          <div flex layout="column" layout-align="center center">
-            <md-icon class="md-medium" ng-style="{color: fan_color}" md-font-set="material-icons">toys</md-icon>
-          </div>
-          <div flex="25" layout="column" layout-align="start center">
-            <h3 class="power_value">{{content1}}</h3>
-          </div>
-        </div>
-        <div flex layout="column" class="power_tile" ng-init="content2=status.heater_energy + ' kWh'" ng-mouseover="content2=status.heater_price + '&euro;'" ng-mouseout="content2=status.heater_energy + ' kWh'">
-          <div flex layout="column" layout-align="center center">
-            <md-icon class="md-medium" ng-style="{color: heater_color}" md-font-set="material-icons">whatshot</md-icon>
-          </div>
-          <div flex="25" layout="column" layout-align="start center">
-            <h3 class="power_value">{{content2}}</h3>
-          </div>
-        </div>
-        <div flex layout="column" class="power_tile" ng-init="content3=status.dehum_energy + ' kWh'" ng-mouseover="content3=status.dehum_price + '&euro;'" ng-mouseout="content3=status.dehum_energy + ' kWh'">
-          <div flex layout="column" layout-align="center center">
-            <md-icon class="md-medium" ng-style="{color: dehum_color}" md-font-set="material-icons">wb_cloudy</md-icon>
-          </div>
-          <div flex="25" layout="column" layout-align="start center">
-            <h3 class="power_value">{{content3}}</h3>
-          </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">{{status.int_hygro_min}}%</h3>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+  <div flex="33" layout="row" layout-align="center" class="exterior">
+    <div layout="column" layout-align="center center" flex="20" >
+      <md-icon class="md-large" md-font-set="material-icons">terrain</md-icon>
+    </div>
+    <div flex layout="row" layout-align="center" >
+      <div flex layout="column" layout-align="center" >
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">{{status.ext_temp_max}}°C</h3>
+        </div>
+        <div layout="column" layout-align="center center" >
+          <h3 class="main_value">{{status.ext_temp}}°C</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">{{status.ext_temp_min}}°C</h3>
+        </div>
+      </div>
+      <div flex layout="column" layout-align="center">
+        <div flex layout="column" layout-align="end center" >
+          <h3 class="max_value">{{status.ext_hygro_max}}%</h3>
+        </div>
+        <div layout="column" layout-align="center center" class="value_bord" >
+          <h3 class="main_value">{{status.ext_hygro}}%</h3>
+        </div>
+        <div flex layout="column" layout-align="start center" >
+          <h3 class="min_value">{{status.ext_hygro_min}}%</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div flex layout="row" class="power">
+    <div flex layout="column" ng-init="content1=status.fan_energy + ' kWh'" ng-mouseover="content1=status.fan_price + '&euro;'" ng-mouseout="content1=status.fan_energy + ' kWh'">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" ng-style="{color: fan_color}" md-font-set="material-icons">toys</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">{{content1}}</h3>
+      </div>
+    </div>
+    <div flex layout="column" class="power_tile" ng-init="content2=status.heater_energy + ' kWh'" ng-mouseover="content2=status.heater_price + '&euro;'" ng-mouseout="content2=status.heater_energy + ' kWh'">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" ng-style="{color: heater_color}" md-font-set="material-icons">whatshot</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">{{content2}}</h3>
+      </div>
+    </div>
+    <div flex layout="column" class="power_tile" ng-init="content3=status.dehum_energy + ' kWh'" ng-mouseover="content3=status.dehum_price + '&euro;'" ng-mouseout="content3=status.dehum_energy + ' kWh'">
+      <div flex layout="column" layout-align="center center">
+        <md-icon class="md-medium" ng-style="{color: dehum_color}" md-font-set="material-icons">wb_cloudy</md-icon>
+      </div>
+      <div flex="25" layout="column" layout-align="start center">
+        <h3 class="power_value">{{content3}}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="reset_div" ng-init="reset_show=false" ng-mouseover="reset_show=true" ng-mouseout="reset_show=false">
+    <md-button ng-click="showConfirm($event)" ng-show="reset_show" class="md-warn md-fab md-fab-bottom-right ng-hide">
+      <md-icon class="md-36" md-font-set="material-icons">replay</md-icon>
+    </md-button>
+  </div>
+</div>
