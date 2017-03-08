@@ -1,6 +1,5 @@
 *.pyc
 *.swp
-*.json
 *.csv
 *.log
 indicators.txt

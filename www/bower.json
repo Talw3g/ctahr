@@ -1,0 +1,24 @@
+{
+  "name": "tlaws-app",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/js/components/",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "^1.6.1",
+    "angular-material": "^1.1.3",
+    "angular-ui-router": "^0.3.2",
+    "material-design-icons": "^3.0.1"
+  },
+  "dependencies": {
+    "angular-nvd3": "^1.0.9",
+    "mdi": "^1.8.36"
+  }
+}
