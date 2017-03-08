@@ -36,7 +36,7 @@ class JSONWrapper():
 
         raw = rrdtool.fetch(configuration.rrdtool_file,'-r',
             '%ds'%max(1,int(period/1500)),'AVERAGE','-s',
-            '-%ds'%int(period+86400),'--end','-1d')
+            '-%ds'%int(period))
 
         # Generating the timestamp list from rrd
         x = [1000*i for i in range(*raw[0])]

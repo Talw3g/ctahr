@@ -108,14 +108,14 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             )
             return
 
-        elif path == 'api/increase':
+        elif path == 'api/reset':
             self.send_response(200)
             self.send_header('Content-Type','application/json')
             self.send_header('Cache-Control','no-cache, no-store, must-revalidate')
             self.send_header('Pragma','no-cache')
             self.send_header('Expires','0')
             self.end_headers()
-            self.server.app.dummy.increase()
+            self.server.app.dummy.reset()
             return
 
         elif path.startswith('api/data'):

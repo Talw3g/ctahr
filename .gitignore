@@ -1,7 +1,6 @@
 *.pyc
 *.swp
 *.json
-private.py
 *.csv
 *.log
 indicators.txt
@@ -10,3 +9,7 @@ indicators.txt
 .vim_list
 www/src/components/*
 files
+private.py
+dummy.py
+run2.py
+app2.py

@@ -3,14 +3,6 @@ function AppController($http, $scope, $mdDialog) {
 
   var refresh_timeout_ms = 3000;
 
-  $scope.increase = function() {
-    $http.get('/api/increase').then(response => {
-      console.log(response)},
-      function errorCallback(response) {
-        console.log(response);
-      });
-  }
-
   $scope.refresh = function() {
     // fetch status
     $http.get('/api/status').then(response => {
@@ -44,6 +36,7 @@ function AppController($http, $scope, $mdDialog) {
           .clickOutsideToClose(true);
 
     $mdDialog.show(confirm).then(function() {
+      $http.get('/api/reset');
       $scope.result = 'min/max values were reset';
     }, function() {
       $scope.result = 'Aborted';
