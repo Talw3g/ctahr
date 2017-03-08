@@ -2,6 +2,7 @@
 *.swp
 *.csv
 *.log
+stats.json
 indicators.txt
 *.rrd
 *.png

@@ -13,6 +13,8 @@ from .fan import CtahrFan
 from .heater import CtahrHeater
 from .dehum import CtahrDehum
 from .rrd_logging import CtahrLogging
+from .webserver import CtahrWebServer
+from .wrapper import JSONWrapper
 
 class CtahrApplication:
 
@@ -43,6 +45,8 @@ class CtahrApplication:
         self.safety = CtahrSafety(self)
         self.rrd = CtahrLogging(self)
         self.stats = CtahrStats(self)
+        self.webserver = CtahrWebServer(self)
+        self.wrapper = JSONWrapper(self)
 
         # Starting every threads
         self.logic.start()
@@ -53,6 +57,7 @@ class CtahrApplication:
         self.display.start()
         self.stats.start()
         self.safety.start()
+        self.webserver.start()
 
         self.led_run_status = False
 
@@ -84,6 +89,7 @@ class CtahrApplication:
         self.logic.join()
         self.stats.stop()
         self.stats.join()
+        self.webserver.stop()
         self.thermohygro_exterior.stop()
         self.thermohygro_exterior.process.join()
         self.thermohygro_interior.stop()

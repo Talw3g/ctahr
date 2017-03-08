@@ -78,29 +78,29 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Expires','0')
             self.end_headers()
 
-            obj = {'int_temp':self.server.app.dummy.int_temp,
-                'int_temp_min':self.server.app.dummy.int_temp_min,
-                'int_temp_max':self.server.app.dummy.int_temp_max,
-                'ext_temp':self.server.app.dummy.ext_temp,
-                'ext_temp_min':self.server.app.dummy.ext_temp_min,
-                'ext_temp_max':self.server.app.dummy.ext_temp_max,
-                'int_hygro':self.server.app.dummy.int_hygro,
-                'int_hygro_min':self.server.app.dummy.int_hygro_min,
-                'int_hygro_max':self.server.app.dummy.int_hygro_max,
-                'ext_hygro':self.server.app.dummy.ext_hygro,
-                'ext_hygro_min':self.server.app.dummy.ext_hygro_min,
-                'ext_hygro_max':self.server.app.dummy.ext_hygro_max,
-                'fan_status':self.server.app.dummy.fan_status,
-                'heater_status':self.server.app.dummy.heater_status,
-                'dehum_status':self.server.app.dummy.dehum_status,
-                'fan_energy':self.server.app.dummy.fan_energy,
-                'fan_price':round(self.server.app.dummy.fan_energy *
+            obj = {'int_temp':self.server.app.stats.int_temp,
+                'int_temp_min':self.server.app.stats.int_temp_min,
+                'int_temp_max':self.server.app.stats.int_temp_max,
+                'ext_temp':self.server.app.stats.ext_temp,
+                'ext_temp_min':self.server.app.stats.ext_temp_min,
+                'ext_temp_max':self.server.app.stats.ext_temp_max,
+                'int_hygro':self.server.app.stats.int_hygro,
+                'int_hygro_min':self.server.app.stats.int_hygro_min,
+                'int_hygro_max':self.server.app.stats.int_hygro_max,
+                'ext_hygro':self.server.app.stats.ext_hygro,
+                'ext_hygro_min':self.server.app.stats.ext_hygro_min,
+                'ext_hygro_max':self.server.app.stats.ext_hygro_max,
+                'fan_status':self.server.app.logic.fan,
+                'heater_status':self.server.app.logic.heat,
+                'dehum_status':self.server.app.logic.dehum,
+                'fan_energy':self.server.app.stats.fan_energy,
+                'fan_price':round(self.server.app.stats.fan_energy *
                     configuration.rate, 0),
-                'heater_energy':self.server.app.dummy.heater_energy,
-                'heater_price':round(self.server.app.dummy.heater_energy *
+                'heater_energy':self.server.app.stats.heater_energy,
+                'heater_price':round(self.server.app.stats.heater_energy *
                     configuration.rate, 0),
-                'dehum_energy':self.server.app.dummy.dehum_energy,
-                'dehum_price':round(self.server.app.dummy.dehum_energy *
+                'dehum_energy':self.server.app.stats.dehum_energy,
+                'dehum_price':round(self.server.app.stats.dehum_energy *
                     configuration.rate, 0)}
 
             self.wfile.write(
@@ -115,7 +115,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
             self.send_header('Pragma','no-cache')
             self.send_header('Expires','0')
             self.end_headers()
-            self.server.app.dummy.reset()
+            self.server.app.stats.reset_hygro_temp()
             return
 
         elif path.startswith('api/data'):
