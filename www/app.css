@@ -124,16 +124,18 @@
 }
 
 .interior {
-  background-image: url("img/bckgnd1.png");
-  background-size: cover;
+  /*background-image: url("img/bckgnd1.png");
+  background-size: cover;*/
+  background-color: rgba(166,160,143,0.3);
   border-style: solid;
   border-width: 3px;
   border-color: var(--dark-color);
 }
 
 .exterior {
-  background-image: url("img/bckgnd1.png");
-  background-size: cover;
+  /*background-image: url("img/bckgnd1.png");
+  background-size: cover;*/
+  background-color: rgba(167,255,136,0.3);
   border-style: solid;
   border-top-style: none;
   border-width: 3px;
