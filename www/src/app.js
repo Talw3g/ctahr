@@ -7,15 +7,23 @@ function AppController($http, $scope, $mdDialog) {
     // fetch status
     $http.get('/api/status').then(response => {
         $scope.status = response.data;
-        if ($scope.status.fan_status)
+        if ($scope.status.fan_force)
+          $scope.fan_color = '#FF7500';
+        else if ($scope.status.fan_status)
           $scope.fan_color = '#4CAF50';
         else
           $scope.fan_color = 'md-primary';
-        if ($scope.status.heater_status)
+
+        if ($scope.status.heater_force)
+          $scope.fan_color = '#FF7500';
+        else if ($scope.status.heater_status)
           $scope.heater_color = '#4CAF50';
         else
           $scope.heater_color = 'md-primary';
-        if ($scope.status.dehum_status)
+
+        if ($scope.status.dehum_force)
+          $scope.fan_color = '#FF7500';
+        else if ($scope.status.dehum_status)
           $scope.dehum_color = '#4CAF50';
         else
           $scope.dehum_color = 'md-primary';

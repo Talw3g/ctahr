@@ -93,6 +93,9 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                 'fan_status':self.server.app.logic.fan,
                 'heater_status':self.server.app.logic.heat,
                 'dehum_status':self.server.app.logic.dehum,
+                'fan_force':self.server.app.buttons.fan,
+                'heater_force':self.server.app.buttons.heater,
+                'dehum_force':self.server.app.buttons.dehum,
                 'fan_energy':self.server.app.stats.fan_energy,
                 'fan_price':round(self.server.app.stats.fan_energy *
                     configuration.rate, 0),
