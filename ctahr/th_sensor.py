@@ -32,8 +32,8 @@ class CtahrThermoHygroSensor:
     def run(values_wrapper, pin, name, quit_event):
         print("[+] Starting", name, "sensors module")
 
-        temp_filter = StdDevFilter(3,20)
-        hygro_filter = StdDevFilter(3,20)
+        temp_filter = StdDevFilter(3,50)
+        hygro_filter = StdDevFilter(3,50)
         while not quit_event.is_set():
            # if name == 'interior':
            #     f = '/opt/ctahr/ctahr/int.csv'

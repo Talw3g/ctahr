@@ -1,6 +1,9 @@
 ## Code from JDRobotter : https://github.com/JDRobotter ##
 import math
 
+class StdDevFilterException(Exception):
+    pass
+
 class StdDevFilter:
     def __init__(self, alpha, n):
         """
@@ -25,7 +28,7 @@ class StdDevFilter:
     def mean_stddev(self):
         """ Return a (mean,standard deviation) tuple """
         if len(self.vs) == 0:
-            return None
+            raise StdDevFilterException
 
         mx = self.mean()
         # compute variance
@@ -33,26 +36,15 @@ class StdDevFilter:
         # return mean value and standard deviation (square root of variance)
         return mx,math.sqrt(variance)
 
-    def limits(self, x, typ):
-        if typ == 'T':
-            if x > -30 and x < 60:
-                return True
-            else:
-                return False
-        elif typ == 'H':
-            if x > 0 and x < 100:
-                return True
-            else:
-                return False
-
     def do(self, x, typ):
         """ Apply filter on value """
-        if self.limits(x,typ):
+        try:
+            mean,stddev = self.mean_stddev()
+        except StdDevFilterException:
             self.insert_value(x)
-        else:
-            return 0, False
+            return x,True
 
-        mean,stddev = self.mean_stddev()
+        self.insert_value(x)
 
         # limit dispersion, refuse new value when too far away from mean
         e = abs(x-mean)
@@ -60,3 +52,4 @@ class StdDevFilter:
             return x,True
         else:
             return mean,False
+
