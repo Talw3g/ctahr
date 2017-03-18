@@ -40,28 +40,17 @@ class CtahrSafety(threading.Thread):
     def kill(self, reason, values):
         if reason == 'int_outdated':
             subject = 'Interior values outdated (>5min old)'
-            message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            if self.mail.connect():
-                self.mail.send_mail(subject, message)
-            else:
-                with open(configuration.safety_log_file, 'a') as f:
-                    f.write(subject + '|' + message + '\n')
         elif reason == 'ext_outdated':
             subject = 'Exterior values outdated (>5min old)'
-            message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            if self.mail.connect():
-                self.mail.send_mail(subject, message)
-            else:
-                with open(configuration.safety_log_file, 'a') as f:
-                    f.write(subject + '|' + message + '\n')
         elif reason == 'logic dead':
             subject = 'Logic module not running'
-            message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
-            if self.mail.connect():
-                self.mail.send_mail(subject, message)
-            else:
-                with open(configuration.safety_log_file, 'a') as f:
-                    f.write(subject + '|' + message + '\n')
+
+        message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
+        if self.mail.connect():
+            self.mail.send_mail(subject, message)
+        else:
+            with open(configuration.safety_log_file, 'a') as f:
+                f.write(subject + '|' + message + '\n')
 
         os.system("shutdown -r now")
         self.running = False
