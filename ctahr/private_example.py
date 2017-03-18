@@ -10,3 +10,5 @@ smtp_server_password = 'utility_mail_password'
 #destinators addresses
 dest_address_1 = 'dest1@address.com'
 
+# Webserver auth password:
+password = "password"

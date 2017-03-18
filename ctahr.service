@@ -1,0 +1,13 @@
+[Unit]
+Description=Cellar Temperature and Hygrometry Regulator
+
+[Service]
+Type=simple
+TimeoutStopSec=10
+WorkingDirectory=/opt/ctahr
+ExecStart=/usr/bin/stdbuf -oL python3 -u /opt/ctahr/run.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,10 +1,15 @@
 *.pyc
 *.swp
-*.json
-private.py
 *.csv
 *.log
+stats.json
 indicators.txt
 *.rrd
 *.png
 .vim_list
+www/src/components/*
+files
+private.py
+dummy.py
+run2.py
+app2.py

@@ -1,0 +1,188 @@
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/src/components/material-design-icons/iconfont/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+       local('MaterialIcons-Regular'),
+       url(/src/components/material-design-icons/iconfont/MaterialIcons-Regular.woff2) format('woff2'),
+       url(/src/components/material-design-icons/iconfont/MaterialIcons-Regular.woff) format('woff'),
+       url(/src/components/material-design-icons/iconfont/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+/* Rules for sizing the icon. */
+.material-icons.md-18 { font-size: 18px; }
+.material-icons.md-24 { font-size: 24px; }
+.material-icons.md-36 {
+  font-size: 36px;
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  line-height: 48px;
+}
+.material-icons.md-large {
+  font-size: calc(var(--text-coef) * 13);
+  height: calc(var(--text-coef) * 13);
+  line-height: calc(var(--text-coef) * 13);
+  width: calc(var(--text-coef) * 13);
+}
+
+.material-icons.md-medium {
+  font-size: calc(var(--text-coef) * 10);
+  height: calc(var(--text-coef) * 10);
+  line-height: calc(var(--text-coef) * 10);
+  width: calc(var(--text-coef) * 10);
+}
+
+/* Rules for using icons as black on a light background. */
+.material-icons.md-dark { color: rgba(0, 0, 0, 0.54); }
+.material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+
+/* Rules for using icons as white on a dark background. */
+.material-icons.md-light { color: rgba(255, 255, 255, 1); }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+
+
+
+/* Custom classes*/
+:root {
+  --text-coef: 0.8vmax;
+  --dark-color: #363D45;
+}
+
+.main_value {
+  font-size: calc(var(--text-coef) * 7);
+  line-height: calc(var(--text-coef) * 7);
+  height: calc(var(--text-coef) * 7);
+  margin: 0px calc(var(--text-coef) * 1);
+  color: var(--dark-color);
+}
+.max_value {
+  font-size: calc(var(--text-coef) * 3);
+  line-height: calc(var(--text-coef) * 3);
+  margin: 0px;
+  margin-left: calc(var(--text-coef) * 15);
+  color: #FF991D;
+}
+.min_value {
+  font-size: calc(var(--text-coef) * 3);
+  line-height: calc(var(--text-coef) * 3);
+  margin: 0px;
+  margin-left: calc(var(--text-coef) * 15);
+  color: #02CCA0;
+}
+
+.power_value {
+  font-size: calc(var(--text-coef) * 3.4);
+  line-height: calc(var(--text-coef) * 3.4);
+  height: calc(var(--text-coef) * 3.4);
+  margin: 0px calc(var(--text-coef) * 1);
+  color: var(--dark-color);
+}
+
+.main_container {
+  min-height: 40vw;
+  height: calc(88vh - 48px);
+  padding: 2vmin;
+  width: 95vw;
+  max-width: 1200px;
+  min-width: 57vh;
+  margin: 0 auto;
+  position: static;
+  z-index: 0;
+}
+
+.interior {
+  /*background-image: url("img/bckgnd1.png");
+  background-size: cover;*/
+  background-color: rgba(166,160,143,0.3);
+  border-style: solid;
+  border-width: 3px;
+  border-color: var(--dark-color);
+}
+
+.exterior {
+  /*background-image: url("img/bckgnd1.png");
+  background-size: cover;*/
+  background-color: rgba(167,255,136,0.3);
+  border-style: solid;
+  border-top-style: none;
+  border-width: 3px;
+  border-color: var(--dark-color);
+}
+
+.power {
+  background-image: none;
+  background-size: cover;
+  border-style: solid;
+  border-top-style: none;
+  border-width: 3px;
+  border-color: var(--dark-color);
+}
+
+.power_tile {
+  background-image: none;
+  background-size: cover;
+  border-style: none;
+  border-left-style: solid;
+  border-width: 3px;
+  border-color: var(--dark-color);
+}
+
+.value_bord {
+  border-left: thick solid var(--dark-color);
+}
+
+.bord {
+  border-style: solid;
+  border-width: 1px;
+}
+
+.reset_div {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 20vmin;
+  height: 20vmin;
+  z-index: 999;
+}
+
+._md-toolbar-transitions {
+  height: 8vh;
+}
+/*
+.md-padding {
+  padding-top: 1vh;
+}
+
