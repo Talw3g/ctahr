@@ -13,7 +13,7 @@ class CtahrSafety(threading.Thread):
         self.running = True
         self.int_time = time.monotonic()
         self.ext_time = time.monotonic()
-        self.free_pass = True
+
         self.mail = CtahrMailing()
 
 
@@ -32,10 +32,7 @@ class CtahrSafety(threading.Thread):
 
     def logic_alive(self):
         if time.monotonic() - self.app.logic.watchdog > 120:
-            if self.free_pass:
-                self.free_pass = False
-            else:
-                self.kill('logic dead',self.app.logic.watchdog)
+            self.kill('logic dead',self.app.logic.watchdog)
         else:
             pass
 
