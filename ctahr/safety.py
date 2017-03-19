@@ -1,5 +1,6 @@
 
 import threading,time,os
+import subprocess
 from datetime import datetime
 from .mailing import CtahrMailing
 from . import configuration
@@ -45,7 +46,11 @@ class CtahrSafety(threading.Thread):
         elif reason == 'logic dead':
             subject = 'Logic module not running'
 
+        args = ['journalctl','-u','ctahr.service','--since','yesterday']
+        journal = subprocess.Popen(args, stdout=subprocess.PIPE)
+        log = journal.stdout.read().decode('utf-8')
         message = datetime.now().strftime("%Y-%m-%d %H:%M:%S : " + str(values))
+        message += '\n\n' + log
         if self.mail.connect():
             self.mail.send_mail(subject, message)
         else:
