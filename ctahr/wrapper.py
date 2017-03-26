@@ -48,9 +48,9 @@ class JSONWrapper():
 
         # Stocking values from rrd to 'values' lists
         for i in raw[2]:
-            if i[0] is not None:
+            if None not in i:
                 for j,*rest in enumerate(data):
-                    data[j]['values'].append(round(float(i[j]),2))
+                    data[j]['values'].append(round(i[j],2))
 
                 # computing min and max for this period:
                 if None in (tint_min, tint_max, text_min, text_max):
@@ -67,13 +67,25 @@ class JSONWrapper():
                         text_min = round(i[1],1)
                     elif i[1] > text_max:
                         text_max = round(i[1],1)
+            else:
+                for j,*rest in enumerate(data):
+                    data[j]['values'].append(None)
 
         for j,*rest in enumerate(data):
-            # Zipping each values list with timestamp list
-            data[j]['values'] = list(zip(x,data[j]['values']))
+            # Zipping timestamp and values into temporary list
+            _values = list(zip(x,data[j]['values']))
+            data[j]['values'] = []
+
+            # Removing every line containing a None value:
+            for k,*rest in enumerate(_values):
+                if None not in _values[k]:
+                    data[j]['values'].append(_values[k])
+
             # Decimating to keep approx. 800 points
             resolution = max(1,int(len(data[j]['values'])/800))
             data[j]['values'] = data[j]['values'][::resolution]
+
+        # Appending min/max values
         data = [data, {'tint_min':tint_min, 'tint_max':tint_max,
             'text_min':text_min, 'text_max':text_max}]
 
