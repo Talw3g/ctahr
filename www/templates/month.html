@@ -1,15 +1,39 @@
-
-<div flex-xs flex-gt-xs="100" layout="column">
+<div flex-xs flex-gt-xs="100" layout="column" ng-controller="GraphController" ng-init="init(2592000,'%d-%b','%A %e/%m/%Y %H:%M')">
   <md-card>
     <md-card-header>
-      <md-card-header-text layout-align="center center">
-        <span class="md-title">Last 30 days</span>
+      <md-card-header-text layout="row" layout-align="center center">
+        <span flex class='int_graph' layout-xs="column" layout="row" layout-align="end center">
+          <span>
+            <md-icon md-font-set="material-icons">home</md-icon>
+          </span>
+          <span class='min_graph' layout="row" layout-align="center center">
+            <i class="material-icons">arrow_downward</i>
+            {{extreme.tint_min}}
+          </span>
+          <span class='max_graph' layout="row" layout-align="center center">
+            <i class="material-icons">arrow_upward</i>
+            {{extreme.tint_max}}
+          </span>
+        </span>
+        <span class="md-title" style="text-align: center">Last 31 days</span>
+        <span flex class='ext_graph' layout-xs="column" layout="row" layout-align="start center">
+          <span>
+            <md-icon md-font-set="material-icons">terrain</md-icon>
+          </span>
+          <span class='min_graph' layout="row" layout-align="center center">
+            <i class="material-icons">arrow_downward</i>
+            {{extreme.text_min}}
+          </span>
+          <span class='max_graph' layout="row" layout-align="center center">
+            <i class="material-icons">arrow_upward</i>
+            {{extreme.text_max}}
+          </span>
+        </span>
       </md-card-header-text>
     </md-card-header>
-    <div ng-controller="GraphController" ng-init="init(2592000,'%d-%b','%A %e/%m/%Y %H:%M')">
+    <div >
       <nvd3 options="options" data="data"></nvd3>
     </div>
     </md-card-header>
   </md-card>
 </div>
-

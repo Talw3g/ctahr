@@ -78,7 +78,9 @@ function GraphController($http, $scope) {
     // fetch status
     if($scope.period_s) {
       $http.get('/api/data/'+$scope.period_s).then(response => {
-          $scope.data = response.data;
+          data = response.data;
+          $scope.data = data[0];
+          $scope.extreme = data[1];
         },
         function errorCallback(response) {
           console.log(response);

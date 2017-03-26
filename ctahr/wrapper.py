@@ -23,6 +23,11 @@ class JSONWrapper():
             return v
 
     def _get_rrd_json(self, period):
+        # Initializing min/max
+        tint_min = None
+        tint_max = None
+        text_min = None
+        text_max = None
         # Creating list of data dictionnaries
         data = [{'key':'Interior Temperature', 'values':[], 'yAxis':1, 'type':'line'},
             {'key':'Exterior Temperature', 'values':[], 'yAxis':1, 'type':'line'},
@@ -47,12 +52,30 @@ class JSONWrapper():
                 for j,*rest in enumerate(data):
                     data[j]['values'].append(round(float(i[j]),2))
 
+                # computing min and max for this period:
+                if None in (tint_min, tint_max, text_min, text_max):
+                    tint_min = round(i[0],1)
+                    tint_max = round(i[0],1)
+                    text_min = round(i[1],1)
+                    text_max = round(i[1],1)
+                else:
+                    if i[0] < tint_min:
+                        tint_min = round(i[0],1)
+                    elif i[0] > tint_max:
+                        tint_max = round(i[0],1)
+                    if i[1] < text_min:
+                        text_min = round(i[1],1)
+                    elif i[1] > text_max:
+                        text_max = round(i[1],1)
+
         for j,*rest in enumerate(data):
             # Zipping each values list with timestamp list
             data[j]['values'] = list(zip(x,data[j]['values']))
             # Decimating to keep approx. 800 points
             resolution = max(1,int(len(data[j]['values'])/800))
             data[j]['values'] = data[j]['values'][::resolution]
+        data = [data, {'tint_min':tint_min, 'tint_max':tint_max,
+            'text_min':text_min, 'text_max':text_max}]
 
         return json.dumps(data)
 

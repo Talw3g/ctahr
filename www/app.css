@@ -103,6 +103,29 @@
   color: #02CCA0;
 }
 
+.max_graph {
+  font-size: 20px;
+  line-height: 20px;
+  color: #FF991D;
+}
+.min_graph {
+  font-size: 20px;
+  line-height: 20px;
+  color: #02CCA0;
+}
+.int_graph {
+  font-size: 20px;
+  line-height: 20px;
+  text-align: right;
+  margin-right: 5vw;
+}
+.ext_graph {
+  font-size: 20px;
+  line-height: 20px;
+  text-align: left;
+  margin-left: 5vw;
+}
+
 .power_value {
   font-size: calc(var(--text-coef) * 3.4);
   line-height: calc(var(--text-coef) * 3.4);
