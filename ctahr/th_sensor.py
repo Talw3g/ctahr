@@ -57,7 +57,7 @@ class CtahrThermoHygroSensor:
 #                   log.writerow([time.time(), temp, hygro])
 
                 hygro, valid_H = hygro_filter.do(hygro,'H')
-                temp, valid_T = hygro_filter.do(temp,'T')
+                temp, valid_T = temp_filter.do(temp,'T')
 
                 if valid_H and valid_T:
                     valid = 1
