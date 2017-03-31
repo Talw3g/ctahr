@@ -15,14 +15,14 @@ function AppController($http, $scope, $mdDialog) {
           $scope.fan_color = 'md-primary';
 
         if ($scope.status.heater_force)
-          $scope.fan_color = '#FF7500';
+          $scope.heater_color = '#FF7500';
         else if ($scope.status.heater_status)
           $scope.heater_color = '#4CAF50';
         else
           $scope.heater_color = 'md-primary';
 
         if ($scope.status.dehum_force)
-          $scope.fan_color = '#FF7500';
+          $scope.dehum_color = '#FF7500';
         else if ($scope.status.dehum_status)
           $scope.dehum_color = '#4CAF50';
         else
