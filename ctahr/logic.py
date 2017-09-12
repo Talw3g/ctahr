@@ -1,5 +1,6 @@
 
 import threading,time
+import prctl
 from datetime import datetime
 from . import configuration
 from .relay import CtahrRelay
@@ -8,6 +9,7 @@ class CtahrLogic(threading.Thread):
     daemon = True
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Logic')
         self.lock = threading.Lock()
         self.app = app
         self.led_run = CtahrRelay(configuration.led_run_pin)

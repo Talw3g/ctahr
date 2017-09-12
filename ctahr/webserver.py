@@ -1,5 +1,6 @@
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import prctl
 from socketserver import ThreadingMixIn
 import threading
 from . import configuration
@@ -180,6 +181,7 @@ class CtahrWebServer(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('WebServer')
         print("[+] Starting webserver")
         self.app = app
         self.httpd = None

@@ -1,5 +1,6 @@
 
 import time,threading
+import prctl
 from . import configuration
 import RPi.GPIO as GPIO
 
@@ -8,6 +9,7 @@ class CtahrButtons(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Buttons')
         self.app = app
         self.lock = threading.Lock()
 

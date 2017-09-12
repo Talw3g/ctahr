@@ -1,5 +1,6 @@
 
 import threading,time,os
+import prctl
 import json
 from . import configuration
 
@@ -8,6 +9,7 @@ class CtahrStats(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Stats')
         self.app = app
         self.lock = threading.Lock()
         self.running = True

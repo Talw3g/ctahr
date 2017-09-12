@@ -1,5 +1,6 @@
 
 import os,sys,time
+import prctl
 import threading
 import RPi.GPIO as GPIO
 from serial import Serial
@@ -11,6 +12,7 @@ class CtahrDisplay(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Display')
         self.running = True
         # Configuring light sensor
         GPIO.setmode(GPIO.BCM)

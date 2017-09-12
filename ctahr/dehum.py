@@ -1,11 +1,13 @@
 
 import threading,time
+import prctl
 import RPi.GPIO as GPIO
 from . import configuration
 
 class CtahrDehum(threading.Thread):
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Dehum')
         self.app = app
         GPIO.setmode(GPIO.BCM)
         GPIO.setwarnings(False)

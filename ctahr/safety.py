@@ -1,5 +1,6 @@
 
 import threading,time,os
+import prctl
 import subprocess
 from datetime import datetime
 from .mailing import CtahrMailing
@@ -10,6 +11,7 @@ class CtahrSafety(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
+        prctl.set_name('Safety')
         self.app = app
         self.running = True
         self.int_time = time.monotonic()
