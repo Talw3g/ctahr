@@ -70,5 +70,5 @@ class CtahrThermoHygroSensor:
 
             quit_event.wait(timeout = 3)
 
-        print("[+] Stopping", name, "sensors module")
+        print("[-] Stopping", name, "sensors module")
 
