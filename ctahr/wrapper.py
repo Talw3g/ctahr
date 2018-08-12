@@ -39,6 +39,14 @@ class JSONWrapper():
             {'key':'Heater Status', 'values':[], 'disabled':True, 'yAxis':1, 'type':'line'},
             {'key':'Dehum Status', 'values':[], 'disabled':True, 'yAxis':1, 'type':'line'}]
 
+
+        # UNIX timestamp of the first day of data
+        day_0_ts = time.mktime(time.strptime("03 01 2017", "%d %m %Y"))
+
+        # Fake period that stands for "since the beginning"
+        if period == 555555:
+            period = time.time() - day_0_ts
+
         raw = rrdtool.fetch(configuration.rrdtool_file,'-r',
             '%ds'%max(1,int(period/1500)),'AVERAGE','-s',
             '-%ds'%int(period))

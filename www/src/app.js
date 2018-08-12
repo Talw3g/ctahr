@@ -192,6 +192,10 @@ var app = angular.module( 'ctahr-app', ['ngMaterial','ui.router','nvd3'])
           url:'/year',
           templateUrl:'templates/year.html',
         })
+        .state('alltime', {
+          url:'/alltime',
+          templateUrl:'templates/alltime.html',
+        })
     }])
   .config(function($mdThemingProvider) {
       $mdThemingProvider.theme('default')
