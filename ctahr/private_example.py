@@ -1,11 +1,14 @@
 
 ## Rename this file 'private.py' and modify the following info to fit your case ##
 
-# Mail server infos
-sender_address = 'utility.mail@address.com'
-smtp_server_address = 'smtp.server.com'
-smtp_server_port = 666
-smtp_server_password = 'utility_mail_password'
+# mail auth:
+mail = {
+    "port": 587,
+    "server": "smtp.server.com",
+    "addr": "account@address.com",
+    "from_addr": "diplayed@fromaddress.com",
+    "pass": "accountpass",
+}
 
 #destinators addresses
 dest_address_1 = 'dest1@address.com'

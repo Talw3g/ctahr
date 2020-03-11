@@ -1,0 +1,1 @@
+{"int": {"temp": {"min": 100, "max": 0}, "hygro": {"min": 110, "max": 0}}, "ext": {"temp": {"min": 100, "max": 0}, "hygro": {"min": 110, "max": 0}}, "fan": {"energy": 321.1, "time": 3211}, "heater": {"energy": 576.4, "time": 384.27}, "dehum": {"energy": 1140.6, "time": 1901}}

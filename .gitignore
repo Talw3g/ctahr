@@ -8,6 +8,7 @@ indicators.txt
 *.png
 .vim_list
 www/src/components/*
+www/node_modules
 files
 private.py
 dummy.py
