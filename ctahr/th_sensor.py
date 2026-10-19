@@ -35,27 +35,8 @@ class CtahrThermoHygroSensor:
         temp_filter = StdDevFilter(3,50)
         hygro_filter = StdDevFilter(3,50)
         while not quit_event.is_set():
-           # if name == 'interior':
-           #     f = '/opt/ctahr/ctahr/int.csv'
-           # else:
-           #     f = '/opt/ctahr/ctahr/ext.csv'
-           # for row in csv.reader(open(f,'rb'), delimiter=','):
-           #     hygro,temp = row
-           #     hygro = float(hygro)
-           #     temp = float(temp)
             hygro,temp = DHT.read_retry(DHT.DHT22, pin)
-
             if hygro != None and temp != None:
-#               if name == 'interior':
-#                   log_file = '/opt/ctahr/rrdtool/int_raw.csv'
-#               elif name == 'exterior':
-#                   log_file = '/opt/ctahr/rrdtool/ext_raw.csv'
-#
-#               with open(log_file, 'ab') as fout:
-#                   log = csv.writer(fout, delimiter=';', quotechar='"',
-#                       quoting=csv.QUOTE_NONNUMERIC)
-#                   log.writerow([time.time(), temp, hygro])
-
                 hygro, valid_H = hygro_filter.do(hygro,'H')
                 temp, valid_T = temp_filter.do(temp,'T')
 

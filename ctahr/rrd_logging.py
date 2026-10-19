@@ -14,9 +14,15 @@ class CtahrLogging():
         self.err_content = ""
 
     def log(self):
+        now = datetime.now().timestamp()
         try:
-            update(configuration.rrdtool_file,"N:%f:%f:%f:%f:%d:%d:%d:%f:%f:%f"
-                %(self.app.logic.int_temp, self.app.logic.ext_temp,
+            with open("/home/thibault/timestamps.txt","a") as f:
+                f.write("{:.0f}\n".format(now))
+        except:
+            pass
+        try:
+            update(configuration.rrdtool_file,"{:.0f}:{:f}:{:f}:{:f}:{:f}:{:d}:{:d}:{:d}:{:f}:{:f}:{:f}"
+                .format(now, self.app.logic.int_temp, self.app.logic.ext_temp,
                 self.app.logic.int_hygro, self.app.logic.ext_hygro,
                 int(self.app.logic.fan), int(self.app.logic.heat),
                 int(self.app.logic.dehum), self.app.stats.fan_energy,

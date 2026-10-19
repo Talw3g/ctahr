@@ -4,7 +4,7 @@ import prctl
 import threading
 import RPi.GPIO as GPIO
 from serial import Serial
-from . import configuration
+from . import configuration as conf
 from .display_lib import DisplayLib
 
 class CtahrDisplay(threading.Thread):
@@ -16,7 +16,7 @@ class CtahrDisplay(threading.Thread):
         self.running = True
         # Configuring light sensor
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(configuration.light_sensor_pin, GPIO.IN)
+        GPIO.setup(conf.light_sensor_pin, GPIO.IN)
 
         # Initializing variables
         self.lib = DisplayLib()
@@ -42,7 +42,8 @@ class CtahrDisplay(threading.Thread):
             self.ext_hygro, self.ext_temp, *rest = ext_values
 
     def light_state(self):
-        if GPIO.input(configuration.light_sensor_pin) == 1:
+#        if GPIO.input(conf.light_sensor_pin) == 1:
+        if False:
             self.lib.backlight(False)
             self.lib.clear()
         else:
@@ -99,6 +100,11 @@ class CtahrDisplay(threading.Thread):
             self.lib.justify_R(2,20,self.app.stats.fan_energy, 'E')
             self.lib.justify_R(3,20,self.app.stats.heater_energy, 'E')
             self.lib.justify_R(4,20,self.app.stats.dehum_energy, 'E')
+
+        elif self.state == 'ERROR':
+            self.lib.clear()
+            self.lib.center(2,'ERROR')
+            self.lib.center(3,'Values outdated')
 
         elif self.state == 'RESET':
             self.lib.clear()

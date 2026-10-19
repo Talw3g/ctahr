@@ -1,4 +1,4 @@
-
+import sys
 import signal
 import threading
 from . import configuration
@@ -24,6 +24,7 @@ class CtahrApplication:
         print("[+] Starting Ctahr")
 
         # gracefull shutdown signal handler
+        self.double_kill = False
         signal.signal(signal.SIGTERM, self.shutdown)
         signal.signal(signal.SIGINT, self.shutdown)
 
@@ -64,10 +65,13 @@ class CtahrApplication:
 
     def shutdown(self, signum, frame):
         # perform a gracefull shutdown here ;)
-
+        if self.double_kill:
+            print("[-] Double kill received, shutting down now")
+            sys.exit()
         print("[-] SIGNAL",signum,"received, shutting down gracefully")
         #
         self.not_running.set()
+        self.double_kill = True
 
     def run(self):
         while not self.not_running.is_set():

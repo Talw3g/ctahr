@@ -2,7 +2,7 @@
 import threading,time
 import prctl
 from datetime import datetime
-from . import configuration
+from . import configuration as conf
 from .relay import CtahrRelay
 
 class CtahrLogic(threading.Thread):
@@ -12,9 +12,10 @@ class CtahrLogic(threading.Thread):
         prctl.set_name('Logic')
         self.lock = threading.Lock()
         self.app = app
-        self.led_run = CtahrRelay(configuration.led_run_pin)
+        self.led_run = CtahrRelay(conf.led_run_pin)
         self.temp_state = 'CHECK'
         self.hygro_state = 'CHECK'
+        self.season = "UNKNOWN"
         self.fan_vote = [False,False]
         self.fan = False
         self.heat = False
@@ -36,38 +37,38 @@ class CtahrLogic(threading.Thread):
             self.fan_vote[0] = False
             self.heat = False
             self.block_dehum = False
-            if self.temp_targ_err < -configuration.delta_targ_H:
+            if self.temp_targ_err < -conf.delta_targ_H:
                 self.temp_state = 'CHILL'
-            elif self.temp_targ_err > configuration.delta_targ_H:
+            elif self.temp_targ_err > conf.delta_targ_H:
                 self.temp_state = 'WARM'
 
         elif self.temp_state == 'CHILL':
-            if self.temp_ext_err < -configuration.delta_ext_H:
+            if self.temp_ext_err < -conf.delta_ext_H:
                 self.temp_state = 'VENTILATE'
                 self.block_dehum = True
             else:
                 self.temp_state = 'CHECK'
 
         elif self.temp_state == 'WARM':
-            if self.temp_targ_err > configuration.delta_freeze_H:
+            if self.temp_targ_err > conf.delta_freeze_H:
                 self.temp_state = 'HEAT'
-            elif self.temp_ext_err > configuration.delta_ext_H:
+            elif self.temp_ext_err > conf.delta_ext_H:
                 self.temp_state = 'VENTILATE'
             else:
                 self.temp_state = 'CHECK'
 
         elif self.temp_state == 'VENTILATE':
-            if (abs(self.temp_targ_err) < configuration.delta_targ_L or
-                abs(self.temp_ext_err) < configuration.delta_ext_L):
+            if (abs(self.temp_targ_err) < conf.delta_targ_L or
+                abs(self.temp_ext_err) < conf.delta_ext_L):
                 self.temp_state = 'CHECK'
-            elif self.temp_targ_err > configuration.delta_freeze_H:
+            elif self.temp_targ_err > conf.delta_freeze_H:
                 self.temp_state = 'HEAT'
                 self.fan_vote[0] = False
             else:
                 self.fan_vote[0] = True
 
         elif self.temp_state == 'HEAT':
-            if self.temp_targ_err < configuration.delta_freeze_L:
+            if self.temp_targ_err < conf.delta_freeze_L:
                 self.temp_state = 'CHECK'
             else:
                 self.heat = True
@@ -75,14 +76,24 @@ class CtahrLogic(threading.Thread):
 
     def update_hygro(self):
         if self.hygro_state == 'CHECK':
-            if (self.hygro_err < -configuration.delta_hygro and
+            if (self.hygro_err < -conf.delta_hygro and
                     not self.block_dehum):
+                print("CHECK => DEHUM")
+                print("hygro_err > 0 ? ", self.hygro_err > 0)
+                print("hygro target : ", self.hygro_target)
+                print("int hygro : ", self.int_hygro)
+                print("block_dehum ? ", self.block_dehum)
                 self.hygro_state = 'DEHUM'
             else:
                 self.dehum = False
 
         elif self.hygro_state == 'DEHUM':
             if (self.hygro_err > 0 or self.block_dehum):
+                print("DEHUM => CHECK")
+                print("hygro_err > 0 ? ", self.hygro_err > 0)
+                print("hygro target : ", self.hygro_target)
+                print("int hygro : ", self.int_hygro)
+                print("block_dehum ? ", self.block_dehum)
                 self.hygro_state = 'CHECK'
             else:
                 self.dehum = True
@@ -103,23 +114,34 @@ class CtahrLogic(threading.Thread):
             return False
 
     def calc_err_targ(self):
-        self.temp_targ_err = configuration.temp_target - self.int_temp
+        self.temp_targ_err = conf.temp_target - self.int_temp
         self.temp_ext_err = self.ext_temp - self.int_temp
-        self.airing_err = abs(configuration.temp_target - self.ext_temp)
-        if self.temp_targ_err < -configuration.delta_targ_H:
-            self.hygro_target = configuration.hygro_target_summer
-        else:
-            self.hygro_target = configuration.hygro_target_winter
+        self.airing_err = abs(conf.temp_target - self.ext_temp)
+        if self.season == "UNKNOWN":
+            if self.temp_targ_err <= -conf.delta_targ_H:
+                self.hygro_target = conf.hygro_target_summer
+                self.season = "SUMMER"
+            else:
+                self.hygro_target = conf.hygro_target_winter
+                self.season = "WINTER"
+        elif self.season == "SUMMER":
+            self.hygro_target = conf.hygro_target_summer
+            if self.temp_targ_err >= 0:
+                self.season = "WINTER"
+        elif self.season == "WINTER":
+            self.hygro_target = conf.hygro_target_winter
+            if self.temp_targ_err <= -conf.delta_targ_H:
+                self.season = "SUMMER"
         self.hygro_err = self.hygro_target - self.int_hygro
 
 
     def daily_airing(self):
-        temp_optimal = self.airing_err < configuration.delta_targ_H
-        unaired = (time.monotonic() - self.aired_time) > configuration.daily_period
+        temp_optimal = self.airing_err < conf.delta_targ_H
+        unaired = (time.monotonic() - self.aired_time) > conf.daily_period
         damp = self.ext_hygro > self.hygro_target
         self.daily_uptime = self.app.fan.get_uptime()
 
-        if self.daily_uptime > configuration.daily_airing_time:
+        if self.daily_uptime > conf.daily_airing_time:
             self.app.fan.reset_uptime()
             self.aired_time = time.monotonic()
             self.fan_vote[1] = False
@@ -135,7 +157,7 @@ class CtahrLogic(threading.Thread):
 
 
     def indicators(self):
-        with open(configuration.indicators_file, 'w') as f:
+        with open(conf.indicators_file, 'w') as f:
             f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
             f.write("\nINT temp: " + str(self.int_temp))
             f.write("\nINT hygro: " + str(self.int_hygro))
@@ -144,7 +166,6 @@ class CtahrLogic(threading.Thread):
             f.write("\nFan: " + str(self.fan))
             f.write("\nHeater: " + str(self.heat))
             f.write("\nDehum: " + str(self.dehum) + "\n")
-
 
     def stop(self):
         self.running = False
@@ -155,17 +176,18 @@ class CtahrLogic(threading.Thread):
     def run(self):
         print("[+] Starting logic module")
         while self.running:
+            self.watchdog = time.monotonic()
             if self.update_values():
                 self.calc_err_targ()
                 self.daily_airing()
                 self.indicators()
-            self.update_temp()
-            self.update_hygro()
-            self.decide_ventilate()
-            self.led_run.activate(True)
-            time.sleep(0.01)
-            self.led_run.activate(False)
-            self.watchdog = time.monotonic()
+            if not self.app.safety.alarm_mode:
+                self.update_temp()
+                self.update_hygro()
+                self.decide_ventilate()
+                self.led_run.activate(True)
+                time.sleep(0.01)
+                self.led_run.activate(False)
             time.sleep(1)
         self.led_run.activate(False)
         print("[-] Stopping logic module")

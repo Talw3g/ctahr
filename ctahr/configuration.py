@@ -6,7 +6,7 @@ port = 51641
 
 ## PIN CONFIGURATION ##
 # Display
-display_serial_device = "/dev/ttyAMA0"
+display_serial_device = "/dev/ttyS0"
 display_serial_speed = 115200
 
 # Sensors
@@ -37,7 +37,7 @@ servo_dutycycle_open = 9
 
 # System / Misc
 watchdog_pin = 20
-powerstate_pin = 23
+powerstate_pin = 21
 led_run_pin = 16
 
 
@@ -46,6 +46,8 @@ stats_log_file = os.path.join(root_folder, 'ctahr/stats.json')
 safety_log_file = os.path.join(root_folder, 'ctahr/safety.log')
 indicators_file = os.path.join(root_folder, 'ctahr/indicators.txt')
 rrdtool_file = os.path.join(root_folder, 'rrdtool/ctahr.rrd')
+watchdog_file = os.path.join(root_folder, 'ctahr_watchdog')
+reboot_count_file = os.path.join(root_folder, 'reboot_count')
 
 
 ## REGULATION FIXED VALUES ##
